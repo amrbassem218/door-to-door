@@ -42,7 +42,7 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
     const item: Item = 
     {
         title:"L'Oreal Paris Makeup True Match Lumi Glotion, Natural Glow Enhancer, Illuminator Highlighter, Bronzing Drops For a Sun-Kissed Glow, 903 Medium",
-        mainImage: 'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
+        thumbnail: 'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
         images: [
             'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
             'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
@@ -59,17 +59,16 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
         id: "111",
         rating: 3.5,
         reviewCount: 120,
-        stockCount: 40,
+        stock_count: 40,
         description: "Lorem ipsum dolor sit amet consectetur adipiscing elit quisque faucibus ex sapien vitae pellentesque sem placerat in id cursus mi.",
         seller: "Shop1102879409 Store (Trader)",
         sellerId: "Er12345",
-        minQuantity: 350
+        min_order: 350
     }
-    const [quantity, setQuantity] = useState<number>(item?.minQuantity ?? 0);
+    const [quantity, setQuantity] = useState<number>(item?.min_order ?? 0);
     const [currentImage, setCurrentImage] = useState(0);
   return (
     <>
-    <Header/>
     <div className='mx-15 my-10 grid grid-cols-16 gap-10'>
         {/* Product Main */}
         <div className='flex gap-5 col-span-12 border-b-1 pb-5'>
@@ -104,7 +103,7 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
                             allowFraction // allows values like 3.5 stars
                         />
                         <p className="text-md font-normal text-gray-600">({item?.reviewCount ?? 0}) reviews | </p>
-                        <p className={`text-md font-normal ${item?.stockCount ? "text-green-600" : 'text-red-600'}`}>{item?.stockCount ? "In stock" : "Out of stock"}</p>
+                        <p className={`text-md font-normal ${item?.stock_count ? "text-green-600" : 'text-red-600'}`}>{item?.stock_count ? "In stock" : "Out of stock"}</p>
                     </div>
                 </div>
 
@@ -154,7 +153,7 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
             {/* Stock & Purchase */}
             <div className='flex flex-col items-start border-b-1 py-3 gap-4'>
                 <div className='flex justify-between  w-full'>
-                    <h1 className={`text-xl  font-medium ${item?.stockCount ? "text-green-600" : 'text-red-600'}`}>{item?.stockCount ? "In stock" : "Out of stock"}</h1>
+                    <h1 className={`text-xl  font-medium ${item?.stock_count ? "text-green-600" : 'text-red-600'}`}>{item?.stock_count ? "In stock" : "Out of stock"}</h1>
                     
                     <div>
                         <DropdownMenu>
