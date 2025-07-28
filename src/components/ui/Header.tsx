@@ -13,6 +13,7 @@ import { useSearch } from '@/searchContext';
 import { useState, useEffect, useRef } from 'react';
 import { LuUser } from "react-icons/lu";
 import { IoCartOutline } from "react-icons/io5";
+import Sign from '../sign';
 
 interface IHeaderProps {
   
@@ -60,12 +61,16 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
       <div className='grid-cols-12 border-border w-full '>
         <div className='max-w-400  px-20  mx-auto'>
           <div className='flex items-center justify-between w-full h-20'>
+
+            {/* Logo & Menu */}
             <div className='flex items-center gap-2 '>
               <Button className='cursor-pointer bg-background-secondary-3 p-2 rounded-md' variant={'link'}>
                 <RiMenu2Fill size={20} className='text-primary'/>
               </Button>
-              <button className='cursor-pointer text-primary font-semibold' onClick={() => navigate('/')}>LOGO NAME</button>
+              <button className='cursor-pointer text-primary font-semibold' onClick={() => navigate('/')}>Door2Door</button>
             </div>
+
+            {/* Search Bar & Suggestions */}
             <div ref={searchRef} className=' justify-center relative h-10 bg-background-secondary-3 w-120 flex items-center gap-1 rounded-md'>
               <IoSearchOutline className='text-primary absolute left-2' size={18}/>
               <form className='w-full' action="" onSubmit={(e) => {e.preventDefault(); handleSearchSubmit()}}>
@@ -106,10 +111,12 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
                 </div>
               )}
             </div>
+
+            {/* Cart & Sign */}
             <div className='flex gap-3'>
               <div className='flex gap-1 items-center pr-5 border-r-1'>
                 <LuUser className='text-primary' size={20}/>
-                <button className='font-medium text-text text-sm hover:text-primary hover:underline'>Sign Up/Sign In</button>
+                <Sign/>
               </div>
               <div className='flex gap-1 items-center'>
                 <IoCartOutline className='text-primary' size={20}/>

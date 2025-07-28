@@ -5,7 +5,7 @@ import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { Rating } from 'react-simple-star-rating'
 import { FaAngleDown, FaMinus, FaStar } from "react-icons/fa";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaAngleRight } from "react-icons/fa6";
 import { CiLocationOn } from "react-icons/ci";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -16,6 +16,7 @@ import { FiMinus, FiPlus } from "react-icons/fi";
 import { Input } from '@/components/ui/input';
 import { FaHeart } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
+import { unitChange } from '@/utilities';
 
 interface IProductProps {
 }
@@ -25,9 +26,8 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
     const measurements = [
         "KG",
         "Grams",
-        "Tons",
-        "Ounces",
-        "Litres",
+        "Ton",
+        "Ounces"
     ]
     const [measurement, setMeasurment] = useState(measurements[0]);
     const [activeTab, setActiveTab] = useState("Customer Reviews");
@@ -67,6 +67,15 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
     }
     const [quantity, setQuantity] = useState<number>(item?.min_order ?? 0);
     const [currentImage, setCurrentImage] = useState(0);
+    const handleMeasurementChange = (mes: string) => {
+        let converted = unitChange(quantity, measurement, mes);
+        let minOrderOfNewUnit = unitChange(item?.min_order ?? 0, 'kg', mes);
+        if(converted < minOrderOfNewUnit){
+            converted = minOrderOfNewUnit;
+        }
+        setQuantity(Number(converted));
+        setMeasurment(mes);
+    }
   return (
     <>
     <div className='mx-15 my-10 grid grid-cols-16 gap-10'>
@@ -154,19 +163,20 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
             <div className='flex flex-col items-start border-b-1 py-3 gap-4'>
                 <div className='flex justify-between  w-full'>
                     <h1 className={`text-xl  font-medium ${item?.stock_count ? "text-green-600" : 'text-red-600'}`}>{item?.stock_count ? "In stock" : "Out of stock"}</h1>
-                    
+
+                    {/* Measurement change */}
                     <div>
                         <DropdownMenu>
                             <DropdownMenuTrigger className='m-auto'>
-                                <button className='bg-background-secondary p-1 px-2 rounded-lg border-gray-300 border-1 flex items-center gap-4'>
+                                <Button variant={'link'} className='text-heading decoration-0 bg-background-secondary p-1 px-2 rounded-lg border-gray-300 border-1 flex items-center gap-4'>
                                     Size: {measurement}
                                     <FaChevronDown size={15} className='text-text'/>
-                                </button>
+                                </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
                                 {
                                     measurements.map((mes) => (
-                                        <DropdownMenuItem onClick={() => setMeasurment(mes)}>{mes}</DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => handleMeasurementChange(mes)}>{mes}</DropdownMenuItem>
                                     ))
                                 }
                             </DropdownMenuContent>
@@ -175,17 +185,23 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
                     
                 </div>
                 {/* Quantity */}
-                <div className='flex justify-center  w-full '>
-                    <div className='flex m-auto '>
+                <div className='flex justify-center items-center gap-4 w-full'>
+                    <div className='flex items-center m-auto'>
                         <button className='border-1 p-1 cursor-pointer' onClick={() => setQuantity(quantity-1)}>
                             <FiMinus size={20}/>  
                         </button>
-                        <input type='number' value={quantity} className='text-center w-15 border-1' onChange={(e) => setQuantity(Number(e.target.value))}/>
+                        <input 
+                            type='number' 
+                            value={quantity} 
+                            className='border-1 px-2 min-w-15 max-w-40 w-auto h-8' 
+                            style={{ width: `${Math.max(3, Math.min(8, quantity.toString().length + 1))}rem` }}
+                            onChange={(e) => setQuantity(Number(e.target.value))}
+                        />
                         <button className='border-1 p-1 cursor-pointer bg-primary text-white' onClick={() => setQuantity(quantity+1)}>
                             <FiPlus size={20}/>  
                         </button>
                     </div>
-                    <Button variant={'outline'} className=''>Add to Cart</Button>
+                    <Button variant={'outline'} className='flex-1 max-w-40'>Add to Cart</Button>
                 </div>
                 {/* Add to cart & Heart */}
                 <div className='flex gap-2 w-full'>

@@ -41,3 +41,15 @@ export interface ProductFilters {
     trusted?: boolean;
     freeReturns?: boolean;
 }
+
+export interface Product{
+  id: number;
+  name: string;
+  price: number;
+  
+};
+
+export interface CartItem{
+  quantity: number;
+  products: Product;
+};
