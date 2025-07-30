@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearch } from '@/searchContext';
 import { useNavigate, useParams } from 'react-router-dom';
-import type { ProductFilters, Item } from '@/types';
+import type { ProductFilters, Product } from '@/types';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -10,7 +10,7 @@ const ProductsList: React.FC = () => {
   const { query } = useParams<{ query: string }>();
   // const [searchQuery, setSearchQuery]
   const search = useSearch();
-  const [filteredProducts, setFilteredProducts] = useState<Item[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [filters, setFilters] = useState<ProductFilters>({});
   const [searchQuery, setSearchQuery] = useState(query || '');
   const [ratingFilter, setRatingFilter] = useState<string | null>(null);
@@ -139,7 +139,7 @@ const ProductsList: React.FC = () => {
                   placeholder="Min. Order"
                   className="w-full px-3 py-2 border rounded"
                   onChange={(e) => handleFilterChange({
-                    min_order: Number(e.target.value)
+                    minOrder: Number(e.target.value)
                   })}
                 />
               </div>
@@ -165,12 +165,12 @@ const ProductsList: React.FC = () => {
               <div className='h-48 my-2'>
                 <img
                   src={product.thumbnail}
-                  alt={product.title}
+                  alt={product.name}
                   className="object-contain h-full max-w-full mx-auto"
                 />
               </div>
               <div className="p-4">
-                <h3 className="font-semibold text-lg mb-2">{product.title}</h3>
+                <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xl font-bold text-green-600">
                     ${product.price}
@@ -192,9 +192,9 @@ const ProductsList: React.FC = () => {
                     )}
                   </div>
                 )}
-                {product.stock_count !== undefined && (
+                {product.stockCount !== undefined && (
                   <p className="text-sm text-gray-600 mb-2">
-                    {product.stock_count > 0 ? `${product.stock_count} in stock` : 'Out of stock'}
+                    {product.stockCount > 0 ? `${product.stockCount} in stock` : 'Out of stock'}
                   </p>
                 )}
                 {product.seller && (

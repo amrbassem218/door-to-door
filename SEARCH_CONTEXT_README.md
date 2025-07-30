@@ -47,11 +47,11 @@ interface Item {
     thumbnail: string;
     rating?: number;
     reviewCount?: number;
-    stock_count?: number;
+    stockCount?: number;
     description?: string;
     seller?: string;
     sellerId?: string;
-    min_order?: number;
+    minOrder?: number;
 }
 ```
 
@@ -129,7 +129,7 @@ const ProductList = () => {
       
       {results.map(product => (
         <div key={product.id}>
-          <h3>{product.title}</h3>
+          <h3>{product.name}</h3>
           <p>${product.price}</p>
         </div>
       ))}

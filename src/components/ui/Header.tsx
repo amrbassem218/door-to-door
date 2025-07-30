@@ -94,12 +94,12 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
                       className='px-4 py-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-b-0'
                       onClick={() => {
                         // setQuery();
-                        handleSearchSubmit(suggestion.title);
+                        handleSearchSubmit(suggestion.name);
                         setSuggestions([]);
                       }}
                     >
                       <div>
-                        <div className='font-medium'>{suggestion.title}</div>
+                        <div className='font-medium'>{suggestion.name}</div>
                         {suggestion.tags && (
                           <div className='text-sm text-gray-500'>
                             {Array.isArray(suggestion.tags) ? suggestion.tags.join(', ') : suggestion.tags}
@@ -120,7 +120,7 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
               </div>
               <div className='flex gap-1 items-center'>
                 <IoCartOutline className='text-primary' size={20}/>
-                <button className='text-text font-medium hover:text-primary hover:underline'>Cart</button>
+                <button className='text-text font-medium hover:text-primary hover:underline' onClick={() => navigate('/cart')}>Cart</button>
               </div>
             </div>
           </div>

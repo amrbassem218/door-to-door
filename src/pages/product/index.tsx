@@ -1,8 +1,7 @@
 import Header from '@/components/ui/Header';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import type { Item } from '@/types';
 import * as React from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Rating } from 'react-simple-star-rating'
 import { FaAngleDown, FaMinus, FaStar } from "react-icons/fa";
 import { useState, useEffect } from 'react';
@@ -16,22 +15,25 @@ import { FiMinus, FiPlus } from "react-icons/fi";
 import { Input } from '@/components/ui/input';
 import { FaHeart } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
-import { unitChange } from '@/utilities';
+import { addProductToCart, camel, getProduct, measurements, unitChange, useUser } from '@/utilities';
+import type { Product } from '@/types';
+import Error from '../error/Error';
+import { toast } from 'sonner';
+import CardSheet from '@/components/ui/cardSheet';
 
 interface IProductProps {
 }
 
-const Product: React.FunctionComponent<IProductProps> = (props) => {
+const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
     const {id} = useParams();
-    const measurements = [
-        "KG",
-        "Grams",
-        "Ton",
-        "Ounces"
-    ]
+    
     const [measurement, setMeasurment] = useState(measurements[0]);
     const [activeTab, setActiveTab] = useState("Customer Reviews");
     const [reviewSort, setReviewSort] = useState('Most relevant');
+    const [product, setProduct] = useState<Product>();
+    const [quantity, setQuantity] = useState<number>(0);
+    const user = useUser();
+    const navigate = useNavigate();
     const sortingTypes = [
         "Most relevant",
         "Latest",
@@ -39,43 +41,60 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
         "Low to High",
         "High to low",
     ]
-    const item: Item = 
-    {
-        title:"L'Oreal Paris Makeup True Match Lumi Glotion, Natural Glow Enhancer, Illuminator Highlighter, Bronzing Drops For a Sun-Kissed Glow, 903 Medium",
-        thumbnail: 'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
-        images: [
-            'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
-            'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
-            'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
-            'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
-            'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
-            'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
-            'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
-            'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
-            'https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=0.752xw:1.00xh;0.175xw,0&resize=1200:*',
-        ],
-        price: 499,
-        priceBefore: 750,
-        id: "111",
-        rating: 3.5,
-        reviewCount: 120,
-        stock_count: 40,
-        description: "Lorem ipsum dolor sit amet consectetur adipiscing elit quisque faucibus ex sapien vitae pellentesque sem placerat in id cursus mi.",
-        seller: "Shop1102879409 Store (Trader)",
-        sellerId: "Er12345",
-        min_order: 350
-    }
-    const [quantity, setQuantity] = useState<number>(item?.min_order ?? 0);
+    // const product: Product = 
+    // {
+    //     name:"L'Oreal Paris Makeup True Match Lumi Glotion, Natural Glow Enhancer, Illuminator Highlighter, Bronzing Drops For a Sun-Kissed Glow, 903 Medium",
+    //     thumbnail: 'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
+    //     images: [
+    //         'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
+    //         'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
+    //         'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
+    //         'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
+    //         'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
+    //         'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
+    //         'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
+    //         'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
+    //         'https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=0.752xw:1.00xh;0.175xw,0&resize=1200:*',
+    //     ],
+    //     price: 499,
+    //     priceBefore: 750,
+    //     id: "111",
+    //     rating: 3.5,
+    //     reviewCount: 120,
+    //     stockCount: 40,
+    //     description: "Lorem ipsum dolor sit amet consectetur adipiscing elit quisque faucibus ex sapien vitae pellentesque sem placerat in id cursus mi.",
+    //     seller: "Shop1102879409 Store (Trader)",
+    //     sellerId: "Er12345",
+    //     minOrder: 350
+    // }
+    useEffect(() => {
+        if(id){
+            const handleGetProduct = async() => {
+                let productInfo = await getProduct(Number(id));
+                productInfo = camel(productInfo);
+                setProduct(productInfo);
+                setQuantity(productInfo.minOrder);
+            }
+            handleGetProduct();
+        }
+    }, [])
     const [currentImage, setCurrentImage] = useState(0);
     const handleMeasurementChange = (mes: string) => {
         let converted = unitChange(quantity, measurement, mes);
-        let minOrderOfNewUnit = unitChange(item?.min_order ?? 0, 'kg', mes);
+        let minOrderOfNewUnit = unitChange(product?.minOrder ?? 0, 'kg', mes);
         if(converted < minOrderOfNewUnit){
             converted = minOrderOfNewUnit;
         }
         setQuantity(Number(converted));
         setMeasurment(mes);
     }
+    if(!product){
+        return <Error/>
+    }
+    
+    // if(!product){
+    //     navigate('/404');
+    // }
   return (
     <>
     <div className='mx-15 my-10 grid grid-cols-16 gap-10'>
@@ -86,7 +105,7 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
                 {/* Images sideBar */}
                 <ScrollArea className='w-20 h-90 '>
                     <div className='flex flex-col gap-1'>
-                        {item.images.map((image, i) => (
+                        {product.images.map((image, i) => (
                         <div className={`w-20 h-20 border-1 flex justify-center items-center ${currentImage == i && "border-primary"} cursor-pointer`} onClick={() => setCurrentImage(i)}>
                             <img src={`${image}`} alt="" className='object-contain h-full max-w-full ' />
                         </div>
@@ -95,30 +114,30 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
                 </ScrollArea>
                 {/* Main image */}
                 <div className='w-90 h-90 border-1 flex justify-center items-center '>
-                    <img src={`${item.images[currentImage]}`} alt="" className='object-contain h-full max-w-full ' />
+                    <img src={`${product.images[currentImage]}`} alt="" className='object-contain h-full max-w-full ' />
                 </div>
             </div>
             {/* Product Main Description */}
             <div className=''>
                 <div className='mb-2'>
-                    <h1 className='text-xl font-semibold'>{item.title}</h1>
+                    <h1 className='text-xl font-semibold'>{product.name}</h1>
                     {/* Rating and Stock */}
                     <div className="flex items-end gap-1">
                         <Rating
                             readonly
-                            initialValue={item.rating}
+                            initialValue={product.rating}
                             size={25}
                             SVGstyle={{ display: 'inline-block' }}
                             allowFraction // allows values like 3.5 stars
                         />
-                        <p className="text-md font-normal text-gray-600">({item?.reviewCount ?? 0}) reviews | </p>
-                        <p className={`text-md font-normal ${item?.stock_count ? "text-green-600" : 'text-red-600'}`}>{item?.stock_count ? "In stock" : "Out of stock"}</p>
+                        <p className="text-md font-normal text-gray-600">({product?.reviewCount ?? 0}) reviews | </p>
+                        <p className={`text-md font-normal ${product?.stockCount ? "text-green-600" : 'text-red-600'}`}>{product?.stockCount ? "In stock" : "Out of stock"}</p>
                     </div>
                 </div>
 
                 <div className='space-y-2'>
-                    <h1 className='text-2xl'>${item.price.toFixed(2)}</h1>
-                    <p>{item.description}</p>
+                    <h1 className='text-2xl'>${product.price.toFixed(2)}</h1>
+                    <p>{product.description}</p>
                 </div>
                 <div className='mt-2 border-b-2'></div>
             </div>            
@@ -128,7 +147,7 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
         <div className='col-span-4 border-1 p-4'>
             {/* Price */}
             <div className='flex flex-col items-start border-b-1 pb-3'>
-                <p className='text-2xl'>${item.price} <span className='text-sm text-text'>($14 / ounce)</span></p>
+                <p className='text-2xl'>${product.price} <span className='text-sm text-text'>($14 / ounce)</span></p>
                 <Popover>
                     <PopoverTrigger>
                         <button className='text-primary text-left hover:underline decoration-1 cursor-pointer'>International Returns</button>
@@ -144,7 +163,7 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
             <div className='flex justify-between gap-6 border-b-1 py-3'>
                 <p className='font-medium '>Sold by</p>
                 <div className='flex flex-1 items-center w-10 justify-end cursor-pointer'>
-                    <p className='truncate text-ellipsis overflow-hidden hover:underline'>{item.seller}</p>
+                    <p className='truncate text-ellipsis overflow-hidden hover:underline'>{product.seller}</p>
                     <FaAngleRight size={15}/>
                 </div>
             </div>
@@ -162,7 +181,7 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
             {/* Stock & Purchase */}
             <div className='flex flex-col items-start border-b-1 py-3 gap-4'>
                 <div className='flex justify-between  w-full'>
-                    <h1 className={`text-xl  font-medium ${item?.stock_count ? "text-green-600" : 'text-red-600'}`}>{item?.stock_count ? "In stock" : "Out of stock"}</h1>
+                    <h1 className={`text-xl  font-medium ${product?.stockCount ? "text-green-600" : 'text-red-600'}`}>{product?.stockCount ? "In stock" : "Out of stock"}</h1>
 
                     {/* Measurement change */}
                     <div>
@@ -201,7 +220,7 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
                             <FiPlus size={20}/>  
                         </button>
                     </div>
-                    <Button variant={'outline'} className='flex-1 max-w-40'>Add to Cart</Button>
+                    <CardSheet product={product} quantity={quantity}/>
                 </div>
                 {/* Add to cart & Heart */}
                 <div className='flex gap-2 w-full'>
@@ -243,16 +262,16 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
         {/* Reviews */}
         <section className='mx-15'>
             <div className='flex gap-1'>
-                <h1 className='text-xl font-semibold'>Reviews | {item.rating}</h1>
+                <h1 className='text-xl font-semibold'>Reviews | {product.rating}</h1>
                 <Rating
                     readonly
-                    initialValue={item.rating}
+                    initialValue={product.rating}
                     size={25}
                     SVGstyle={{ display: 'inline-block' }}
                     allowFraction // allows values like 3.5 stars
                 />
                 <div className='flex items-end'>
-                    <span className='text-sm text-text'>({item.reviewCount})</span>
+                    <span className='text-sm text-text'>({product.reviewCount})</span>
                 </div>
 
             </div>
@@ -277,4 +296,4 @@ const Product: React.FunctionComponent<IProductProps> = (props) => {
   );
 };
 
-export default Product;
+export default ProductListing;

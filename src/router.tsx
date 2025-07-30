@@ -2,10 +2,10 @@ import { createBrowserRouter } from "react-router-dom";
 import Home from "./pages/home";
 import Error from "./pages/error/Error";
 
-import Product from "./pages/product";
 import Layout from "./components/Layout";
 import ProductsList from "./pages/productsList";
 import Cart from "./pages/cart";
+import ProductListing from "./pages/product";
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -17,7 +17,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/product/:id',
-                element: <Product/>,
+                element: <ProductListing/>,
             },
             {
                 path: '/search/:query',
@@ -26,6 +26,10 @@ export const router = createBrowserRouter([
             {
                 path: '/cart',
                 element: <Cart/>,
+            },
+            {
+                path: '/404',
+                element: <Error/>,
             },
         ],
         errorElement: <Error/>,

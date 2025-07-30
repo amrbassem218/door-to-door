@@ -46,13 +46,13 @@ export type Database = {
           discount: number
           id: number
           images: string[] | null
-          min_order: number | null
+          minOrder: number | null
           price: number
           rating: number | null
           review_count: number | null
           seller: string | null
           seller_id: number | null
-          stock_count: number | null
+          stockCount: number | null
           tags: string[] | null
           thumbnail: string | null
           title: string
@@ -63,13 +63,13 @@ export type Database = {
           discount?: number
           id?: number
           images?: string[] | null
-          min_order?: number | null
+          minOrder?: number | null
           price?: number
           rating?: number | null
           review_count?: number | null
           seller?: string | null
           seller_id?: number | null
-          stock_count?: number | null
+          stockCount?: number | null
           tags?: string[] | null
           thumbnail?: string | null
           title: string
@@ -80,13 +80,13 @@ export type Database = {
           discount?: number
           id?: number
           images?: string[] | null
-          min_order?: number | null
+          minOrder?: number | null
           price?: number
           rating?: number | null
           review_count?: number | null
           seller?: string | null
           seller_id?: number | null
-          stock_count?: number | null
+          stockCount?: number | null
           tags?: string[] | null
           thumbnail?: string | null
           title?: string

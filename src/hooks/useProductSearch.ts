@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useSearch } from '@/searchContext';
-import { Item, ProductFilters } from '@/types';
+import { Product, ProductFilters } from '@/types';
 
 export const useProductSearch = () => {
   const search = useSearch();
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState<ProductFilters>({});
-  const [results, setResults] = useState<Item[]>([]);
+  const [results, setResults] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   // Search products by query

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { MdNavigateNext } from "react-icons/md";
 import { useState } from 'react';
-import type { Item } from '@/types';
+import type { Product } from '@/types';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/ui/Header';
 import Hero from './hero';
@@ -13,9 +13,9 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
   const [topSellingSeeMore, setTopSellingSeeMore] = useState(false);
   const navigate = useNavigate();
   const limit = 6;
-  const items: Item[] = [
+  const items: Product[] = [
     {
-      title:"L'Oreal Paris Makeup True Match Lumi Glotion",
+      name:"L'Oreal Paris Makeup True Match Lumi Glotion",
       thumbnail: 'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
       images: [],
       price: 499,
@@ -23,7 +23,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
       id: "111",
     },
     {
-      title:"True Match Face Makeup True Match Radiant Serum Concealer",
+      name:"True Match Face Makeup True Match Radiant Serum Concealer",
       thumbnail: 'https://www.loreal-paris.co.uk/-/media/project/loreal/brand-sites/oap/emea/uk/products/makeup/face-makeup/true-match/concealer/radiant-serum-concealer/2023_oap_makeup_true_match_concealer_eu_opened_8n_medium_deep_pack_front-1-(1).png',
       images: [],
       price: 299,
@@ -31,7 +31,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
       id: "112",
     },
     {
-      title:"L'Oreal Paris Makeup True Match Lumi Glotion",
+      name:"L'Oreal Paris Makeup True Match Lumi Glotion",
       thumbnail: 'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
       images: [],
       price: 499,
@@ -39,7 +39,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
       id: "111",
     },
     {
-      title:"True Match Face Makeup True Match Radiant Serum Concealer",
+      name:"True Match Face Makeup True Match Radiant Serum Concealer",
       thumbnail: 'https://www.loreal-paris.co.uk/-/media/project/loreal/brand-sites/oap/emea/uk/products/makeup/face-makeup/true-match/concealer/radiant-serum-concealer/2023_oap_makeup_true_match_concealer_eu_opened_8n_medium_deep_pack_front-1-(1).png',
       images: [],
       price: 299,
@@ -47,7 +47,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
       id: "112",
     },
     {
-      title:"L'Oreal Paris Makeup True Match Lumi Glotion",
+      name:"L'Oreal Paris Makeup True Match Lumi Glotion",
       thumbnail: 'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
       images: [],
       price: 499,
@@ -55,7 +55,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
       id: "111",
     },
     {
-      title:"True Match Face Makeup True Match Radiant Serum Concealer",
+      name:"True Match Face Makeup True Match Radiant Serum Concealer",
       thumbnail: 'https://www.loreal-paris.co.uk/-/media/project/loreal/brand-sites/oap/emea/uk/products/makeup/face-makeup/true-match/concealer/radiant-serum-concealer/2023_oap_makeup_true_match_concealer_eu_opened_8n_medium_deep_pack_front-1-(1).png',
       images: [],
       price: 299,
@@ -63,7 +63,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
       id: "112",
     },
     {
-      title:"L'Oreal Paris Makeup True Match Lumi Glotion",
+      name:"L'Oreal Paris Makeup True Match Lumi Glotion",
       thumbnail: 'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
       images: [],
       price: 499,
@@ -71,7 +71,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
       id: "111",
     },
     {
-      title:"True Match Face Makeup True Match Radiant Serum Concealer",
+      name:"True Match Face Makeup True Match Radiant Serum Concealer",
       thumbnail: 'https://www.loreal-paris.co.uk/-/media/project/loreal/brand-sites/oap/emea/uk/products/makeup/face-makeup/true-match/concealer/radiant-serum-concealer/2023_oap_makeup_true_match_concealer_eu_opened_8n_medium_deep_pack_front-1-(1).png',
       images: [],
       price: 299,
@@ -79,7 +79,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
       id: "112",
     },
     {
-      title:"L'Oreal Paris Makeup True Match Lumi Glotion",
+      name:"L'Oreal Paris Makeup True Match Lumi Glotion",
       thumbnail: 'https://www.lorealparis.com.au/-/media/project/loreal/brand-sites/oap/apac/au/products/makeup/face-makeup/true-match/liquid-foundation/new-images/packshot/05n__pack_closed_front.png',
       images: [],
       price: 499,
@@ -87,7 +87,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
       id: "111",
     },
     {
-      title:"True Match Face Makeup True Match Radiant Serum Concealer",
+      name:"True Match Face Makeup True Match Radiant Serum Concealer",
       thumbnail: 'https://www.loreal-paris.co.uk/-/media/project/loreal/brand-sites/oap/emea/uk/products/makeup/face-makeup/true-match/concealer/radiant-serum-concealer/2023_oap_makeup_true_match_concealer_eu_opened_8n_medium_deep_pack_front-1-(1).png',
       images: [],
       price: 299,

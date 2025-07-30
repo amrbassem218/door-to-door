@@ -1,7 +1,7 @@
 import { Index } from "flexsearch";
 
-export interface Item{
-    title: string;
+export interface Product{
+    name: string;
     price: number;
     priceBefore: number;
     id: string;
@@ -9,22 +9,22 @@ export interface Item{
     thumbnail: string;
     rating?: number;
     reviewCount?: number;
-    stock_count?: number;
+    stockCount?: number;
     description?: string;
     seller?: string;
     sellerId?: string;
-    min_order?: number;
-    tags?: string[] | string;
+    minOrder?: number;
+    tags?: string[] ;
 }
 
 export type dbData = any[] | null;
 
 export interface SearchContextType {
     indexes: Index<string>[];
-    products: Item[];
-    allProducts: Item[];
-    searchProducts: (query: string) => Promise<Item[]>;
-    filterProducts: (filters: ProductFilters) => Item[];
+    products: Product[];
+    allProducts: Product[];
+    searchProducts: (query: string) => Promise<Product[]>;
+    filterProducts: (filters: ProductFilters) => Product[];
 }
 
 export interface ProductFilters {
@@ -36,20 +36,20 @@ export interface ProductFilters {
     rating?: string;
     inStock?: boolean;
     seller?: string[];
-    min_order?: number;
+    minOrder?: number;
     previouslySuppliedTo?:  string[],
     trusted?: boolean;
     freeReturns?: boolean;
 }
 
-export interface Product{
-  id: number;
-  name: string;
-  price: number;
-  
+
+export interface CartItems{
+  quantity: number;
+  products: Product[];
 };
 
 export interface CartItem{
-  quantity: number;
-  products: Product;
-};
+    products: Product;
+    quantity: number;
+    measurement: string;
+}

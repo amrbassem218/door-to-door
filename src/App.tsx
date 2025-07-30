@@ -8,19 +8,19 @@ import { RouterProvider } from 'react-router-dom'
 import { router } from './router'
 import Auth from './auth'
 import { getProducts, indexProducts, getSuggestion } from './utilities'
-import type { dbData, SearchContextType, Item, ProductFilters } from './types'
+import type { dbData, SearchContextType, Product, ProductFilters } from './types'
 import type { Index } from 'flexsearch'
 import { SearchContext } from './searchContext'
 function App() {
   const [indexes, setIndexes] = useState<Index<string>[]>([]);
-  const [products, setProducts] = useState<Item[]>([]);
-  const [allProducts, setAllProducts] = useState<Item[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     getProducts()
     .then((data: dbData) => {
       if(data){
-        const typedData = data as Item[];
+        const typedData = data as Product[];
         setProducts(typedData);
         setAllProducts(typedData);
         indexProducts(data).then((props) => {
@@ -33,7 +33,7 @@ function App() {
     })
   }, [])
 
-  const searchProducts = async (query: string): Promise<Item[]> => {
+  const searchProducts = async (query: string): Promise<Product[]> => {
     if (!query || !indexes.length || !products.length) return [];
     
     return await getSuggestion({
@@ -44,13 +44,13 @@ function App() {
     });
   };
 
-  const filterProducts = (filters: ProductFilters): Item[] => {
+  const filterProducts = (filters: ProductFilters): Product[] => {
     let filtered = [...allProducts];
 
     if (filters.category) {
       filtered = filtered.filter(product => 
         product.tags?.includes(filters.category!) || 
-        product.title.toLowerCase().includes(filters.category!.toLowerCase())
+        product.name.toLowerCase().includes(filters.category!.toLowerCase())
       );
     }
 
@@ -77,10 +77,10 @@ function App() {
 
     if (filters.inStock !== undefined) {
       console.log(filters.inStock)
-      console.log(products[0].stock_count)
+      console.log(products[0].stockCount)
       // console.log(filters.inStock)
       filtered = filtered.filter(product => 
-        filters.inStock ? (product.stock_count && product.stock_count > 0) : true
+        filters.inStock ? (product.stockCount && product.stockCount > 0) : true
       );
     }
 
@@ -95,9 +95,9 @@ function App() {
         if(flag) return product;
       });
     }
-    if(filters.min_order){
+    if(filters.minOrder){
       filtered = filtered.filter((prod) => (
-        prod.min_order && filters.min_order && prod.min_order <= filters.min_order
+        prod.minOrder && filters.minOrder && prod.minOrder <= filters.minOrder
       ))
     }
     return filtered;
