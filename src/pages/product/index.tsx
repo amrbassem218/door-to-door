@@ -19,7 +19,7 @@ import { addProductToCart, camel, getProduct, measurements, unitChange, useUser 
 import type { Product } from '@/types';
 import Error from '../error/Error';
 import { toast } from 'sonner';
-import CardSheet from '@/components/ui/cardSheet';
+import CartSheet from '@/components/ui/cartSheet';
 
 interface IProductProps {
 }
@@ -220,7 +220,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                             <FiPlus size={20}/>  
                         </button>
                     </div>
-                    <CardSheet product={product} quantity={quantity}/>
+                    <CartSheet product={product} quantity={quantity}/>
                 </div>
                 {/* Add to cart & Heart */}
                 <div className='flex gap-2 w-full'>

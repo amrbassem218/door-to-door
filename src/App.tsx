@@ -76,9 +76,9 @@ function App() {
     }
 
     if (filters.inStock !== undefined) {
-      console.log(filters.inStock)
-      console.log(products[0].stockCount)
       // console.log(filters.inStock)
+      // console.log(products[0].stockCount)
+      // // console.log(filters.inStock)
       filtered = filtered.filter(product => 
         filters.inStock ? (product.stockCount && product.stockCount > 0) : true
       );

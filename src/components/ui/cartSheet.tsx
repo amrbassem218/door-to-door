@@ -22,7 +22,7 @@ interface ICardSheetProps {
   quantity: number;
 }
 
-const CardSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
+const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
   const user = useUser();
   const [cart, setCart] = useState<CartItem[]>();
   const [subtotal, setSubtotal] = useState(0);
@@ -45,13 +45,13 @@ const CardSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
             currentCartQuantity[id(product)] = quantity;
             currentCartMeasurement[id(product)] = measurement;
           })
-          console.log("quantity: ", currentCartQuantity);
-          console.log("measurement: ", currentCartMeasurement);
+          // console.log("quantity: ", currentCartQuantity);
+          // console.log("measurement: ", currentCartMeasurement);
           setCartQuantity(currentCartQuantity);
           setCartMeasurement(currentCartMeasurement);
           setSubtotal(total);
           setCart(data);
-          console.log(data);
+          // console.log(data);
         }
     }
     else{
@@ -94,7 +94,7 @@ const CardSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                 <div className='flex hover:bg-background-secondary cursor-pointer items-center h-40' onClick={() => navigate(`/product/${product.id}`)}>
                   
                   {/* Product image */}
-                  <div className='w-20 h-35W flex flex-col justify-center gap-2 items-center py-4'>
+                  <div className='w-20 h-35 flex flex-col justify-center gap-2 items-center py-4'>
                     <img src={product.thumbnail} alt="" className='object-contain h-full max-w-full' />
                     <span className='text-xs text-text'>(${product.price}/{cartMeasurement[id(product)]})</span>
                   </div>
@@ -169,4 +169,4 @@ const CardSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
   );
 };
 
-export default CardSheet;
+export default CartSheet;

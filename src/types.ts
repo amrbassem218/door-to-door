@@ -12,9 +12,10 @@ export interface Product{
     stockCount?: number;
     description?: string;
     seller?: string;
-    sellerId?: string;
+    sellerId?: number;
     minOrder?: number;
     tags?: string[] ;
+    discount: number;
 }
 
 export type dbData = any[] | null;

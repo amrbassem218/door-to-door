@@ -2,7 +2,7 @@ import { supabase } from "./supabase/supabaseClient"
 import { Index } from "flexsearch"
 import { Document } from "flexsearch"
 import type { CartItem, dbData, Product } from "./types";
-import { create, all } from 'mathjs'
+import { create, all, prod } from 'mathjs'
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import camelcaseKeys from 'camelcase-keys';
@@ -12,7 +12,7 @@ export const getProducts = async() => {
     .from('products')
     .select();
     if(products){
-        console.log(products);
+        // console.log(products);
     }  
     else{
         console.error(error);
@@ -59,19 +59,19 @@ export const unitChange = (value: number, currentUnit: string, targetUnit: strin
   const math = create(all);
   
   // Debug logging to see what's being passed
-  console.log('unitChange called with:', { value, currentUnit, targetUnit });
+  // console.log('unitChange called with:', { value, currentUnit, targetUnit });
   
   targetUnit = targetUnit.toLowerCase();
   currentUnit = currentUnit.toLowerCase();
   if(targetUnit == "ton") targetUnit = "tonne";
   if(currentUnit == "ton") currentUnit = "tonne";
   
-  console.log('After normalization:', { currentUnit, targetUnit });
+  // console.log('After normalization:', { currentUnit, targetUnit });
   
   const current = math.unit(value, currentUnit);
   const converted = current.to(targetUnit);
-  console.log(current);
-  console.log(converted);
+  // console.log(current);
+  // console.log(converted);
   return converted.toNumber().toFixed(2);
 }
 export const handleGoogleAuth = () => {
@@ -120,7 +120,7 @@ export const getCartId = async(user: User) =>{
   .select('id')
   .eq('user_id', user.id)
   .single();
-  console.log("user:", user)
+  // console.log("user:", user)
   if(error){
     if(error.code == "PGRST116"){
       let {data: cartId, error: createCartError} = await supabase
@@ -132,51 +132,65 @@ export const getCartId = async(user: User) =>{
       .single();
       if(createCartError){
         console.error(createCartError);
-        console.log("couldn't create a new cart");
+        // console.log("couldn't create a new cart");
       }
       else if(cartId){
         return cartId.id;
       }
     }
     else{
-  console.log("I'm here");
+  // console.log("I'm here");
 
       console.error(error);
     }
   }
   else if(cartId?.id) return cartId.id;
 }
-export const getCartItems = async(user: User) => {
-  // const , error} = 
-  getCartId(user).then(async(cartId) => {
-    console.log("1 step away");
-    console.log("data: ", cartId);
-    supabase
-    .from('cart_items')
-    .select('quantity, products(*)')
-    .eq('cart_id', cartId)
-    .then(({data: cartItems}) => {
-      console.log("almost there");
-      console.log("prev. cartItems: ", cartItems);
-      return camel(cartItems);
-    })
-  })
-  console.log("null is actually what is happening right now")
-  return null;
-}
+// export const getCartItems = async(user: User) => {
+//   try {
+//     const cartId = await getCartId(user);
+    
+//     if (!cartId) {
+//       // console.log("No cart ID found");
+//       return null;
+//     }
+    
+//     const {data: cartItems, error} = await supabase
+//       .from('cart_items')
+//       .select('quantity, products(*)')
+//       .eq('cart_id', cartId);
+    
+//     if (error) {
+//       console.error("Error fetching cart items:", error);
+//       return null;
+//     }
+    
+//     return camel(cartItems) as CartItem[];
+//   } catch (error) {
+//     console.error("Error in getCartItems:", error);
+//     return null;
+//   }
+// }
 
 export const camel = (element: any) => {
-  if(typeof element == 'object'){
-    return camelcaseKeys(element);
+  
+  if (Array.isArray(element)) {
+    const result = element.map((e: any, index: number) => {
+      const camelized = camelcaseKeys(e, { deep: true });
+      return camelized;
+    });
+    return result;
+  } else if (typeof element === 'object' && element !== null) {
+    const result = camelcaseKeys(element, { deep: true });
+    return result;
   }
-  const camelCaseArray = element.map((e: any) => camelcaseKeys(e));
-  return camelCaseArray;
+  return element;
 }
 
 export const addProductToCart = async(user: User, product: Product, quantity: number) =>{
   const cartId = await getCartId(user);
-  console.log("id: ", cartId)
-  console.log("product_id: ", Number(product.id))
+  // console.log("id: ", cartId)
+  // console.log("product_id: ", Number(product.id))
   const {data, error: getProductError} = await supabase
   .from('cart_items')
   .select('product_id')
@@ -199,7 +213,7 @@ export const addProductToCart = async(user: User, product: Product, quantity: nu
       quantity: quantity
     })
     if(error){
-      console.log("error here");
+      // console.log("error here");
       console.error(error);
     }
     return "success";
@@ -214,7 +228,7 @@ export const getProduct = async(id: number) => {
   .single();
   if(error){
     console.error(error);
-    console.log("couldn't fetch product");
+    // console.log("couldn't fetch product");
     return null;
   }
   return data;
@@ -228,11 +242,10 @@ export const getCart = async(user: User) => {
 
   if(error){
     console.error(error);
-    console.log("couldn't fetch cart");
   }
   else if(data){
-    console.log("cart_items:", data);
-    return camel(data) as CartItem[];
+    let camelData: CartItem[] = camel(data);
+    return camelData;
   }
 }
 
@@ -242,3 +255,7 @@ export const measurements = [
   "Ton",
   "Ounces"
 ]
+
+export const newPrice = (product:Product) => {
+  return product.price - (product.price / product.discount);
+}
