@@ -6,7 +6,7 @@ export default function Layout() {
   return (
     <>
       <Header />
-      <main className='max-w-400 mx-auto'>
+      <main className=''>
         <Outlet />
       </main>
     </>

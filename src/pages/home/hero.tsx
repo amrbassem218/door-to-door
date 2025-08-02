@@ -12,18 +12,23 @@ interface IHeroProps {
 }
 
 const Hero: React.FunctionComponent<IHeroProps> = (props) => {
+    const images = [
+        'rec.png',
+        'rec2.png'
+    ]
   return (
-    <div className='space-y-10'>
+    <div className=''>
     {/* Carousel */}
     <section className='pt-5 w-full mx-auto'>
         <Carousel className="relative">
             <CarouselContent className=''>
-                {Array.from({ length: 5 }).map((_, index) => (
+                {images.map((img, index) => (
                 <CarouselItem key={index}>
-                    <div className="p-1">
-                        <Card className=''>
-                            <CardContent className="h-50 flex items-center justify-center p-6">
-                                <span className="text-4xl font-semibold">{index + 1}</span>
+                    <div className="">
+                        <Card className='p-0 m-0'>
+                            <CardContent className="w-full flex items-center justify-center p-0 m-0">
+                                <img src={img} alt="" className='w-full'/>
+                                {/* <span className="text-4xl font-semibold">{index + 1}</span> */}
                             </CardContent>
                         </Card>
                     </div>
@@ -35,6 +40,14 @@ const Hero: React.FunctionComponent<IHeroProps> = (props) => {
         </Carousel>
     </section>
     
+    {/* <section className='w-screen h-70 bg-primary/70'>
+        <div>
+            <h2>Sale Ends: Aug 31st, 05:59 (GMT+3)</h2>
+            <div>
+
+            </div>
+        </div>
+    </section> */}
     </div>
   );
 };

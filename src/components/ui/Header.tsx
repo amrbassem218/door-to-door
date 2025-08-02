@@ -125,7 +125,7 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
             </div>
           </div>
           <div className='absolute left-0 w-screen border-b-1'></div>
-          <TopicBar/>
+          {/* <TopicBar/> */}
           <div className='absolute left-0 w-screen border-b-1'></div>
         </div>
         {/* <div className='flex gap-3 justify-center '>
