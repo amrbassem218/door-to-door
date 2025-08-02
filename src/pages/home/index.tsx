@@ -69,11 +69,11 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
             )}
           </div>
         </section> */}
-        
-        <div className='mx-20'>
           <div className='mb-10'>
             <Hero/>
           </div>
+        
+        <div className='mx-20'>
           {/* Today's deals */}
           <section className='mb-15 space-y-7'>
             <h1 className='text-center text-3xl font-bold'>Today's deals</h1>
