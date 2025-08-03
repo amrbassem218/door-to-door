@@ -1,4 +1,5 @@
 import { Index } from "flexsearch";
+import type { Dispatch, SetStateAction } from "react";
 
 export interface Product{
     name: string;
@@ -27,7 +28,10 @@ export interface SearchContextType {
     searchProducts: (query: string) => Promise<Product[]>;
     filterProducts: (filters: ProductFilters) => Product[];
 }
-
+export interface LangContextType{
+    lang: string;
+    setLang: Dispatch<SetStateAction<string>>;
+}
 export interface ProductFilters {
     category?: string;
     priceRange?: {

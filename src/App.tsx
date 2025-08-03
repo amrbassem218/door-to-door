@@ -8,14 +8,15 @@ import { RouterProvider } from 'react-router-dom'
 import { router } from './router'
 import Auth from './auth'
 import { getProducts, indexProducts, getSuggestion } from './utilities'
-import type { dbData, SearchContextType, Product, ProductFilters } from './types'
+import type { dbData, SearchContextType, Product, ProductFilters, LangContextType } from './types'
 import type { Index } from 'flexsearch'
 import { SearchContext } from './searchContext'
+import { LangContext } from './langContext'
 function App() {
   const [indexes, setIndexes] = useState<Index<string>[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
-
+  const [lang, setLang] = useState<string>("en");
   useEffect(() => {
     getProducts()
     .then((data: dbData) => {
@@ -111,12 +112,18 @@ function App() {
     filterProducts
   };
 
+  const langContextValue: LangContextType = {
+    lang,
+    setLang  
+  }
   return (
-    <SearchContext.Provider value={searchContextValue}>
-      <div className='w-full'>
-        <RouterProvider router={router}/>
-      </div>
-    </SearchContext.Provider>
+    <LangContext.Provider value={langContextValue}>
+      <SearchContext.Provider value={searchContextValue}>
+        <div className='w-full'>
+          <RouterProvider router={router}/>
+        </div>
+      </SearchContext.Provider>
+    </LangContext.Provider>
   )
 }
 

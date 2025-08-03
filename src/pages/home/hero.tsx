@@ -36,13 +36,12 @@ const Hero: React.FunctionComponent<IHeroProps> = (props) => {
       </video>
       
       {/* Gradient overlay - darker at bottom */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/70 to-transparent"></div>
       <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/0 to-transparent"></div>
       
       <div className="relative z-10 flex items-center justify-center h-150 mx-20">
         <div className='absolute left-0 bottom-35 w-150'>
             <h1 className="text-5xl font-bold mb-4 text-white ">From Egyptian Fields to the World's Markets</h1>
-            {/* <Input className='w-full max-w-150 h-10 bg-white'/> */}
             <div className='space-y-3'>
                 <SearchBar styles='w-full h-12'/>
                 <div className='flex gap-2'>

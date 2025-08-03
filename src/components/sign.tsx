@@ -29,8 +29,9 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
         ? 
         <div>
           <DropdownMenu>
-            <DropdownMenuTrigger className='font-medium text-text text-sm hover:text-primary hover:underline'>
-              {getDisplayName(user)}
+            <DropdownMenuTrigger className='font-medium text-text  hover:text-primary hover:underline text-left'>
+              <p className='text-xs'>Hello there,</p>
+              <p className='text-heading text-xs'>{getDisplayName(user)}</p>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuItem>Profile</DropdownMenuItem>
@@ -44,6 +45,7 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
         </div>
           :<Dialog>
             <DialogTrigger className='font-medium text-text text-sm hover:text-primary hover:underline'>
+              Hello there, <br/>
               Sign in/ Register
             </DialogTrigger>
           <DialogContent className='p-10 w-120 '>

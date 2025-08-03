@@ -12,9 +12,9 @@ const TopicBar: React.FunctionComponent<ITopicBarProps> = (props) => {
         setActiveTab(topic);
     }
   return (
-    <div className='h-15 flex gap-5 items-center px-20 '>
+    <div className='h-15 flex gap-5 items-center px-20 mb-1'>
         {topics.map((topic) => (
-            <button className={`h-9 ${topic == activeTab ? "text-white bg-primary" : "text-heading bg-background-secondary-3"} cursor-pointer px-4 gap-1 flex items-center justify-center rounded-xl`} onClick={() => handleTopicClick(topic)}>
+            <button className={`h-9 ${topic == activeTab ? "text-white bg-primary" : "text-heading bg-background-secondary-3 hover:bg-primary/10"} cursor-pointer px-4 gap-1 flex items-center justify-center rounded-xl `} onClick={() => handleTopicClick(topic)}>
                 <p className=''>
                     {topic}
                 </p>
