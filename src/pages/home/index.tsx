@@ -73,13 +73,13 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
             <Hero/>
           </div>
         
-        <div className='mx-20'>
+        <div className='md:mx-20 mx-5'>
           {/* Today's deals */}
           <section className='mb-15 space-y-7'>
             <h1 className='text-center text-3xl font-bold'>Today's deals</h1>
-            <div className='grid grid-cols-12 gap-10 '>
+            <div className='grid grid-cols-12 md:gap-10 gap-5'>
               {/* Best sellers */}
-              <Card className='col-span-4 hover:bg-background-secondary transition-all'>
+              <Card className='md:col-span-4 col-span-12 hover:bg-background-secondary transition-all'>
                 <CardHeader>
                   <CardTitle className='mx-auto text-2xl font-semibold'>
                     Bestsellers
@@ -91,11 +91,11 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className='grid grid-cols-12 gap-10'>
+                  <div className='grid grid-cols-12 md:gap-10 gap-2'>
                     {items && items.map((item, i) => 
                       {
                         return (topSellingSeeMore || i < 2) &&
-                        <Item item={item} col='col-span-6'/>
+                        <Item item={item} col='md:col-span-6 col-span-12'/>
                       }
                     )}
                   </div>
@@ -103,7 +103,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
               </Card>
 
               {/* Big save */}
-              <Card className='col-span-4 hover:bg-background-secondary transition-all'>
+              <Card className='md:col-span-4 col-span-12 hover:bg-background-secondary transition-all'>
                 <CardHeader>
                   <CardTitle className='mx-auto text-2xl font-semibold'>
                     Big Save
@@ -115,11 +115,11 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className='grid grid-cols-12 gap-10'>
+                  <div className='grid grid-cols-12 md:gap-10 gap-2'>
                     {items && items.map((item, i) => 
                       {
                         return (topSellingSeeMore || i < 2) &&
-                        <Item item={item} col='col-span-6'/>
+                        <Item item={item} col='md:col-span-6 col-span-12'/>
                       }
                     )}
                   </div>
@@ -127,7 +127,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
               </Card>
 
               {/* Super deals */}
-              <Card className='col-span-4 hover:bg-background-secondary transition-all'>
+              <Card className='md:col-span-4 col-span-12 hover:bg-background-secondary transition-all'>
                 <CardHeader>
                   <CardTitle className='mx-auto text-2xl font-semibold'>
                     SuperDeals
@@ -139,11 +139,11 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
                   </CardDescription>
                 </CardHeader>
                   <CardContent>
-                  <div className='grid grid-cols-12 gap-10'>
+                  <div className='grid grid-cols-12 md:gap-10 gap-2'>
                     {items && items.map((item, i) => 
                       {
                         return (topSellingSeeMore || i < 2) &&
-                        <Item item={item} col='col-span-6'/>
+                        <Item item={item} col='md:col-span-6 col-span-12'/>
                       }
                     )}
                   </div>
@@ -158,7 +158,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
             <div className='grid grid-cols-12 gap-5'>
               {items && items.map((item, i) => 
                 (
-                  <Item item={item} col='col-span-2'/>
+                  <Item item={item} col='lg:col-span-2 col-span-6'/>
                 )
               )}
             </div>

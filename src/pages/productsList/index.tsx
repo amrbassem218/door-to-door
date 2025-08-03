@@ -5,6 +5,7 @@ import type { ProductFilters, Product } from '@/types';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
 import { Checkbox } from '@/components/ui/checkbox';
+import { newPrice } from '@/utilities';
 
 const ProductsList: React.FC = () => {
   const { query } = useParams<{ query: string }>();
@@ -48,7 +49,7 @@ const ProductsList: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto  py-8">
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-4">
           Search Results for "{searchQuery}"
@@ -60,7 +61,7 @@ const ProductsList: React.FC = () => {
 
       <div className='grid grid-cols-16 gap-10'>
         {/* Filters */}
-        <div className="mb-6 p-4 border-2 bg-background-secondary-3 border-background-secondary-3 rounded-lg max-w-200 col-span-3">
+        <div className="md:block md:col-span-3 hidden mb-6 p-4 border-2 bg-background-secondary-3 border-background-secondary-3 rounded-lg max-w-200 ">
           <h2 className="text-lg font-semibold mb-4">Filters</h2>
           <div className="flex flex-col gap-4">
 
@@ -159,25 +160,26 @@ const ProductsList: React.FC = () => {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 col-span-13">
+        <div className="grid grid-cols-12 gap-6 md:col-span-13 col-span-16 max-w-screen">
           {filteredProducts.map((product) => (
-            <div key={product.id} className="border rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate(`/product/${product.id}`)}>
-              <div className='h-48 my-2'>
+            <div key={product.id} className="flex items-center gap-2 md:gap-0 w-full px-2 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer col-span-12" onClick={() => navigate(`/product/${product.id}`)}>
+              <div className='w-30 h-30  '>
                 <img
                   src={product.thumbnail}
                   alt={product.name}
                   className="object-contain h-full max-w-full mx-auto"
                 />
               </div>
-              <div className="p-4">
-                <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xl font-bold text-green-600">
-                    ${product.price}
+              <div className="mid:p-4 flex-1">
+                <h3 className="md:font-semibold md:text-lg text-sm mb-2 line-clamp-2">{product.name}</h3>
+
+                <div className="flex items-center gap-2 md:justify-between mb-2">
+                  <span className="md:text-xl text-lg font-bold text-green-600">
+                    ${newPrice(product).toFixed(0)}
                   </span>
-                  {product.priceBefore && (
+                  {product.discount && (
                     <span className="text-sm text-gray-500 line-through">
-                      ${product.priceBefore}
+                      ${product.price}
                     </span>
                   )}
                 </div>
@@ -193,12 +195,12 @@ const ProductsList: React.FC = () => {
                   </div>
                 )}
                 {product.stockCount !== undefined && (
-                  <p className="text-sm text-gray-600 mb-2">
-                    {product.stockCount > 0 ? `${product.stockCount} in stock` : 'Out of stock'}
+                  <p className="text-sm text-red-500 font-medium mb-2">
+                    {product.stockCount <= 0 && 'Out of stock'}
                   </p>
                 )}
                 {product.seller && (
-                  <p className="text-sm text-gray-500">by {product.seller}</p>
+                  <p className="text-sm text-gray-500 hidden md:block">by {product.seller}</p>
                 )}
               </div>
             </div>

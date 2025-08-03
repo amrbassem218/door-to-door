@@ -119,7 +119,7 @@ function App() {
   return (
     <LangContext.Provider value={langContextValue}>
       <SearchContext.Provider value={searchContextValue}>
-        <div className='w-full'>
+        <div className='w-screen border-1 border-black'>
           <RouterProvider router={router}/>
         </div>
       </SearchContext.Provider>

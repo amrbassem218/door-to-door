@@ -24,7 +24,7 @@ const Hero: React.FunctionComponent<IHeroProps> = (props) => {
     const navigate = useNavigate();
   return (
     <div className=''>
-    <div className="relative h-150 overflow-hidden">
+    <div className="relative sm:h-150 h-100 overflow-hidden">
       <video
         autoPlay
         loop
@@ -39,9 +39,9 @@ const Hero: React.FunctionComponent<IHeroProps> = (props) => {
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/70 to-transparent"></div>
       <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/0 to-transparent"></div>
       
-      <div className="relative z-10 flex items-center justify-center h-150 mx-20">
-        <div className='absolute left-0 bottom-35 w-150'>
-            <h1 className="text-5xl font-bold mb-4 text-white ">From Egyptian Fields to the World's Markets</h1>
+      <div className=" z-10 flex items-center justify-center lg:mx-20 ">
+        <div className='absolute left-0 sm:bottom-35 bottom-10 w-150 max-w-full px-5'>
+            <h1 className="lg:text-5xl text-2xl font-bold mb-4 text-white ">From Egyptian Fields to the World's Markets</h1>
             <div className='space-y-3'>
                 <SearchBar styles='w-full h-12'/>
                 <div className='flex gap-2'>

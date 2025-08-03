@@ -117,6 +117,9 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                     <img src={`${product.images[currentImage]}`} alt="" className='object-contain h-full max-w-full ' />
                 </div>
             </div>
+
+
+
             {/* Product Main Description */}
             <div className=''>
                 <div className='mb-2'>

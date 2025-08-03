@@ -35,8 +35,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from '@/lib/utils';
-import { CiShoppingCart } from "react-icons/ci";
 import { getCart, useUser } from '@/utilities';
+import { LuShoppingCart } from "react-icons/lu";
+
 
 interface IHeaderProps {
   
@@ -64,25 +65,26 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
     }
   }, [user])
   return (
-    <div className='relative'>
-      <TopBar/>
+    <div className='fixed top-0 left-0 w-full bg-white z-50 shadow md:h-37'>
+      {/* <TopBar/> */}
       <div className='grid-cols-12 border-border w-full '>
-        <div className='px-20  mx-auto'>
-          <div className='flex items-center justify-between w-full h-20 gap-15'>
+        <div className='sm:px-20 px-7 mx-auto'>
+          <div className='flex items-center justify-between w-full lg:h-20 lg:gap-15 h-15 '>
 
             {/* Logo & Menu */}
             <div className='flex items-center gap-2 '>
-              <button className='cursor-pointer text-primary font-semibold text-3xl' onClick={() => navigate('/')}>Door2Door</button>
+              <button className='cursor-pointer text-primary font-semibold lg:text-3xl text-lg' onClick={() => navigate('/')}>Door2Door</button>
             </div>
 
-            <div className='flex-1 '>
+            <div className='flex-1 hidden lg:inline md:inline'>
               <SearchBar styles='w-full'/>
             </div>
 
             <div className='flex gap-5'>
+
               {/* Language & currency */}
               <DropdownMenu>
-                <DropdownMenuTrigger>
+                <DropdownMenuTrigger className='hidden md:inline'>
                   <div className='flex items-center gap-2 cursor-pointer'>
                     {/* flag */}
                     <div>
@@ -143,16 +145,20 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
                 </DropdownMenuContent>
               </DropdownMenu>
 
+              <div className='sm:hidden'>
+                <IoSearchOutline className='text-primary text-2xl'/>
+              </div>
+
               {/* Sign */}
-              <div className='flex gap-1 items-center pr-5 border-r-1'>
-                <LuUser className='text-primary' size={30}/>
+              <div className='flex gap-1 items-center '>
+                <LuUser className='text-primary text-2xl lg:text-3xl'/>
                 <Sign/>
               </div>
 
               {/* Cart */}
               <div className='flex gap-1 items-center cursor-pointer' onClick={() => navigate('/cart')}>
-                <CiShoppingCart className='text-primary' size={35}/>
-                <div className='flex flex-col  justify-center items-center'>
+                <LuShoppingCart  className='text-primary text-2xl lg:text-3xl'/>
+                <div className='flex-col  justify-center items-center hidden md:flex'>
                   <div className='w-10 h-3 bg-primary text-white flex items-center justify-center p-2 rounded-md'>
                     <p className='text-sm font-bold'>{cartLength}</p>
                   </div>
@@ -160,10 +166,14 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
                 </div>
               </div>
             </div>
+            
           </div>
 
+
         </div>
-        <TopicBar/>
+        <div className='hidden md:block'>
+          <TopicBar/>
+        </div>
         {/* <div className='flex gap-3 justify-center '>
           <Button className='w-25 cursor-pointer'>
           <CiLogin size={20} className=''/>
