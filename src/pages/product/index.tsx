@@ -3,13 +3,12 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import * as React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Rating } from 'react-simple-star-rating'
-import { FaAngleDown, FaMinus, FaStar } from "react-icons/fa";
+import { FaAngleDown, FaCaretDown, FaMinus, FaStar } from "react-icons/fa";
 import { useState, useEffect } from 'react';
 import { FaAngleRight } from "react-icons/fa6";
 import { CiLocationOn } from "react-icons/ci";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { FaChevronDown } from "react-icons/fa";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { Input } from '@/components/ui/input';
@@ -19,6 +18,11 @@ import { addProductToCart, camel, getProduct, measurements, unitChange, useUser 
 import type { Product } from '@/types';
 import Error from '../error/Error';
 import { toast } from 'sonner';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import ProductSideBar from '@/components/ui/productSideBar';
+import MeasurementChange from '@/components/ui/measurementChange';
+import QuantityChange from '@/components/ui/quantityChange';
+import { LuShoppingCart } from 'react-icons/lu';
 import CartSheet from '@/components/ui/cartSheet';
 
 interface IProductProps {
@@ -27,7 +31,7 @@ interface IProductProps {
 const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
     const {id} = useParams();
     
-    const [measurement, setMeasurment] = useState(measurements[0]);
+    const [measurement, setMeasurement] = useState(measurements[0]);
     const [activeTab, setActiveTab] = useState("Customer Reviews");
     const [reviewSort, setReviewSort] = useState('Most relevant');
     const [product, setProduct] = useState<Product>();
@@ -67,6 +71,26 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
     //     sellerId: "Er12345",
     //     minOrder: 350
     // }
+    const handleMeasurementChange = (mes: string) => {
+        let converted = unitChange(quantity, measurement, mes);
+        let minOrderOfNewUnit = unitChange(product?.minOrder ?? 0, 'kg', mes);
+        if(converted < minOrderOfNewUnit){
+            converted = minOrderOfNewUnit;
+        }
+        setQuantity(Number(converted));
+        setMeasurement(mes);
+    }
+    const handleQuantityChange = (type: string) => {
+        if(type == "plus"){
+            setQuantity(quantity + 1);
+        }
+        else if(type == "minus"){
+            setQuantity(quantity - 1);
+        }
+        else{
+            setQuantity(Number(type));
+        }
+    }
     useEffect(() => {
         if(id){
             const handleGetProduct = async() => {
@@ -79,15 +103,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
         }
     }, [])
     const [currentImage, setCurrentImage] = useState(0);
-    const handleMeasurementChange = (mes: string) => {
-        let converted = unitChange(quantity, measurement, mes);
-        let minOrderOfNewUnit = unitChange(product?.minOrder ?? 0, 'kg', mes);
-        if(converted < minOrderOfNewUnit){
-            converted = minOrderOfNewUnit;
-        }
-        setQuantity(Number(converted));
-        setMeasurment(mes);
-    }
+    
     if(!product){
         return <Error/>
     }
@@ -97,11 +113,11 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
     // }
   return (
     <>
-    <div className='mx-15 my-10 grid grid-cols-16 gap-10'>
+    <div className='sm:mx-15  my-10 sm:grid grid-cols-16 gap-10 flex flex-col'>
         {/* Product Main */}
-        <div className='flex gap-5 col-span-12 border-b-1 pb-5'>
+        <div className='flex flex-col sm:flex-row gap-5 col-span-12 border-b-1 pb-5 px-3'>
             {/* Images */}
-            <div className='flex gap-2'>
+            <div className='gap-2 sm:flex hidden'>
                 {/* Images sideBar */}
                 <ScrollArea className='w-20 h-90 '>
                     <div className='flex flex-col gap-1'>
@@ -118,7 +134,18 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                 </div>
             </div>
 
-
+            {/* Images for phone */}
+            <div className=''>
+                <Carousel className='w-full h-70 border-1 sm:hidden overflow-visible'>
+                    <CarouselContent className='flex gap-2'>
+                        {product.images.map((image) => (
+                            <CarouselItem className='basis-[80%] h-70 shrink-0 flex items-center justify-center'>
+                                <img src={image} alt="" className='object-contain max-w-full h-full rounded-md' />
+                            </CarouselItem>
+                        ))}
+                    </CarouselContent>
+                </Carousel>
+            </div>
 
             {/* Product Main Description */}
             <div className=''>
@@ -144,106 +171,27 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                 </div>
                 <div className='mt-2 border-b-2'></div>
             </div>            
-            {/* right SideBar */}
-        </div>
-        {/* Right sideBar */}
-        <div className='col-span-4 border-1 p-4'>
-            {/* Price */}
-            <div className='flex flex-col items-start border-b-1 pb-3'>
-                <p className='text-2xl'>${product.price} <span className='text-sm text-text'>($14 / ounce)</span></p>
-                <Popover>
-                    <PopoverTrigger>
-                        <button className='text-primary text-left hover:underline decoration-1 cursor-pointer'>International Returns</button>
-                    </PopoverTrigger>
-                    <PopoverContent>
-                        <h1 className='font-medium'>Return this item </h1>
-                        <p className='text-sm'>International returns are available for the shipping address you chose. You can return the item for any reason in new and unused condition: return shipping charges may apply.</p>
-                    </PopoverContent>
-                </Popover>
-            </div>
 
-            {/* Seller */}
-            <div className='flex justify-between gap-6 border-b-1 py-3'>
-                <p className='font-medium '>Sold by</p>
-                <div className='flex flex-1 items-center w-10 justify-end cursor-pointer'>
-                    <p className='truncate text-ellipsis overflow-hidden hover:underline'>{product.seller}</p>
-                    <FaAngleRight size={15}/>
-                </div>
-            </div>
+            {/* Bottom bar for mobile */}
+            <div className='sm:hidden fixed bottom-0 left-0 h-12 border-t-1 w-full bg-background flex items-center gap-4 px-2'>
+                <div className='flex  gap-2'>
+                    <LuShoppingCart className='text-text text-2xl'/>
 
-            {/* Shipping place */}
-            <div className='flex justify-between gap-6 border-b-1 py-3'>
-                <p className='font-medium '>Ship to</p>
-                <div className='flex flex-1 items-center w-10 justify-end cursor-pointer'>
-                    <CiLocationOn/>
-                    <p className='truncate text-ellipsis overflow-hidden hover:underline'>Said St. by Helw St.</p>
-                    <FaAngleRight size={15}/>
-                </div>
-            </div>
-
-            {/* Stock & Purchase */}
-            <div className='flex flex-col items-start border-b-1 py-3 gap-4'>
-                <div className='flex justify-between  w-full'>
-                    <h1 className={`text-xl  font-medium ${product?.stockCount ? "text-green-600" : 'text-red-600'}`}>{product?.stockCount ? "In stock" : "Out of stock"}</h1>
-
-                    {/* Measurement change */}
-                    <div>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger className='m-auto'>
-                                <Button variant={'link'} className='text-heading decoration-0 bg-background-secondary p-1 px-2 rounded-lg border-gray-300 border-1 flex items-center gap-4'>
-                                    Size: {measurement}
-                                    <FaChevronDown size={15} className='text-text'/>
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                {
-                                    measurements.map((mes) => (
-                                        <DropdownMenuItem onClick={() => handleMeasurementChange(mes)}>{mes}</DropdownMenuItem>
-                                    ))
-                                }
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
+                    {/* <QuantityChange handleQuantityChange={handleQuantityChange} value={quantity} mobile={true} styles='w-25'/> */}
                     
+                    {/* Measurement */}
+                    {/* <MeasurementChange product={product} label={measurement} handleMeasurementChange={handleMeasurementChange} styles='h-7 w-17' /> */}
                 </div>
-                {/* Quantity */}
-                <div className='flex justify-center items-center gap-4 w-full'>
-                    <div className='flex items-center m-auto'>
-                        <button className='border-1 p-1 cursor-pointer' onClick={() => setQuantity(quantity-1)}>
-                            <FiMinus size={20}/>  
-                        </button>
-                        <input 
-                            type='number' 
-                            value={quantity} 
-                            className='border-1 px-2 min-w-15 max-w-40 w-auto h-8' 
-                            style={{ width: `${Math.max(3, Math.min(8, quantity.toString().length + 1))}rem` }}
-                            onChange={(e) => setQuantity(Number(e.target.value))}
-                        />
-                        <button className='border-1 p-1 cursor-pointer bg-primary text-white' onClick={() => setQuantity(quantity+1)}>
-                            <FiPlus size={20}/>  
-                        </button>
-                    </div>
-                    <CartSheet product={product} quantity={quantity}/>
-                </div>
-                {/* Add to cart & Heart */}
                 <div className='flex gap-2 w-full'>
-                    <Button className='m-auto flex-1'>Buy Now</Button>
-                    <Button variant={'outline'} className='text-text w-10 hover:text-red-500'>
-                        <FaHeart className=''/>
-                    </Button>
+                    <CartSheet product={product} quantity={quantity} styles='w-30'/>
+                    <Button className='m-auto flex-1 border-1 '>Buy Now</Button>
                 </div>
             </div>
+        </div>
 
-            {/* shipping */}
-            {/* <div className='flex justify-between gap-6 border-b-1 py-3'>
-                <p className='font-medium '>Ship to</p>
-                <div className='flex flex-1 items-center w-10 justify-end cursor-pointer'>
-                    <CiLocationOn/>
-                    <p className='truncate text-ellipsis overflow-hidden hover:underline'>Said St. by Helw St.</p>
-                    <FaAngleRight size={15}/>
-                </div>
-            </div> */}
-
+        {/* Right sideBar for pc*/}
+        <div className='hidden sm:block sm:col-span-4 '>
+            <ProductSideBar product={product} quantity={quantity} setQuantity={setQuantity} measurement={measurement} setMeasurement={setMeasurement} handleMeasurementChange={handleMeasurementChange}/>
         </div>
     </div>
     <div>

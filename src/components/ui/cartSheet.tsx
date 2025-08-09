@@ -20,6 +20,7 @@ import { FaChevronDown } from 'react-icons/fa';
 interface ICardSheetProps {
   product: Product,
   quantity: number;
+  styles?: string;
 }
 
 const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
@@ -72,7 +73,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
     <div>
       <Sheet>
         <SheetTrigger>
-          <Button variant={'outline'} className='flex-1 max-w-40' onClick={() => handleAddToCart()}>Add to Cart</Button>
+          <Button variant={'outline'} className={`sm:flex-1 max-w-40 ${props.styles}`} onClick={() => handleAddToCart()}>Add to Cart</Button>
         </SheetTrigger>
         <SheetContent className='w-60 pl-2 flex flex-col h-screen'>
           <SheetHeader className='h-32 mb-3'>

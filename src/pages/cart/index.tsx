@@ -14,6 +14,8 @@ import { supabase } from '@/supabase/supabaseClient';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { useNavigate } from 'react-router-dom';
+import MeasurementChange from '@/components/ui/measurementChange';
+import QuantityChange from '@/components/ui/quantityChange';
 
 interface ICartProps {
 }
@@ -71,11 +73,26 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
       handleGetCartItems();
     }
   }, [user])
-  const handleMeasurementChange = (product: Product, mes: string) => {
-    const pid = id(product);
-    const convertedMeasurement = Number(unitChange(cartQuantity[pid], cartMeasurement[pid], mes));
-    setCartQuantity({...cartQuantity, [pid]: convertedMeasurement});
-    setCartMeasurement({...cartMeasurement, [pid]: mes}); 
+  const handleMeasurementChange = (mes: string, product?:Product) => {
+    if(product){
+      const pid = id(product);
+      const convertedMeasurement = Number(unitChange(cartQuantity[pid], cartMeasurement[pid], mes));
+      setCartQuantity({...cartQuantity, [pid]: convertedMeasurement});
+      setCartMeasurement({...cartMeasurement, [pid]: mes}); 
+    }
+  }
+  const handleQuantityChange = (type: string, product?: Product) => {
+    if(product){
+      if(type == "plus"){
+        setCartQuantity({...cartQuantity, [product.id]: cartQuantity && cartQuantity[id(product)]+1})
+      }
+      else if(type == "minus"){
+        setCartQuantity({...cartQuantity, [product.id]: cartQuantity && cartQuantity[id(product)]-1})
+      }
+      else{
+        setCartQuantity({...cartQuantity, [id(product)]: Number(type)})
+      }
+    }
   }
   const handleDeleteItem = async(product: Product, sellerId: number, index:number) =>{
     if(cart){
@@ -96,9 +113,9 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
     <div>
       {
         cart &&
-        <section className='w-screen absolute left-0 h-screen bg-gray-100 px-40'>
+        <section className='w-screen absolute left-0 h-screen bg-gray-100 sm:px-40 px-5'>
           {/* Cart Section */}
-          <div className=' w-300 mx-auto grid grid-cols-12 gap-5 mt-5'>
+          <div className='w-full mx-auto flex flex-col sm:grid grid-cols-12 gap-5 mt-5'>
             <div className='col-span-8 space-y-2'>
               {/* Cart Header */}
               <Card> 
@@ -130,39 +147,11 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                               <div className='flex gap-2 items-center flex-shrink-0'>
                                 {/* Measurement change */}
                                 <div>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger className='m-auto'>
-                                            <button className='text-sm flex items-center justify-center h-4 p-2 gap-1 text-text decoration-0 bg-background-secondary rounded-lg border-gray-300 border-1'>
-                                                {cartMeasurement[id(product)]}
-                                                <FaCaretDown className='text-text'/>
-                                            </button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent>
-                                          <DropdownMenuLabel>Measurement</DropdownMenuLabel>
-                                            {
-                                                measurements.map((mes) => (
-                                                    <DropdownMenuItem onClick={() => handleMeasurementChange(product, mes)}>{mes}</DropdownMenuItem>
-                                                ))
-                                            }
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+                                  <MeasurementChange handleMeasurementChange={handleMeasurementChange} product={product} label={cartMeasurement[id(product)]} />
                                 </div>
-
                                 {/* Qty. */}
-                                <div className='flex items-center'>
-                                  <button className='border-1 p-1 cursor-pointer' onClick={() => setCartQuantity({...cartQuantity, [product.id]: cartQuantity && cartQuantity[id(product)]-1})}>
-                                      <FiMinus size={10}/>  
-                                  </button> 
-                                  <input 
-                                      type='number' 
-                                      value={cartQuantity[id(product)]} 
-                                      className='border-1 min-w-10 h-5 text-center' 
-                                      style={{ width: `${Math.max(2.5, Math.min(8, (cartQuantity[id(product)].toString().length + 1)/1.5))}rem` }}
-                                      onChange={(e) => setCartQuantity({...cartQuantity, [id(product)]: Number(e.target.value)})}
-                                  />
-                                  <button className='border-1 p-1 cursor-pointer bg-primary text-white' onClick={() => setCartQuantity({...cartQuantity, [product.id]: cartQuantity && cartQuantity[id(product)]+1 })}>
-                                      <FiPlus size={10}/>  
-                                  </button>
+                                <div>
+                                  <QuantityChange handleQuantityChange={handleQuantityChange} value={cartQuantity[id(product)]}/>
                                 </div>
 
                                 {/* Delete */}
