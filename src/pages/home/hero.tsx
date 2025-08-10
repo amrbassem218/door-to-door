@@ -32,7 +32,7 @@ const Hero: React.FunctionComponent<IHeroProps> = (props) => {
         playsInline
         className="absolute inset-0 w-full h-full object-cover"
       >
-        <source src="/public/door2door_vid.mp4" type="video/mp4" />
+        <source src="/door2door_vid.mp4" type="video/mp4" />
       </video>
       
       {/* Gradient overlay - darker at bottom */}
