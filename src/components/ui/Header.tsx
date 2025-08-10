@@ -35,7 +35,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from '@/lib/utils';
-import { getCart, useUser } from '@/utilities';
+import { getCart, useUser, cleanupDuplicateCarts } from '@/utilities';
 import { LuShoppingCart } from "react-icons/lu";
 
 
@@ -53,15 +53,27 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
   const [open, setOpen] = React.useState(false)
   const [cartLength, setCartLength] = useState(0);
   const user = useUser();
+  
   useEffect(() => {
     if(user){
       const handleGetCart = async() => {
-        const data = await getCart(user);
-        if(data){
-          setCartLength(data.length);
+        try {
+          // First clean up any duplicate carts
+          await cleanupDuplicateCarts(user);
+          
+          // Then get the cart data
+          const data = await getCart(user);
+          if(data){
+            setCartLength(data.length);
+          }
+        } catch (error) {
+          console.error("Error handling cart in Header:", error);
+          setCartLength(0);
         }
       }
       handleGetCart();
+    } else {
+      setCartLength(0);
     }
   }, [user])
   return (

@@ -115,36 +115,62 @@ export const getDisplayName = (user: User) => {
   )
 }
 export const getCartId = async(user: User) =>{
-  let {data: cartId, error} = await supabase
-  .from('carts')
-  .select('id')
-  .eq('user_id', user.id)
-  .single();
-  // console.log("user:", user)
-  if(error){
-    if(error.code == "PGRST116"){
-      let {data: cartId, error: createCartError} = await supabase
+  try {
+    // First, try to get an existing cart
+    let {data: cartId, error} = await supabase
       .from('carts')
-      .insert({
-        user_id: user.id
-      })
       .select('id')
+      .eq('user_id', user.id)
       .single();
-      if(createCartError){
-        console.error(createCartError);
-        // console.log("couldn't create a new cart");
+    
+    if(error){
+      if(error.code == "PGRST116"){
+        // No cart exists, try to create one
+        // Use upsert to prevent duplicate creation
+        let {data: newCart, error: createCartError} = await supabase
+          .from('carts')
+          .upsert({
+            user_id: user.id
+          }, {
+            onConflict: 'user_id', // This prevents duplicate carts for the same user
+            ignoreDuplicates: true
+          })
+          .select('id')
+          .single();
+        
+        if(createCartError){
+          console.error("Error creating cart:", createCartError);
+          // If upsert fails, try to get the cart again (it might have been created by another request)
+          const {data: retryCart, error: retryError} = await supabase
+            .from('carts')
+            .select('id')
+            .eq('user_id', user.id)
+            .single();
+          
+          if(retryError) {
+            console.error("Failed to get cart after creation attempt:", retryError);
+            return null;
+          }
+          return retryCart?.id;
+        }
+        else if(newCart){
+          return newCart.id;
+        }
       }
-      else if(cartId){
-        return cartId.id;
+      else{
+        console.error("Error fetching cart:", error);
+        return null;
       }
     }
-    else{
-  // console.log("I'm here");
-
-      console.error(error);
+    else if(cartId?.id) {
+      return cartId.id;
     }
+    
+    return null;
+  } catch (error) {
+    console.error("Unexpected error in getCartId:", error);
+    return null;
   }
-  else if(cartId?.id) return cartId.id;
 }
 // export const getCartItems = async(user: User) => {
 //   try {
@@ -172,6 +198,85 @@ export const getCartId = async(user: User) =>{
 //   }
 // }
 
+export const cleanupDuplicateCarts = async(user: User) => {
+  try {
+    // Get all carts for the user
+    const {data: carts, error} = await supabase
+      .from('carts')
+      .select('id, created_at')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: true });
+    
+    if(error) {
+      console.error("Error fetching carts for cleanup:", error);
+      return null;
+    }
+    
+    if(carts && carts.length > 1) {
+      // Keep the oldest cart, delete the rest
+      const [oldestCart, ...duplicateCarts] = carts;
+      
+      // Delete duplicate carts
+      for(const duplicateCart of duplicateCarts) {
+        // First delete cart items
+        await supabase
+          .from('cart_items')
+          .delete()
+          .eq('cart_id', duplicateCart.id);
+        
+        // Then delete the cart
+        await supabase
+          .from('carts')
+          .delete()
+          .eq('id', duplicateCart.id);
+      }
+      
+      console.log(`Cleaned up ${duplicateCarts.length} duplicate carts for user ${user.id}`);
+      return oldestCart.id;
+    }
+    
+    return carts?.[0]?.id || null;
+  } catch (error) {
+    console.error("Error in cleanupDuplicateCarts:", error);
+    return null;
+  }
+}
+
+export const getOrCreateCart = async(user: User) => {
+  try {
+    // First try to get an existing cart
+    let cartId = await getCartId(user);
+    
+    if(!cartId) {
+      // If no cart found, try to clean up any duplicates first
+      cartId = await cleanupDuplicateCarts(user);
+      
+      if(!cartId) {
+        // Still no cart, create a new one
+        const {data: newCart, error} = await supabase
+          .from('carts')
+          .insert({
+            user_id: user.id
+          })
+          .select('id')
+          .single();
+        
+        if(error) {
+          console.error("Error creating new cart:", error);
+          return null;
+        }
+        
+        cartId = newCart?.id;
+      }
+    }
+    
+    return cartId;
+  } catch (error) {
+    console.error("Error in getOrCreateCart:", error);
+    return null;
+  }
+}
+
 export const camel = (element: any) => {
   
   if (Array.isArray(element)) {
@@ -188,7 +293,13 @@ export const camel = (element: any) => {
 }
 
 export const addProductToCart = async(user: User, product: Product, quantity: number) =>{
-  const cartId = await getCartId(user);
+  const cartId = await getOrCreateCart(user);
+  
+  if(!cartId) {
+    console.error("Failed to get or create cart for user");
+    return "error";
+  }
+  
   // console.log("id: ", cartId)
   // console.log("product_id: ", Number(product.id))
   const {data, error: getProductError} = await supabase
@@ -234,7 +345,13 @@ export const getProduct = async(id: number) => {
   return data;
 }
 export const getCart = async(user: User) => {
-  let cartId = await getCartId(user);
+  let cartId = await getOrCreateCart(user);
+  
+  if(!cartId) {
+    console.error("Failed to get or create cart for user");
+    return null;
+  }
+  
   let {data, error} = await supabase
   .from('cart_items')
   .select('measurement, quantity, products(*)')
@@ -258,4 +375,80 @@ export const measurements = [
 
 export const newPrice = (product:Product) => {
   return product.price - (product.price / product.discount);
+}
+
+// Manual cleanup function that can be called from browser console
+export const manualCleanupAllDuplicateCarts = async() => {
+  try {
+    console.log("Starting manual cleanup of all duplicate carts...");
+    
+    // Get all users with duplicate carts
+    const {data: duplicateUsers, error} = await supabase
+      .from('carts')
+      .select('user_id')
+      .select(`
+        user_id,
+        id,
+        created_at
+      `);
+    
+    if(error) {
+      console.error("Error fetching carts for cleanup:", error);
+      return;
+    }
+    
+    if(!duplicateUsers) {
+      console.log("No carts found");
+      return;
+    }
+    
+    // Group by user_id to find duplicates
+    const userCarts = duplicateUsers.reduce((acc, cart) => {
+      if(!acc[cart.user_id]) {
+        acc[cart.user_id] = [];
+      }
+      acc[cart.user_id].push(cart);
+      return acc;
+    }, {} as Record<string, any[]>);
+    
+    let totalCleaned = 0;
+    
+    // Clean up duplicates for each user
+    for(const [userId, carts] of Object.entries(userCarts)) {
+      if(carts.length > 1) {
+        console.log(`User ${userId} has ${carts.length} carts, cleaning up...`);
+        
+        // Sort by created_at to keep the oldest
+        carts.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+        const [oldestCart, ...duplicateCarts] = carts;
+        
+        // Delete duplicate carts
+        for(const duplicateCart of duplicateCarts) {
+          // First delete cart items
+          await supabase
+            .from('cart_items')
+            .delete()
+            .eq('cart_id', duplicateCart.id);
+          
+          // Then delete the cart
+          await supabase
+            .from('carts')
+            .delete()
+            .eq('id', duplicateCart.id);
+        }
+        
+        totalCleaned += duplicateCarts.length;
+        console.log(`Cleaned up ${duplicateCarts.length} duplicate carts for user ${userId}`);
+      }
+    }
+    
+    console.log(`Manual cleanup complete! Total duplicate carts removed: ${totalCleaned}`);
+  } catch (error) {
+    console.error("Error in manual cleanup:", error);
+  }
+}
+
+// Make it available globally for browser console access
+if(typeof window !== 'undefined') {
+  (window as any).cleanupDuplicateCarts = manualCleanupAllDuplicateCarts;
 }

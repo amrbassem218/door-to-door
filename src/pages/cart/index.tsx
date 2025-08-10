@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { CartItem, Product } from '@/types';
-import { getCart, measurements, newPrice, unitChange, useUser } from '@/utilities';
+import { getCart, measurements, newPrice, unitChange, useUser, cleanupDuplicateCarts } from '@/utilities';
 import type { User } from '@supabase/supabase-js';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
@@ -42,32 +42,40 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
     if(user){
       console.log("getting called")
       const handleGetCartItems = async() => {
-        let data = await getCart(user);
-        if(data){
-          let currentTotal = 0;
-          let currentSubTotal = 0;
-          let currentCartQuantity = cartQuantity;
-          let currentCartMeasurement = cartMeasurement;
-          let sellerSeperatedCart: Record<number, CartItem[]> = {};
-          data.forEach((item) => {
-            let {products: product, quantity, measurement} = item;
-            currentTotal += product.price
-            currentSubTotal += newPrice(product);
-            currentCartQuantity[id(product)] = quantity;
-            currentCartMeasurement[id(product)] = measurement;
-            console.log("id: ",product.sellerId);
-            if(sellerSeperatedCart[Number(product.sellerId)]){
-              sellerSeperatedCart[Number(product.sellerId)].push(item);
-            }
-            else sellerSeperatedCart[Number(product.sellerId)] = [item];
-            // console.log("min: ", product.min);
-          })
-          setCartQuantity(currentCartQuantity);
-          setCartMeasurement(currentCartMeasurement);
-          setTotal(currentTotal);
-          setSubtotal(currentSubTotal);
-          setCart(sellerSeperatedCart);
-          setCartItems(data);
+        try {
+          // First clean up any duplicate carts
+          await cleanupDuplicateCarts(user);
+          
+          // Then get cart items
+          let data = await getCart(user);
+          if(data){
+            let currentTotal = 0;
+            let currentSubTotal = 0;
+            let currentCartQuantity = cartQuantity;
+            let currentCartMeasurement = cartMeasurement;
+            let sellerSeperatedCart: Record<number, CartItem[]> = {};
+            data.forEach((item) => {
+              let {products: product, quantity, measurement} = item;
+              currentTotal += product.price
+              currentSubTotal += newPrice(product);
+              currentCartQuantity[id(product)] = quantity;
+              currentCartMeasurement[id(product)] = measurement;
+              console.log("id: ",product.sellerId);
+              if(sellerSeperatedCart[Number(product.sellerId)]){
+                sellerSeperatedCart[Number(product.sellerId)].push(item);
+              }
+              else sellerSeperatedCart[Number(product.sellerId)] = [item];
+              // console.log("min: ", product.min);
+            })
+            setCartQuantity(currentCartQuantity);
+            setCartMeasurement(currentCartMeasurement);
+            setTotal(currentTotal);
+            setSubtotal(currentSubTotal);
+            setCart(sellerSeperatedCart);
+            setCartItems(data);
+          }
+        } catch (error) {
+          console.error("Error getting cart items:", error);
         }
       }
       handleGetCartItems();
