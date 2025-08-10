@@ -14,7 +14,7 @@ import { FiMinus, FiPlus } from "react-icons/fi";
 import { Input } from '@/components/ui/input';
 import { FaHeart } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
-import { addProductToCart, camel, getProduct, measurements, unitChange, useUser } from '@/utilities';
+import { addProductToCart, camel, getProduct, measurements, price, unitChange, useUser } from '@/utilities';
 import type { Product } from '@/types';
 import Error from '../error/Error';
 import { toast } from 'sonner';
@@ -166,7 +166,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                 </div>
 
                 <div className='space-y-2'>
-                    <h1 className='text-2xl'>${product.price.toFixed(2)}</h1>
+                    <h1 className='text-2xl'>${Math.round(product.price).toFixed(2)}</h1>
                     <p>{product.description}</p>
                 </div>
                 <div className='mt-2 border-b-2'></div>
@@ -175,7 +175,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
             {/* Bottom bar for mobile */}
             <div className='sm:hidden fixed bottom-0 left-0 h-12 border-t-1 w-full bg-background flex items-center gap-4 px-2'>
                 <div className='flex  gap-2'>
-                    <LuShoppingCart className='text-text text-2xl'/>
+                    <LuShoppingCart className='text-text text-2xl' onClick={() => navigate('/cart')}/>
 
                     {/* <QuantityChange handleQuantityChange={handleQuantityChange} value={quantity} mobile={true} styles='w-25'/> */}
                     

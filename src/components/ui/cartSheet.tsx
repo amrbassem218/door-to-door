@@ -7,7 +7,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { addProductToCart, getCart, measurements, unitChange, useUser } from '@/utilities';
+import { addProductToCart, getCart, measurements, price, unitChange, useUser } from '@/utilities';
 import { Button } from './button';
 import type { CartItem, Product } from '@/types';
 import { useState, useEffect } from 'react';
@@ -42,7 +42,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
           let currentCartQuantity = cartQuantity;
           let currentCartMeasurement = cartMeasurement;
           data.forEach(({products: product, quantity, measurement}) => {
-            total += product.price
+            total += Math.round(product.price)
             currentCartQuantity[id(product)] = quantity;
             currentCartMeasurement[id(product)] = measurement;
           })
@@ -92,12 +92,12 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
           <ScrollArea className='flex-1 overflow-auto'>
             <div className='flex flex-col gap-10 mr-4'>
               {cart?.map(({products: product}) => (
-                <div className='flex hover:bg-background-secondary cursor-pointer items-center h-40' onClick={() => navigate(`/product/${product.id}`)}>
+                <div className='flex hover:bg-background-secondary cursor-pointer items-center h-40 gap-5' onClick={() => navigate(`/product/${product.id}`)}>
                   
                   {/* Product image */}
                   <div className='w-20 h-35 flex flex-col justify-center gap-2 items-center py-4'>
                     <img src={product.thumbnail} alt="" className='object-contain h-full max-w-full' />
-                    <span className='text-xs text-text'>(${product.price}/{cartMeasurement[id(product)]})</span>
+                    <span className='text-xs text-text'>(${Math.round(product.price)}/{cartMeasurement[id(product)]})</span>
                   </div>
                   <div className='space-y-3 text-sm '>
                     
@@ -134,7 +134,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                       </div>
 
                       {/* total */}
-                      <p className='font-semibold'><span className='text-text font-normal'>total: </span> ${product.price}</p>
+                      <p className='font-semibold'><span className='text-text font-normal'>total: </span> ${Math.round(product.price)}</p>
                       
                     </div>
                     {/* Measurement change */}

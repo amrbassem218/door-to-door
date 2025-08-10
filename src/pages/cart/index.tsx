@@ -56,7 +56,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
             let sellerSeperatedCart: Record<number, CartItem[]> = {};
             data.forEach((item) => {
               let {products: product, quantity, measurement} = item;
-              currentTotal += product.price
+              currentTotal += Math.round(product.price)
               currentSubTotal += newPrice(product);
               currentCartQuantity[id(product)] = quantity;
               currentCartMeasurement[id(product)] = measurement;
@@ -172,9 +172,9 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                               {/* Price */}
                               <div className='flex gap-1 items-center'>
                                 <h1 className='text-md font-semibold '>US ${newPrice(product)}</h1>
-                                <p className='line-through text-sm text-text'>US ${product.price}</p>
+                                <p className='line-through text-sm text-text'>US ${Math.round(product.price)}</p>
                               </div>
-                              <p className='text-xs text-red-600 font-medium'>Save US${product.price - newPrice(product)}</p>
+                              <p className='text-xs text-red-600 font-medium'>Save US${Math.round(product.price) - newPrice(product)}</p>
                               <p className='text-text text-xs'>Shipping: US$1542</p>
                             </div>
                           </div>

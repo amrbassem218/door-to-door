@@ -57,8 +57,8 @@ function App() {
 
     if (filters.priceRange) {
       filtered = filtered.filter(product => 
-        product.price >= filters.priceRange!.min && 
-        product.price <= filters.priceRange!.max
+        Math.round(product.price) >= filters.priceRange!.min && 
+        Math.round(product.price) <= filters.priceRange!.max
       );
     }
 

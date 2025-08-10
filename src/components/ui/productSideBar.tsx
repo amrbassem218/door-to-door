@@ -23,7 +23,7 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({product,
     <div className='w-full border-1 p-4'>
             {/* Price */}
             <div className='flex flex-col items-start border-b-1 pb-3'>
-                <p className='text-2xl'>${product.price} <span className='text-sm text-text'>($14 / ounce)</span></p>
+                <p className='text-2xl'>${Math.round(product.price)} <span className='text-sm text-text'>($14 / ounce)</span></p>
                 <Popover>
                     <PopoverTrigger>
                         <button className='text-primary text-left hover:underline decoration-1 cursor-pointer'>International Returns</button>

@@ -130,7 +130,7 @@ const ProductList = () => {
       {results.map(product => (
         <div key={product.id}>
           <h3>{product.name}</h3>
-          <p>${product.price}</p>
+          <p>${Math.round(product.price)}</p>
         </div>
       ))}
     </div>

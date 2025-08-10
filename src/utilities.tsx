@@ -75,8 +75,12 @@ export const unitChange = (value: number, currentUnit: string, targetUnit: strin
   return converted.toNumber().toFixed(2);
 }
 export const handleGoogleAuth = () => {
-  supabase.auth.signInWithOAuth({provider: 'google'})
-
+  supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`
+      }
+    })
 }
 export const handleLogout = async() => {
   const { error } = await supabase.auth.signOut();  
@@ -374,7 +378,10 @@ export const measurements = [
 ]
 
 export const newPrice = (product:Product) => {
-  return product.price - (product.price / product.discount);
+  return Math.round(Math.round(product.price) - (Math.round(product.price) / product.discount));
+}
+export const price = (product: Product):number => {
+  return Math.round(Math.round(product.price));
 }
 
 // Manual cleanup function that can be called from browser console

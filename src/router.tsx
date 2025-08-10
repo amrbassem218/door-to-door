@@ -6,6 +6,7 @@ import Layout from "./components/Layout";
 import ProductsList from "./pages/productsList";
 import Cart from "./pages/cart";
 import ProductListing from "./pages/product";
+import AuthCallback from "./components/ui/authCallback";
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -26,6 +27,10 @@ export const router = createBrowserRouter([
             {
                 path: '/cart',
                 element: <Cart/>,
+            },
+            {
+                path: '/auth/callback',
+                element: <AuthCallback/>,
             },
             {
                 path: '/404',

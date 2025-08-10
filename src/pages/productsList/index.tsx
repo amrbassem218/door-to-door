@@ -179,7 +179,7 @@ const ProductsList: React.FC = () => {
                   </span>
                   {product.discount && (
                     <span className="text-sm text-gray-500 line-through">
-                      ${product.price}
+                      ${Math.round(product.price)}
                     </span>
                   )}
                 </div>
