@@ -45,12 +45,12 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({styles}) => {
     navigate(`/search/${suggestionQuery ? suggestionQuery : query}`)
   }
   return (
-    <div ref={searchRef} className={`justify-center relative h-10 bg-background-secondary-3 w-120 flex items-center gap-1 rounded-md ${styles}`}>
+    <div ref={searchRef} className={`justify-center relative h-10 bg-background-secondary-3 w-120 max-w-full flex items-center gap-1 rounded-md ${styles}`}>
       <IoSearchOutline className='text-primary absolute left-2' size={18}/>
       <form className='w-full h-full' action="" onSubmit={(e) => {e.preventDefault(); handleSearchSubmit()}}>
         <Input 
           type="text" 
-          placeholder='Search Essentials, crops and more...' 
+          placeholder='Search crops, furniture and more...' 
           className='w-full border-0 px-8 h-full' 
           value={query}
           onChange={(e) => setQuery(e.target.value)}

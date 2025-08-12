@@ -9,6 +9,7 @@ import FolderMenu from './folderMenu';
 import { getProducts, newPrice } from '@/utilities';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Item from '@/components/ui/item';
+import BottomBar from '@/components/ui/bottomBar';
 interface IHomeProps {
 }
 
@@ -69,10 +70,13 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
             )}
           </div>
         </section> */}
-          <div className='mb-10'>
-            <Hero/>
-          </div>
-        
+        <div className='mb-10'>
+          <Hero/>
+        </div>
+
+        {/* <div className='absolute bottom-0 left-0 w-full'>
+          <BottomBar/>
+        </div> */}
         <div className='md:mx-20 mx-5'>
           {/* Today's deals */}
           <section className='mb-15 space-y-7'>

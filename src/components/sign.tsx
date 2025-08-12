@@ -11,11 +11,13 @@ import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { Separator } from './ui/separator';
 import { FcGoogle } from "react-icons/fc";
-import { FaFacebook } from "react-icons/fa";
+import { FaArrowRight, FaFacebook } from "react-icons/fa";
 import { FaApple } from "react-icons/fa";
-import { FaSquareXTwitter } from "react-icons/fa6";
+import { FaRightLeft, FaSquareXTwitter } from "react-icons/fa6";
 import { getDisplayName, handleGoogleAuth, handleLogout, useUser } from '@/utilities';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
+import { FaAngleRight } from "react-icons/fa";
+import { LuUser } from 'react-icons/lu';
 
 interface ISignProps {
 }
@@ -29,9 +31,15 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
         ? 
         <div>
           <DropdownMenu>
-            <DropdownMenuTrigger className='font-medium text-text  hover:text-primary hover:underline text-left hidden md:inline'>
-              <p className='text-xs'>Hello there,</p>
-              <p className='text-heading text-xs'>{getDisplayName(user)}</p>
+            <DropdownMenuTrigger className='font-medium text-text hover:text-primary hover:underline text-left flex sm:gap-1 items-center'>
+              <div className='flex items-center'>
+                <div>
+                  <p className='text-xs sm:block hidden'>Hello there,</p>
+                  <p className='text-heading text-sm font-semibold'>{getDisplayName(user)}</p>
+                </div>
+                <FaAngleRight size={10} className='sm:hidden text-heading'/>
+              </div>
+              <LuUser className='text-primary text-2xl lg:text-3xl'/>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuItem>Profile</DropdownMenuItem>
@@ -44,9 +52,21 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
           </DropdownMenu>
         </div>
           :<Dialog>
-            <DialogTrigger className='font-medium text-text text-sm hover:text-primary hover:underline'>
-              Hello there, <br/>
-              Sign in/ Register
+            <DialogTrigger className='flex items-center gap-1'>
+              {/* Sign in for pc */}
+              <div className='font-medium text-text text-xs hover:text-primary hover:underline sm:block hidden'>
+                <p>Hello there</p>
+                <p className='text-heading hover:text-primary'>Sign in/Register</p>
+              </div>
+
+              {/* Sign in for mobile */}
+              <div className='sm:hidden flex items-center'>
+                <p className=''>sign in</p>
+                <FaAngleRight size={10} className='sm:hidden text-heading'/>
+
+              </div>
+
+              <LuUser className='text-primary text-2xl lg:text-3xl'/>
             </DialogTrigger>
           <DialogContent className='p-10 w-120 '>
             <DialogHeader className='mx-auto'>

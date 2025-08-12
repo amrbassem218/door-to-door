@@ -84,6 +84,7 @@ export const handleGoogleAuth = () => {
 }
 export const handleLogout = async() => {
   const { error } = await supabase.auth.signOut();  
+  console.log("logged out successfully");
   if(error){
     console.error(error);
   }
@@ -110,7 +111,7 @@ export const useUser = () => {
 export const getDisplayName = (user: User) => {
   const meta = user?.user_metadata ?? {}
   return (
-    meta.full_name ||    
+    meta.full_name.split(' ')[0] ||    
     meta.name ||      
     meta.username ||  
     meta.user_name || 

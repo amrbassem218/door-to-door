@@ -33,6 +33,10 @@ export const router = createBrowserRouter([
                 element: <AuthCallback/>,
             },
             {
+                path: '/category/:category',
+                element: <AuthCallback/>,
+            },
+            {
                 path: '/404',
                 element: <Error/>,
             },

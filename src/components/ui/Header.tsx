@@ -37,6 +37,9 @@ import {
 import { cn } from '@/lib/utils';
 import { getCart, useUser, cleanupDuplicateCarts } from '@/utilities';
 import { LuShoppingCart } from "react-icons/lu";
+import { IoIosArrowBack } from "react-icons/io";
+import { IoIosMenu } from "react-icons/io";
+import MobileTopicBar from './mobileTopicBar';
 
 
 interface IHeaderProps {
@@ -76,19 +79,26 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
       setCartLength(0);
     }
   }, [user])
+  const goBack = () => { 
+    navigate(-1);
+  }
   return (
     <div className='fixed top-0 left-0 w-full bg-white z-50 shadow md:h-37'>
       {/* <TopBar/> */}
-      <div className='grid-cols-12 border-border w-full '>
-        <div className='sm:px-20 px-7 mx-auto'>
-          <div className='flex items-center justify-between w-full lg:h-20 lg:gap-15 h-15 '>
+      <div className='border-b-1 w-full '>
+        <div className='sm:px-20 px-2 mx-auto'>
+          <div className='flex items-center justify-between w-full lg:h-20 lg:gap-15 h-12 '>
 
             {/* Logo & Menu */}
-            <div className='flex items-center gap-2 '>
+            <div className='flex items-center gap-2'>
+              <div className='flex items-center'>
+                <IoIosArrowBack size={24} className='sm:hidden text-primary' onClick={() => goBack()}/>
+                {/* <IoIosMenu  size={25} className='sm:hidden text-primary'/> */}
+              </div>
               <button className='cursor-pointer text-primary font-semibold lg:text-3xl text-lg' onClick={() => navigate('/')}>Door2Door</button>
             </div>
 
-            <div className='flex-1 hidden lg:inline md:inline'>
+            <div className='flex-1 hidden sm:inline'>
               <SearchBar styles='w-full'/>
             </div>
 
@@ -157,13 +167,12 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <div className='sm:hidden'>
+              {/* <div className='sm:hidden'>
                 <IoSearchOutline className='text-primary text-2xl'/>
-              </div>
+              </div> */}
 
               {/* Sign */}
               <div className='flex gap-1 items-center '>
-                <LuUser className='text-primary text-2xl lg:text-3xl'/>
                 <Sign/>
               </div>
 
@@ -178,13 +187,25 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
                 </div>
               </div>
             </div>
-            
           </div>
-
-
         </div>
+        <Separator className='w-full'/>
         <div className='hidden md:block'>
           <TopicBar/>
+        </div>
+
+        {/* Mobile stuff */}
+        <div className='sm:hidden '>
+          {/* Mobile Search */}
+          <div className='mx-10'>
+            <SearchBar styles=''/>
+          </div>
+          <Separator className='w-full'/>
+
+          {/* Mobile Tabs */}
+          <div className='my-2'>
+            <MobileTopicBar/>
+          </div>
         </div>
         {/* <div className='flex gap-3 justify-center '>
           <Button className='w-25 cursor-pointer'>
