@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/sheet"
 import { addProductToCart, getCart, measurements, price, unitChange, useUser } from '@/utilities';
 import { Button } from './button';
-import type { CartItem, Product } from '@/types';
+import type { CartItem, Product } from '@/types/types';
 import { useState, useEffect } from 'react';
 import { ScrollArea } from './scroll-area';
 import { useNavigate } from 'react-router-dom';

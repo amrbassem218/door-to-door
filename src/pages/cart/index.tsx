@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import type { CartItem, Product } from '@/types';
+import type { CartItem, Product } from '@/types/types';
 import { getCart, measurements, newPrice, unitChange, useUser, cleanupDuplicateCarts } from '@/utilities';
 import type { User } from '@supabase/supabase-js';
 import * as React from 'react';

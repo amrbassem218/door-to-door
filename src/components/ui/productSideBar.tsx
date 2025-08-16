@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import CartSheet from '@/components/ui/cartSheet';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import type { Product } from '@/types';
+import type { Product } from '@/types/types';
 import { FaAngleRight, FaChevronDown, FaHeart } from 'react-icons/fa';
 import { CiLocationOn } from 'react-icons/ci';
 import { Button } from './button';

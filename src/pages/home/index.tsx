@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { MdNavigateNext } from "react-icons/md";
 import { useState, useEffect } from 'react';
-import type { Product } from '@/types';
+import type { Product } from '@/types/types';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/ui/Header';
 import Hero from './hero';

@@ -18,7 +18,7 @@ const Hero: React.FunctionComponent<IHeroProps> = (props) => {
     const suggestedKeywords = [
         "tomatoes",
         "olives",
-        "medjool dates",
+        "lettuce",
         "onion"
     ]
     const navigate = useNavigate();

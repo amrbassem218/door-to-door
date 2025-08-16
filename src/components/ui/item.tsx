@@ -1,4 +1,4 @@
-import type { Product } from '@/types';
+import type { Product } from '@/types/types';
 import { newPrice } from '@/utilities';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';

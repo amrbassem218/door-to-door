@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { FaCaretDown } from 'react-icons/fa';
 import { measurements } from '@/utilities';
-import type { Product } from '@/types';
+import type { Product } from '@/types/types';
 
 interface IMeasurementChangeProps {
   product?: Product;

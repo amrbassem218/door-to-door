@@ -1,7 +1,7 @@
 import { supabase } from "./supabase/supabaseClient"
 import { Index } from "flexsearch"
 import { Document } from "flexsearch"
-import type { CartItem, dbData, Product } from "./types";
+import type { CartItem, dbData, Product } from "./types/types";
 import { create, all, prod } from 'mathjs'
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
@@ -459,4 +459,8 @@ export const manualCleanupAllDuplicateCarts = async() => {
 // Make it available globally for browser console access
 if(typeof window !== 'undefined') {
   (window as any).cleanupDuplicateCarts = manualCleanupAllDuplicateCarts;
+}
+
+export const capetalize = (text: string) => {
+  return text.split(' ').map((word) => word.charAt(0).toUpperCase() + word.substring(1)).join(' ');
 }

@@ -1,4 +1,4 @@
-import type { Product } from '@/types';
+import type { Product } from '@/types/types';
 import * as React from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 

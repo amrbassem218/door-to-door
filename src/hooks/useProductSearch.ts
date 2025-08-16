@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearch } from '@/searchContext';
-import { Product, ProductFilters } from '@/types';
+import { Product, ProductFilters } from '@/types/types';
 
 export const useProductSearch = () => {
   const search = useSearch();

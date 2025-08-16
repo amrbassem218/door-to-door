@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 import { Index } from "flexsearch";
-import type { LangContextType } from "./types";
+import type { LangContextType } from "./types/types";
 import { getSuggestion } from "./utilities";
 
 export const LangContext = createContext<LangContextType | null>(null);

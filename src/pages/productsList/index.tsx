@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearch } from '@/searchContext';
 import { useNavigate, useParams } from 'react-router-dom';
-import type { ProductFilters, Product } from '@/types';
+import type { ProductFilters, Product } from '@/types/types';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
 import { Checkbox } from '@/components/ui/checkbox';
