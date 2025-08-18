@@ -25,6 +25,7 @@ import QuantityChange from '@/components/ui/quantityChange';
 import { LuShoppingCart } from 'react-icons/lu';
 import CartSheet from '@/components/ui/cartSheet';
 import ProductHighLight from '@/components/ui/productHighlightSection';
+import SimialrProducts from '@/components/ui/similarProducts';
 
 interface IProductProps {
 }
@@ -78,9 +79,10 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
             }
             handleGetProduct();
         }
-    }, [])
+    }, [id])
     const [currentImage, setCurrentImage] = useState(0);
     useEffect(() => {
+        window.scrollTo(0,0);
     }, [product])
     if(!product){
         return <Error/>
@@ -272,7 +274,9 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
             
         </section>
 
-        
+        <div>
+            <SimialrProducts product={product}/>
+        </div>
         
     </div>
   );

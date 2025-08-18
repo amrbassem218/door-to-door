@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface IItemProps {
   item: Product
-  col: string;
+  col?: string;
 }
 
 const Item: React.FunctionComponent<IItemProps> = ({item, col}) => {
