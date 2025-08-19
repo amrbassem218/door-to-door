@@ -9,19 +9,34 @@ interface IBottomBarProps {
 }
 
 const BottomBar: React.FunctionComponent<IBottomBarProps> = (props) => {
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState("home");
   const navigate = useNavigate();
-  const items = [<FaHome onClick={() => navigate('/')}/>, <BiCategory onClick={() => navigate('/categories')}/>, <LuShoppingCart onClick={() => navigate('/cart')}/>, <LuUser onClick={() => navigate('/user')}/>];
   return (
-    <div className='sm:hidden fixed bottom-0 left-0 h-15 border-t-1 w-full bg-background flex items-center gap-4 px-2 border-1 shadow-sm'>
+    <div className='sm:hidden fixed bottom-0 left-0 h-12 border-t-1 w-full bg-background flex items-center gap-4 px-2 border-1 shadow-sm'>
       <div className='flex justify-around w-full text-[1.75rem]'>
-        {items.map((item, i) => {
-          return (
-            <div className={`${activeTab == i ? "text-red-700" : "text-text"}`} onClick={() => setActiveTab(i)}>
-              {item}
-            </div>
-          )
-        })}
+          {/* Home */}
+          <div className={`flex flex-col items-center ${activeTab == "home" ? "text-primary/80" : "text-text"}`} onClick={() => setActiveTab("home")}>
+            <FaHome onClick={() => navigate('/')}/>
+            <p className='text-xs'>Home</p>
+          </div>
+
+          {/* Categories */}
+          <div className={`flex flex-col items-center  ${activeTab == "categories" ? "text-primary/80" : "text-text"}`} onClick={() => setActiveTab("categories")}>
+            <BiCategory onClick={() => navigate('/categories')}/>
+            <p className='text-xs'>Categories</p>
+          </div>
+
+          {/* Cart */}
+          <div className={`flex flex-col items-center  ${activeTab == "cart" ? "text-primary/80" : "text-text"}`} onClick={() => setActiveTab("cart")}>
+            <LuShoppingCart onClick={() => navigate('/cart')}/>
+            <p className='text-xs'>Cart</p>
+          </div>
+
+          {/* Account */}
+          <div className={`flex flex-col items-center  ${activeTab == "account" ? "text-primary/80" : "text-text"}`} onClick={() => setActiveTab("account")}>
+            <LuUser onClick={() => navigate('/account')}/>
+            <p className='text-xs'>Account</p>
+          </div>
       </div>
     </div>
   );
