@@ -111,7 +111,7 @@ export const useUser = () => {
 export const getDisplayName = (user: User) => {
   const meta = user?.user_metadata ?? {}
   return (
-    meta.full_name.split(' ')[0] ||    
+    meta.full_name ||    
     meta.name ||      
     meta.username ||  
     meta.user_name || 

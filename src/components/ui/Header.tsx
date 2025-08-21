@@ -106,7 +106,7 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
 
               {/* Language & currency */}
               <DropdownMenu>
-                <DropdownMenuTrigger className='hidden md:inline'>
+                <DropdownMenuTrigger className='hidden sm:block'>
                   <div className='flex items-center gap-2 cursor-pointer'>
                     {/* flag */}
                     <div>
