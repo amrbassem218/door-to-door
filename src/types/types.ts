@@ -58,3 +58,8 @@ export interface CartItem{
     quantity: number;
     measurement: string;
 }
+
+export interface pos {
+    lat: number;
+    lng: number;
+}

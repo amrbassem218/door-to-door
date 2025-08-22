@@ -43,10 +43,10 @@ import MobileTopicBar from './mobileTopicBar';
 
 
 interface IHeaderProps {
-  
+  showSearch?: boolean;
 }
 
-const Header: React.FunctionComponent<IHeaderProps> = (props) => {
+const Header: React.FunctionComponent<IHeaderProps> = ({showSearch}) => {
   const navigate = useNavigate();
   // const countries
   const egypt = {code: "EG", name: "Egypt"};
@@ -92,14 +92,19 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
             {/* Logo & Menu */}
             <div className='flex items-center gap-2'>
               <div className='flex items-center'>
-                <IoIosArrowBack size={24} className='sm:hidden text-primary' onClick={() => goBack()}/>
+                {
+                  window.history.state && window.history.state.idx > 0 &&
+                  <IoIosArrowBack size={24} className='sm:hidden text-primary' onClick={() => goBack()}/>
+                }
                 {/* <IoIosMenu  size={25} className='sm:hidden text-primary'/> */}
               </div>
               <button className='cursor-pointer text-primary font-semibold lg:text-3xl text-lg' onClick={() => navigate('/')}>Door2Door</button>
             </div>
 
             <div className='flex-1 hidden sm:inline'>
-              <SearchBar styles='w-full'/>
+              {showSearch &&
+                <SearchBar styles='w-full'/>
+              }
             </div>
 
             <div className='flex gap-5'>
@@ -197,13 +202,15 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
         {/* Mobile stuff */}
         <div className='sm:hidden '>
           {/* Mobile Search */}
-          <div className='mx-10'>
+          <div className='mx-10 my-2'>
+            {showSearch &&
             <SearchBar styles=''/>
+            }
           </div>
           <Separator className='w-full'/>
 
           {/* Mobile Tabs */}
-          <div className='my-2'>
+          <div className='my-2 hidden'>
             <MobileTopicBar/>
           </div>
         </div>

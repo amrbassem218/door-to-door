@@ -1,21 +1,22 @@
 import * as React from 'react';
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import { useState, useEffect } from "react";
+import type { pos } from '@/types/types';
 
-const containerStyle = {
-  width: "100%",
-  height: "400px",
-};
+
 
 interface ILocationPageProps {
+  position: pos | null;
+  setPosition: React.Dispatch<React.SetStateAction<pos | null>>;
+  styles: Object;
 }
 
-const AdressPicker: React.FunctionComponent<ILocationPageProps> = (props) => {
+const AdressPicker: React.FunctionComponent<ILocationPageProps> = ({position, setPosition, styles}) => {
+  const containerStyle = styles;
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY
   });
 
-  const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -38,6 +39,9 @@ const AdressPicker: React.FunctionComponent<ILocationPageProps> = (props) => {
       mapContainerStyle={containerStyle}
       center={position}
       zoom={15}
+      options={{
+        disableDefaultUI: true
+      }}
       onClick={(e) => {
         if (e.latLng) {
           setPosition({

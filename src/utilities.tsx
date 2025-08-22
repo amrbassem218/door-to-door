@@ -1,7 +1,7 @@
 import { supabase } from "./supabase/supabaseClient"
 import { Index } from "flexsearch"
 import { Document } from "flexsearch"
-import type { CartItem, dbData, Product } from "./types/types";
+import type { CartItem, dbData, pos, Product } from "./types/types";
 import { create, all, prod } from 'mathjs'
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
@@ -463,4 +463,21 @@ if(typeof window !== 'undefined') {
 
 export const capetalize = (text: string) => {
   return text.split(' ').map((word) => word.charAt(0).toUpperCase() + word.substring(1)).join(' ');
+}
+
+async function getAddressFromLatLng(pos: pos | null): Promise<string | undefined> {
+  if(!pos) return;
+  const lat = pos.lat;
+  const lng = pos.lng;
+  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  const res = await fetch(
+    `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`
+  );
+  const data = await res.json();
+
+  if (data.status === "OK" && data.results.length > 0) {
+    return data.results[0].formatted_address;
+  } else {
+    return "Unknown location";
+  }
 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FaAngleLeft } from 'react-icons/fa';
 import { IoIosArrowBack } from 'react-icons/io';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Flag from 'react-world-flags';
 import { useState } from 'react';
 import {
@@ -26,6 +26,7 @@ interface ISettingsProps {
 
 const Settings: React.FunctionComponent<ISettingsProps> = (props) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const egypt = {code: "EG", name: "Egypt"};
   const [userCountry, setUserCountry] = useState(egypt);
   return (
@@ -51,8 +52,8 @@ const Settings: React.FunctionComponent<ISettingsProps> = (props) => {
           
         </div>
 
-        {/* Profile */}
-        <div className='border-b-1 px-5 py-3' onClick={() => navigate('/settings/adressPicker')}>
+        {/* Ship to */}
+        <div className='border-b-1 px-5 py-3' onClick={() => navigate('/location', { state: { from: location.pathname } })}>
           <p className='font-medium'>Ship to</p>
         </div>
 
