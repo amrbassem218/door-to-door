@@ -7,11 +7,13 @@ import TopBar from './components/ui/topbar'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './router'
 import Auth from './auth'
-import { getProducts, indexProducts, getSuggestion } from './utilities'
-import type { dbData, SearchContextType, Product, ProductFilters, LangContextType } from './types/types'
+import { getProducts, indexProducts, getSuggestion, useUser } from './utilities'
+import type { dbData, SearchContextType, Product, ProductFilters, LangContextType, UserProfile } from './types/types'
 import type { Index } from 'flexsearch'
 import { SearchContext } from './searchContext'
 import { LangContext } from './langContext'
+import { UserContext } from './userContext'
+import { supabase } from './supabase/supabaseClient'
 function App() {
   const [indexes, setIndexes] = useState<Index<string>[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -116,14 +118,36 @@ function App() {
     lang,
     setLang  
   }
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const user = useUser();
+  useEffect(() => {
+    if(user){
+      const getUserData = async() => {
+        const {data: userData, error} = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+        if(error){
+          console.log("couldn't get user profile");
+          console.error(error);
+        }
+        if(userData){
+          setUserProfile(userData);
+        }
+      }
+      getUserData();
+    }
+  }, [user])
+    
   return (
-    <LangContext.Provider value={langContextValue}>
+    <UserContext.Provider value={{ userProfile, setUserProfile }}>
       <SearchContext.Provider value={searchContextValue}>
         <div className='w-screen'>
           <RouterProvider router={router}/>
         </div>
       </SearchContext.Provider>
-    </LangContext.Provider>
+    </UserContext.Provider>
   )
 }
 

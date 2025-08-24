@@ -6,10 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import Header from '@/components/ui/Header';
 import Hero from './hero';
 import FolderMenu from './folderMenu';
-import { getProducts, newPrice } from '@/utilities';
+import { convertPrice, getProducts, newPrice } from '@/utilities';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Item from '@/components/ui/item';
 import BottomBar from '@/components/ui/bottomBar';
+import { useCurrencyRates } from '@/getRates';
+import { getProfile, UserContext } from '@/userContext';
 interface IHomeProps {
 }
 
@@ -18,6 +20,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
   const [items, setItems] = useState<Product[]>();
   const navigate = useNavigate();
   const limit = 6;
+  
   useEffect(() => {
     const getProd = async() => {
       let prod = await getProducts();
@@ -27,6 +30,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
     }
     getProd();
   }, [])
+
   return (
     <div className='mx-auto'>
         {/* <section className='space-y-3 w-full'>

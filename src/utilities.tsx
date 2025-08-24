@@ -1,7 +1,7 @@
 import { supabase } from "./supabase/supabaseClient"
 import { Index } from "flexsearch"
 import { Document } from "flexsearch"
-import type { CartItem, dbData, pos, Product } from "./types/types";
+import type { CartItem, currenciesDataType, dbData, pos, Product } from "./types/types";
 import { create, all, prod } from 'mathjs'
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
@@ -379,8 +379,12 @@ export const measurements = [
   "Ounces"
 ]
 
-export const newPrice = (product:Product) => {
-  return Math.round(Math.round(product.price) - (Math.round(product.price) / product.discount));
+export const newPrice = (product:Product, userCurrency: string, rates: Record<string, number>) => {
+  const newPriceInOriginalCurrency = Math.round(Math.round(product.price) - (Math.round(product.price) * (product.discount/100)));
+  const finalPrice = convertPrice(newPriceInOriginalCurrency, userCurrency, rates);
+  console.log("price in original: ", newPriceInOriginalCurrency);
+  console.log("final_price: ", finalPrice);
+  return finalPrice;
 }
 export const price = (product: Product):number => {
   return Math.round(Math.round(product.price));
@@ -482,11 +486,6 @@ async function getAddressFromLatLng(pos: pos | null): Promise<string | undefined
     return "Unknown location";
   }
 }
-
-export const getCountryCodeFromCurrency = (currencyCode: string) => {
-  const countries = getAllCountries();
-      // return getISOByParam('currency', currencyCode);
-}
 export const currencyToPrimaryCountry: Record<string, string> = {
   AED: "AE",
   AFN: "AF",
@@ -515,3 +514,16 @@ export const currencyToPrimaryCountry: Record<string, string> = {
   USD: "US",
   ZAR: "ZA",
 };
+
+export function convertPrice(
+  priceInEGP: number,
+  targetCurrency: string,
+  rates: Record<string, number>
+) {
+  targetCurrency = targetCurrency.toLowerCase();
+  console.log("target: ", targetCurrency);
+  console.log("exists: ", Object.keys(rates).includes(targetCurrency));
+  console.log("what happens: ", rates[targetCurrency])
+  if (!rates[targetCurrency]) return null;
+  return Number((priceInEGP * rates[targetCurrency]).toFixed(2));
+}

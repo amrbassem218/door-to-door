@@ -9,6 +9,7 @@ import { supabase } from '@/supabase/supabaseClient';
 import type { currenciesDataType, UserProfile } from '@/types/types';
 import currencyCodes from "currency-codes";
 import { useProductSearch } from '@/hooks/useProductSearch';
+import { getProfile } from '@/userContext';
 
 interface ISettingsProps {
   
@@ -19,32 +20,8 @@ const Settings: React.FunctionComponent<ISettingsProps> = (props) => {
   const location = useLocation();
   const egypt = {code: "EG", name: "Egypt"};
   const [userCountry, setUserCountry] = useState(egypt);
-  const [userCurrency, setUserCurrency] = useState<currenciesDataType>();
-  const [userProfile, setUserProfile] = useState<UserProfile>();
-  const user = useUser();
-  useEffect(() => {
-    if(user){
-      const getUserData = async() => {
-        const {data: userData, error} = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-        if(error){
-          console.log("couldn't get user profile");
-          console.error(error);
-        }
-        if(userData){
-          setUserProfile(userData);
-          console.log("userdata coming");
-          console.log(userData);
-          setUserCurrency(userData.currency);
-        }
-      }
-      getUserData();
-    }
-  }, [user])
-  
+  const userProfile = getProfile();
+  const [userCurrency, setUserCurrency] = useState<currenciesDataType | null>();
   return (
     <div>
       {/* Header */}

@@ -174,7 +174,7 @@ export type Database = {
         Row: {
           avatar_url: string | null
           country: string | null
-          currency: Json | null
+          currency: Database["public"]["CompositeTypes"]["currency_type"] | null
           full_name: string | null
           id: string
           location: Json | null
@@ -185,7 +185,9 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           country?: string | null
-          currency?: Json | null
+          currency?:
+            | Database["public"]["CompositeTypes"]["currency_type"]
+            | null
           full_name?: string | null
           id: string
           location?: Json | null
@@ -196,7 +198,9 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           country?: string | null
-          currency?: Json | null
+          currency?:
+            | Database["public"]["CompositeTypes"]["currency_type"]
+            | null
           full_name?: string | null
           id?: string
           location?: Json | null
@@ -296,7 +300,11 @@ export type Database = {
       [_ in never]: never
     }
     CompositeTypes: {
-      [_ in never]: never
+      currency_type: {
+        currencyname: string | null
+        currencycode: string | null
+        countrycode: string | null
+      }
     }
   }
 }
