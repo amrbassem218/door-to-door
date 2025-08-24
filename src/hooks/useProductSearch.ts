@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearch } from '@/searchContext';
-import { Product, ProductFilters } from '@/types/types';
+import type { Product, ProductFilters } from '@/types/types';
 
 export const useProductSearch = () => {
   const search = useSearch();
@@ -10,12 +10,12 @@ export const useProductSearch = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // Search products by query
-  const searchProducts = (query: string) => {
+  const searchProducts = async(query: string) => {
     setIsLoading(true);
     setSearchQuery(query);
     
     if (query.trim()) {
-      const searchResults = search.searchProducts(query);
+      const searchResults = await search.searchProducts(query);
       setResults(searchResults);
     } else {
       setResults(search.allProducts);
@@ -47,7 +47,8 @@ export const useProductSearch = () => {
 
   // Get products with minimum rating
   const getProductsByRating = (rating: number) => {
-    return search.filterProducts({ rating });
+    const strRating = rating.toString();
+    return search.filterProducts({ rating: strRating });
   };
 
   // Get in-stock products

@@ -1,5 +1,6 @@
 import { Index } from "flexsearch";
 import type { Dispatch, SetStateAction } from "react";
+import type { Database } from "./database";
 
 export interface Product{
     name: string;
@@ -62,4 +63,12 @@ export interface CartItem{
 export interface pos {
     lat: number;
     lng: number;
+}
+
+export type UserProfile = Database['public']['Tables']['profiles']['Row'];
+
+export interface currenciesDataType {
+  currencyName: string;
+  currencyCode: string;
+  countryCode: string;
 }

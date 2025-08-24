@@ -97,15 +97,17 @@ export type Database = {
           created_at: string
           description: string | null
           discount: number
+          display_name: string | null
           id: number
           images: string[] | null
           min_order: number | null
           name: string
-          price: number
+          price: number | null
           rating: number | null
           review_count: number | null
           seller: string | null
           seller_id: number | null
+          specifications: Json | null
           stock_count: number | null
           sub_category: number | null
           tags: string[] | null
@@ -115,15 +117,17 @@ export type Database = {
           created_at?: string
           description?: string | null
           discount?: number
+          display_name?: string | null
           id?: number
           images?: string[] | null
           min_order?: number | null
           name: string
-          price?: number
+          price?: number | null
           rating?: number | null
           review_count?: number | null
           seller?: string | null
           seller_id?: number | null
+          specifications?: Json | null
           stock_count?: number | null
           sub_category?: number | null
           tags?: string[] | null
@@ -133,15 +137,17 @@ export type Database = {
           created_at?: string
           description?: string | null
           discount?: number
+          display_name?: string | null
           id?: number
           images?: string[] | null
           min_order?: number | null
           name?: string
-          price?: number
+          price?: number | null
           rating?: number | null
           review_count?: number | null
           seller?: string | null
           seller_id?: number | null
+          specifications?: Json | null
           stock_count?: number | null
           sub_category?: number | null
           tags?: string[] | null
@@ -167,24 +173,33 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          country: string | null
+          currency: Json | null
           full_name: string | null
           id: string
+          location: Json | null
           updated_at: string | null
           username: string | null
           website: string | null
         }
         Insert: {
           avatar_url?: string | null
+          country?: string | null
+          currency?: Json | null
           full_name?: string | null
           id: string
+          location?: Json | null
           updated_at?: string | null
           username?: string | null
           website?: string | null
         }
         Update: {
           avatar_url?: string | null
+          country?: string | null
+          currency?: Json | null
           full_name?: string | null
           id?: string
+          location?: Json | null
           updated_at?: string | null
           username?: string | null
           website?: string | null
@@ -231,6 +246,38 @@ export type Database = {
             columns: ["parent_category"]
             isOneToOne: false
             referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sub_categories_prod: {
+        Row: {
+          created_at: string
+          id: number
+          name: string | null
+          sub_category: number | null
+          thumbnail: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          name?: string | null
+          sub_category?: number | null
+          thumbnail?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          name?: string | null
+          sub_category?: number | null
+          thumbnail?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sub_categories_prod_sub_category_fkey"
+            columns: ["sub_category"]
+            isOneToOne: false
+            referencedRelation: "sub_categories"
             referencedColumns: ["id"]
           },
         ]

@@ -3,25 +3,15 @@ import { FaAngleLeft } from 'react-icons/fa';
 import { IoIosArrowBack } from 'react-icons/io';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Flag from 'react-world-flags';
-import { useState } from 'react';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { Button } from '@/components/ui/button';
-import { ChevronsUpDown } from 'lucide-react';
-import  { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger }  from '@/components/ui/dropdown-menu';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command"
-import { countries } from '@/components/countries';
+import { useState, useEffect } from 'react';
+import { useUser } from '@/utilities';
+import { supabase } from '@/supabase/supabaseClient';
+import type { currenciesDataType, UserProfile } from '@/types/types';
+import currencyCodes from "currency-codes";
+import { useProductSearch } from '@/hooks/useProductSearch';
+
 interface ISettingsProps {
+  
 }
 
 const Settings: React.FunctionComponent<ISettingsProps> = (props) => {
@@ -29,6 +19,32 @@ const Settings: React.FunctionComponent<ISettingsProps> = (props) => {
   const location = useLocation();
   const egypt = {code: "EG", name: "Egypt"};
   const [userCountry, setUserCountry] = useState(egypt);
+  const [userCurrency, setUserCurrency] = useState<currenciesDataType>();
+  const [userProfile, setUserProfile] = useState<UserProfile>();
+  const user = useUser();
+  useEffect(() => {
+    if(user){
+      const getUserData = async() => {
+        const {data: userData, error} = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+        if(error){
+          console.log("couldn't get user profile");
+          console.error(error);
+        }
+        if(userData){
+          setUserProfile(userData);
+          console.log("userdata coming");
+          console.log(userData);
+          setUserCurrency(userData.currency);
+        }
+      }
+      getUserData();
+    }
+  }, [user])
+  
   return (
     <div>
       {/* Header */}
@@ -41,15 +57,14 @@ const Settings: React.FunctionComponent<ISettingsProps> = (props) => {
       <div>
         
         {/* Profile */}
-        <div className='border-b-1 px-5 py-3' onClick={() => navigate('/settings/profile')}>
+        <div className='border-b-1 px-5 py-3' onClick={() => navigate('/account/settings/profile')}>
           <p className='font-medium'>Profile</p>
         </div>
 
-        {/* Country */}
-        <div className='border-b-1 px-5 py-3 flex justify-between' onClick={() => navigate('/settings/country')}>
-          <p className='font-medium'>Country</p>
-          <Flag code={userCountry.code} className='w-7 h-7' />
-          
+        {/* Currency */}
+        <div className='border-b-1 px-5 py-3 flex justify-between' onClick={() => navigate('/account/settings/currency')}>
+          <p className='font-medium'>Currency</p>
+          <p className='text-text'>{userCurrency?.currencyName || "USD"}</p>
         </div>
 
         {/* Ship to */}
@@ -58,7 +73,7 @@ const Settings: React.FunctionComponent<ISettingsProps> = (props) => {
         </div>
 
         {/* Profile */}
-        <div className='border-b-1 px-5 py-3' onClick={() => navigate('/settings/profile')}>
+        <div className='border-b-1 px-5 py-3' onClick={() => navigate('/account/settings/profile')}>
           <p className='font-medium'>Profile</p>
         </div>
       </div>

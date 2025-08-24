@@ -6,6 +6,7 @@ import { create, all, prod } from 'mathjs'
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import camelcaseKeys from 'camelcase-keys';
+import { getAllCountries } from "country-currency-map";
 
 export const getProducts = async() => {
     const {data: products, error} = await supabase
@@ -481,3 +482,36 @@ async function getAddressFromLatLng(pos: pos | null): Promise<string | undefined
     return "Unknown location";
   }
 }
+
+export const getCountryCodeFromCurrency = (currencyCode: string) => {
+  const countries = getAllCountries();
+      // return getISOByParam('currency', currencyCode);
+}
+export const currencyToPrimaryCountry: Record<string, string> = {
+  AED: "AE",
+  AFN: "AF",
+  ALL: "AL",
+  DZD: "DZ",
+  ARS: "AR",
+  AUD: "AU",
+  BDT: "BD",
+  BGN: "BG",
+  BRL: "BR",
+  CAD: "CA",
+  CHF: "CH",
+  CNY: "CN",
+  EGP: "EG",
+  EUR: "FR",
+  GBP: "GB",
+  HKD: "HK",
+  INR: "IN",
+  JPY: "JP",
+  KRW: "KR",
+  MXN: "MX",
+  NZD: "NZ",
+  RUB: "RU",
+  SAR: "SA",
+  SGD: "SG",
+  USD: "US",
+  ZAR: "ZA",
+};

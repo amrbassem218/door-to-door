@@ -14,6 +14,7 @@ import Profile from "./pages/settings/profile";
 import Country from "./pages/settings/country";
 import AdressPicker from "./components/ui/adressPicker";
 import LocationPage from "./pages/location";
+import Currency from "./pages/settings/currency";
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -48,16 +49,20 @@ export const router = createBrowserRouter([
                 element: <Account/>,
             },
             {
-                path: '/settings',
+                path: '/account/settings',
                 element: <Settings/>
             },
             {
-                path: '/settings/profile',
+                path: '/account/settings/profile',
                 element: <Profile/>
             },
             {
-                path: '/settings/country',
+                path: '/account/settings/country',
                 element: <Country/>
+            },
+            {
+                path: '/account/settings/currency',
+                element: <Currency/>
             },
             {
                 path: '/location',

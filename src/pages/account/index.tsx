@@ -84,7 +84,7 @@ const Account: React.FunctionComponent<IAccountProps> = (props) => {
       <section className='py-4 px-3 space-y-3 bg-white'>
         <ul>
           <li>
-            <MenuItem name='Settings' route={() => navigate('/settings')}/>
+            <MenuItem name='Settings' route={() => navigate('/account/settings')}/>
           </li>
         </ul>
       </section>

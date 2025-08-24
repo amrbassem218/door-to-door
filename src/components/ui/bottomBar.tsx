@@ -4,13 +4,22 @@ import { FaHome } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
 import { LuShoppingCart, LuUser } from 'react-icons/lu';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 interface IBottomBarProps {
 }
 
 const BottomBar: React.FunctionComponent<IBottomBarProps> = (props) => {
   const [activeTab, setActiveTab] = useState("home");
   const navigate = useNavigate();
+  const location = useLocation();
+  const tabs = ["home", "categories", "cart", "account"]
+  useEffect(() => {
+    tabs.forEach(tab => {
+      if(location.pathname.includes(tab)){
+        setActiveTab(tab);
+      }
+    })
+  }, [location])
   const handleNavigationClick = (tabName: string, path: string) => {
     setActiveTab(tabName);
     navigate(path);
