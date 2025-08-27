@@ -1,6 +1,7 @@
 import { Index } from "flexsearch";
 import type { Dispatch, SetStateAction } from "react";
 import type { Database } from "./database";
+import type { Camelize } from "@/utilities";
 
 export interface Product{
     name: string;
@@ -65,10 +66,8 @@ export interface pos {
     lng: number;
 }
 
-export type UserProfile = Database['public']['Tables']['profiles']['Row'];
-
-export interface currenciesDataType {
-  currencyName: string;
-  currencyCode: string;
-  countryCode: string;
-}
+type localProfiles = Database['public']['Tables']['profiles']['Row'];
+export type profilesRow = Camelize<localProfiles>;
+type localCurrencies = Database['public']['Tables']['currencies']['Row'];
+export type Currencies = Camelize<localCurrencies>
+export type UserProfile = profilesRow & {currencies: Currencies};

@@ -46,13 +46,10 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
             currentCartQuantity[id(product)] = quantity;
             currentCartMeasurement[id(product)] = measurement;
           })
-          // console.log("quantity: ", currentCartQuantity);
-          // console.log("measurement: ", currentCartMeasurement);
           setCartQuantity(currentCartQuantity);
           setCartMeasurement(currentCartMeasurement);
           setSubtotal(total);
           setCart(data);
-          // console.log(data);
         }
     }
     else{

@@ -92,6 +92,36 @@ export type Database = {
         }
         Relationships: []
       }
+      currencies: {
+        Row: {
+          country_code: string
+          country_name: string
+          created_at: string
+          currency_code: string
+          currency_name: string
+          id: number
+          rate_to_egp: string
+        }
+        Insert: {
+          country_code: string
+          country_name: string
+          created_at?: string
+          currency_code: string
+          currency_name: string
+          id?: number
+          rate_to_egp: string
+        }
+        Update: {
+          country_code?: string
+          country_name?: string
+          created_at?: string
+          currency_code?: string
+          currency_name?: string
+          id?: number
+          rate_to_egp?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           created_at: string
@@ -174,7 +204,7 @@ export type Database = {
         Row: {
           avatar_url: string | null
           country: string | null
-          currency: Database["public"]["CompositeTypes"]["currency_type"] | null
+          currency: number
           full_name: string | null
           id: string
           location: Json | null
@@ -185,9 +215,7 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           country?: string | null
-          currency?:
-            | Database["public"]["CompositeTypes"]["currency_type"]
-            | null
+          currency?: number
           full_name?: string | null
           id: string
           location?: Json | null
@@ -198,9 +226,7 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           country?: string | null
-          currency?:
-            | Database["public"]["CompositeTypes"]["currency_type"]
-            | null
+          currency?: number
           full_name?: string | null
           id?: string
           location?: Json | null
@@ -208,7 +234,15 @@ export type Database = {
           username?: string | null
           website?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_currency_fkey"
+            columns: ["currency"]
+            isOneToOne: false
+            referencedRelation: "currencies"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       sellers: {
         Row: {

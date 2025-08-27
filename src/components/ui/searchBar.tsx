@@ -16,7 +16,7 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({styles}) => {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
   const handleFilter = () => {
-    console.log("filtered");
+    
   }
   useEffect(() => {
     if(query && search){

@@ -11,7 +11,6 @@ export function useCurrencyRates() {
         const url = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/egp.json";
         const response = await fetch(url);
         const data = await response.json();
-        console.log(data);
         setRates(data.egp);
         setLoading(false); // This is crucial - stops the infinite re-renders
       } catch (error) {
@@ -23,7 +22,6 @@ export function useCurrencyRates() {
     fetchRates();
   }, []);
   
-  console.log("rates", rates);
   return { rates, loading };
 }
 

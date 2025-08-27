@@ -16,6 +16,8 @@ import { Separator } from '@/components/ui/separator';
 import { useNavigate } from 'react-router-dom';
 import MeasurementChange from '@/components/ui/measurementChange';
 import QuantityChange from '@/components/ui/quantityChange';
+import { getProfile } from '@/userContext';
+import { useCurrencyRates } from '@/getRates';
 
 interface ICartProps {
 }
@@ -29,6 +31,10 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
   const [cartQuantity, setCartQuantity] = useState<Record<number,number>>({});
   const [cartMeasurement, setCartMeasurement] = useState<Record<number,string>>({});
   const navigate = useNavigate();
+  const { rates, loading } = useCurrencyRates();
+  const userProfile = getProfile();
+  const [userCurrency, setUserCurrency] = useState(userProfile?.userProfile?.currency?.currencycode ?? "USD");
+  if (loading) return <p>Loading prices...</p>;
   const id = (product: Product) => {
     return Number(product.id);
   }
@@ -57,7 +63,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
             data.forEach((item) => {
               let {products: product, quantity, measurement} = item;
               currentTotal += Math.round(product.price)
-              currentSubTotal += newPrice(product);
+              currentSubTotal += newPrice(product, userCurrency, rates);
               currentCartQuantity[id(product)] = quantity;
               currentCartMeasurement[id(product)] = measurement;
               console.log("id: ",product.sellerId);
@@ -65,7 +71,6 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                 sellerSeperatedCart[Number(product.sellerId)].push(item);
               }
               else sellerSeperatedCart[Number(product.sellerId)] = [item];
-              // console.log("min: ", product.min);
             })
             setCartQuantity(currentCartQuantity);
             setCartMeasurement(currentCartMeasurement);
@@ -171,10 +176,10 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                             <div>
                               {/* Price */}
                               <div className='flex gap-1 items-center'>
-                                <h1 className='text-md font-semibold '>US ${newPrice(product)}</h1>
+                                <h1 className='text-md font-semibold '>US ${newPrice(product, userCurrency, rates)}</h1>
                                 <p className='line-through text-sm text-text'>US ${Math.round(product.price)}</p>
                               </div>
-                              <p className='text-xs text-red-600 font-medium'>Save US${Math.round(product.price) - newPrice(product)}</p>
+                              <p className='text-xs text-red-600 font-medium'>Save US${Math.round(product.price) - newPrice(product, userCurrency, rates)}</p>
                               <p className='text-text text-xs'>Shipping: US$1542</p>
                             </div>
                           </div>

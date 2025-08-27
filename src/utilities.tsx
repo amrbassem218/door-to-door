@@ -1,7 +1,7 @@
 import { supabase } from "./supabase/supabaseClient"
 import { Index } from "flexsearch"
 import { Document } from "flexsearch"
-import type { CartItem, currenciesDataType, dbData, pos, Product } from "./types/types";
+import type { CartItem, dbData, pos, Product } from "./types/types";
 import { create, all, prod } from 'mathjs'
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
@@ -13,7 +13,6 @@ export const getProducts = async() => {
     .from('products')
     .select();
     if(products){
-        // console.log(products);
     }  
     else{
         console.error(error);
@@ -60,19 +59,15 @@ export const unitChange = (value: number, currentUnit: string, targetUnit: strin
   const math = create(all);
   
   // Debug logging to see what's being passed
-  // console.log('unitChange called with:', { value, currentUnit, targetUnit });
   
   targetUnit = targetUnit.toLowerCase();
   currentUnit = currentUnit.toLowerCase();
   if(targetUnit == "ton") targetUnit = "tonne";
   if(currentUnit == "ton") currentUnit = "tonne";
   
-  // console.log('After normalization:', { currentUnit, targetUnit });
   
   const current = math.unit(value, currentUnit);
   const converted = current.to(targetUnit);
-  // console.log(current);
-  // console.log(converted);
   return converted.toNumber().toFixed(2);
 }
 export const handleGoogleAuth = () => {
@@ -183,7 +178,6 @@ export const getCartId = async(user: User) =>{
 //     const cartId = await getCartId(user);
     
 //     if (!cartId) {
-//       // console.log("No cart ID found");
 //       return null;
 //     }
     
@@ -237,7 +231,6 @@ export const cleanupDuplicateCarts = async(user: User) => {
           .eq('id', duplicateCart.id);
       }
       
-      console.log(`Cleaned up ${duplicateCarts.length} duplicate carts for user ${user.id}`);
       return oldestCart.id;
     }
     
@@ -298,6 +291,18 @@ export const camel = (element: any) => {
   return element;
 }
 
+// convert snake_case to camelCase at type level
+export type CamelCase<S extends string> =
+  S extends `${infer Head}_${infer Tail}`
+    ? `${Head}${Capitalize<CamelCase<Tail>>}`
+    : S;
+
+// recursively apply to an object
+export type Camelize<T> = {
+  [K in keyof T as CamelCase<string & K>]:
+    T[K] extends object ? Camelize<T[K]> : T[K];
+};
+
 export const addProductToCart = async(user: User, product: Product, quantity: number) =>{
   const cartId = await getOrCreateCart(user);
   
@@ -306,8 +311,6 @@ export const addProductToCart = async(user: User, product: Product, quantity: nu
     return "error";
   }
   
-  // console.log("id: ", cartId)
-  // console.log("product_id: ", Number(product.id))
   const {data, error: getProductError} = await supabase
   .from('cart_items')
   .select('product_id')
@@ -330,7 +333,6 @@ export const addProductToCart = async(user: User, product: Product, quantity: nu
       quantity: quantity
     })
     if(error){
-      // console.log("error here");
       console.error(error);
     }
     return "success";
@@ -345,7 +347,6 @@ export const getProduct = async(id: number) => {
   .single();
   if(error){
     console.error(error);
-    // console.log("couldn't fetch product");
     return null;
   }
   return data;
@@ -382,9 +383,7 @@ export const measurements = [
 export const newPrice = (product:Product, userCurrency: string, rates: Record<string, number>) => {
   const newPriceInOriginalCurrency = Math.round(Math.round(product.price) - (Math.round(product.price) * (product.discount/100)));
   const finalPrice = convertPrice(newPriceInOriginalCurrency, userCurrency, rates);
-  console.log("price in original: ", newPriceInOriginalCurrency);
-  console.log("final_price: ", finalPrice);
-  return finalPrice;
+  return finalPrice ?? 0;
 }
 export const price = (product: Product):number => {
   return Math.round(Math.round(product.price));
@@ -393,9 +392,6 @@ export const price = (product: Product):number => {
 // Manual cleanup function that can be called from browser console
 export const manualCleanupAllDuplicateCarts = async() => {
   try {
-    console.log("Starting manual cleanup of all duplicate carts...");
-    
-    // Get all users with duplicate carts
     const {data: duplicateUsers, error} = await supabase
       .from('carts')
       .select('user_id')
@@ -429,8 +425,6 @@ export const manualCleanupAllDuplicateCarts = async() => {
     // Clean up duplicates for each user
     for(const [userId, carts] of Object.entries(userCarts)) {
       if(carts.length > 1) {
-        console.log(`User ${userId} has ${carts.length} carts, cleaning up...`);
-        
         // Sort by created_at to keep the oldest
         carts.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
         const [oldestCart, ...duplicateCarts] = carts;
@@ -515,15 +509,26 @@ export const currencyToPrimaryCountry: Record<string, string> = {
   ZAR: "ZA",
 };
 
-export function convertPrice(
-  priceInEGP: number,
-  targetCurrency: string,
-  rates: Record<string, number>
-) {
+export const convertPrice = (priceInEGP: number, targetCurrency: string, rates: Record<string, number>) => {
   targetCurrency = targetCurrency.toLowerCase();
   console.log("target: ", targetCurrency);
   console.log("exists: ", Object.keys(rates).includes(targetCurrency));
   console.log("what happens: ", rates[targetCurrency])
   if (!rates[targetCurrency]) return null;
   return Number((priceInEGP * rates[targetCurrency]).toFixed(2));
+}
+
+export const getUserCurrency = async(userId: string) => {
+  const {data: userCurrency, error} = await supabase
+  .from('profiles')
+  .select('currency, currencies(*)')
+  .eq('id', userId)
+  .single();
+  if(error){
+    console.log("couldn't get user currency from id");
+    console.error(error);
+    return null;
+  }
+  console.log("got user currency");
+  return camel(userCurrency);
 }

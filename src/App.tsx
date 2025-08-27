@@ -7,7 +7,7 @@ import TopBar from './components/ui/topbar'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './router'
 import Auth from './auth'
-import { getProducts, indexProducts, getSuggestion, useUser } from './utilities'
+import { getProducts, indexProducts, getSuggestion, useUser, camel } from './utilities'
 import type { dbData, SearchContextType, Product, ProductFilters, LangContextType, UserProfile } from './types/types'
 import type { Index } from 'flexsearch'
 import { SearchContext } from './searchContext'
@@ -79,9 +79,6 @@ function App() {
     }
 
     if (filters.inStock !== undefined) {
-      // console.log(filters.inStock)
-      // console.log(products[0].stockCount)
-      // // console.log(filters.inStock)
       filtered = filtered.filter(product => 
         filters.inStock ? (product.stockCount && product.stockCount > 0) : true
       );
@@ -125,7 +122,7 @@ function App() {
       const getUserData = async() => {
         const {data: userData, error} = await supabase
         .from('profiles')
-        .select('*')
+        .select('*, currencies(*)')
         .eq('id', user.id)
         .single();
         if(error){
@@ -133,7 +130,8 @@ function App() {
           console.error(error);
         }
         if(userData){
-          setUserProfile(userData);
+          const camelUser = camel(userData) as UserProfile;
+          setUserProfile(camelUser);
         }
       }
       getUserData();

@@ -6,7 +6,7 @@ import Flag from 'react-world-flags';
 import { useState, useEffect } from 'react';
 import { useUser } from '@/utilities';
 import { supabase } from '@/supabase/supabaseClient';
-import type { currenciesDataType, UserProfile } from '@/types/types';
+import type { Currencies, UserProfile } from '@/types/types';
 import currencyCodes from "currency-codes";
 import { useProductSearch } from '@/hooks/useProductSearch';
 import { getProfile } from '@/userContext';
@@ -21,7 +21,13 @@ const Settings: React.FunctionComponent<ISettingsProps> = (props) => {
   const egypt = {code: "EG", name: "Egypt"};
   const [userCountry, setUserCountry] = useState(egypt);
   const userProfile = getProfile();
-  const [userCurrency, setUserCurrency] = useState<currenciesDataType | null>();
+  const [userCurrency, setUserCurrency] = useState<Currencies>();
+  useEffect(() => {
+    if(userProfile){
+      console.log("user_profile: ", userProfile);
+      setUserCurrency(userProfile?.userProfile?.currencies);
+    }
+  }, [userProfile])
   return (
     <div>
       {/* Header */}
@@ -41,7 +47,7 @@ const Settings: React.FunctionComponent<ISettingsProps> = (props) => {
         {/* Currency */}
         <div className='border-b-1 px-5 py-3 flex justify-between' onClick={() => navigate('/account/settings/currency')}>
           <p className='font-medium'>Currency</p>
-          <p className='text-text'>{userCurrency?.currencyName || "USD"}</p>
+          <p className='text-text'>{userCurrency?.currencyCode}</p>
         </div>
 
         {/* Ship to */}
