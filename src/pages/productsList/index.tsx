@@ -6,6 +6,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from '@/component
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
 import { Checkbox } from '@/components/ui/checkbox';
 import { newPrice } from '@/utilities';
+import { getProfile } from '@/userContext';
+import { useCurrencyRates } from '@/getRates';
 
 const ProductsList: React.FC = () => {
   const { query } = useParams<{ query: string }>();
@@ -47,11 +49,15 @@ const ProductsList: React.FC = () => {
   const handleFilterChange = (newFilters: Partial<ProductFilters>) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
   };
-
+  const userProfile = getProfile();
+  const [userCurrency, setUserCurrency] = useState(userProfile?.userProfile?.currencies.countryCode ?? "USD");
+  const { rates, loading } = useCurrencyRates();
+  if (loading) return <p>Loading prices...</p>;
+  
   return (
-    <div className="container mx-auto  py-8">
+    <div className="container mx-auto py-4 px-2">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold mb-4">
+        <h1 className="text-xl font-bold">
           Search Results for "{searchQuery}"
         </h1>
         <p className="text-gray-600">
@@ -175,7 +181,7 @@ const ProductsList: React.FC = () => {
 
                 <div className="flex items-center gap-2 md:justify-between mb-2">
                   <span className="md:text-xl text-lg font-bold text-green-600">
-                    ${newPrice(product).toFixed(0)}
+                    ${newPrice(product, userCurrency, rates)}
                   </span>
                   {product.discount && (
                     <span className="text-sm text-gray-500 line-through">

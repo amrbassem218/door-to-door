@@ -7,7 +7,7 @@ import { Button } from './button';
 import { CiUser } from "react-icons/ci";
 import { CiLogin } from "react-icons/ci";
 import TopicBar from './topicBar';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import TopBar from './topbar';
 import { useSearch } from '@/searchContext';
 import { useState, useEffect, useRef } from 'react';
@@ -82,6 +82,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({showSearch}) => {
   const goBack = () => { 
     navigate(-1);
   }
+  const location = useLocation();
   return (
     <div className='fixed top-0 left-0 w-full bg-white z-50 shadow md:h-37'>
       {/* <TopBar/> */}
@@ -94,7 +95,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({showSearch}) => {
               <div className='flex items-center'>
                 {
                   window.history.state && window.history.state.idx > 0 &&
-                  <IoIosArrowBack size={24} className='sm:hidden text-primary' onClick={() => goBack()}/>
+                  <IoIosArrowBack size={24} className={`sm:hidden text-primary ${location.pathname == '/' && "hidden"}`} onClick={() => goBack()}/>
                 }
                 {/* <IoIosMenu  size={25} className='sm:hidden text-primary'/> */}
               </div>

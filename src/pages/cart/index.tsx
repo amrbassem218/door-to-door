@@ -33,8 +33,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
   const navigate = useNavigate();
   const { rates, loading } = useCurrencyRates();
   const userProfile = getProfile();
-  const [userCurrency, setUserCurrency] = useState(userProfile?.userProfile?.currency?.currencycode ?? "USD");
-  if (loading) return <p>Loading prices...</p>;
+  const [userCurrency, setUserCurrency] = useState(userProfile?.userProfile?.currencies.countryCode ?? "USD");
   const id = (product: Product) => {
     return Number(product.id);
   }
@@ -122,6 +121,8 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
       }
     }
   }
+  if (loading) return <p>Loading prices...</p>;
+
   return (
     <div>
       {

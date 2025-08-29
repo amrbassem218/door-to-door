@@ -14,12 +14,13 @@ const BottomBar: React.FunctionComponent<IBottomBarProps> = (props) => {
   const location = useLocation();
   const tabs = ["home", "categories", "cart", "account"]
   useEffect(() => {
+    setActiveTab("home");
     tabs.forEach(tab => {
       if(location.pathname.includes(tab)){
         setActiveTab(tab);
       }
     })
-  }, [location])
+  }, [location.pathname])
   const handleNavigationClick = (tabName: string, path: string) => {
     setActiveTab(tabName);
     navigate(path);
