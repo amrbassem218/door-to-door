@@ -38,14 +38,14 @@ const TopSellingItemsStrip: React.FunctionComponent<ITopSellingItemsStripProps> 
                 <div className='mx-4 mt-2 pb-2 border-b-2 space-y-1'>
                   <h1 className='text-lg font-medium'>L'Oreal Paris Makeup True Match Lumi Glotion</h1>
                   <div className='flex gap-2 text-md'>
-                    <p className='font-bold'>${newPrice(item)}</p>
+                    <p className='font-bold'>{newPrice(item)} {userCurrency}</p>
                     <p className='line-through decoration-1'>${item.price}</p>
                   </div>
                 </div>
 
                 {/* Footer */}
                 <div className='mx-4 py-2'>
-                  <p className='font-semibold text-green-600'>Save - ${item.price - newPrice(item)}</p>
+                  <p className='font-semibold text-green-600'>Save - {item.price - newPrice(item)} {userCurrency}</p>
                 </div>
               </div>
               }

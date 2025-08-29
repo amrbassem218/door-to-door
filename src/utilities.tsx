@@ -380,15 +380,29 @@ export const measurements = [
   "Ounces"
 ]
 
-export const newPrice = (product:Product, userCurrency: string, rates: Record<string, number>) => {
-  const newPriceInOriginalCurrency = Math.round(Math.round(product.price) - (Math.round(product.price) * (product.discount/100)));
-  const finalPrice = convertPrice(newPriceInOriginalCurrency, userCurrency, rates);
-  return finalPrice ?? 0;
+export const newPrice = (product:Product, userCurrency: string, rates: Record<string, number>, here?: boolean) => {
+  let newPriceInOriginalCurrency = product.price;
+  if(product.discount > 0){
+    newPriceInOriginalCurrency -= (product.price * (product.discount/100));
+  }
+  const finalPrice = convertPrice(newPriceInOriginalCurrency, userCurrency, rates)?.toFixed(2);
+  if(here){
+    console.log("priced: ", product.price);
+    console.log("original: ", newPriceInOriginalCurrency);
+    console.log("final: ", finalPrice);
+    console.log("discount: ", product.discount);
+    console.log("curr: ", userCurrency);
+    console.log("rates: ", rates);
+  }
+  return Number(finalPrice) ?? 0;
 }
-export const price = (product: Product):number => {
-  return Math.round(Math.round(product.price));
+export const price = (product:Product, userCurrency: string, rates: Record<string, number>)  => {
+  let productPrice = product.price ?? 0;
+  return Number(convertPrice(productPrice, userCurrency, rates)?.toFixed(2));
 }
-
+export const save = (product:Product, userCurrency: string, rates: Record<string, number>)  => {
+  return (price(product, userCurrency, rates) - newPrice(product, userCurrency, rates)).toFixed(2);
+}
 // Manual cleanup function that can be called from browser console
 export const manualCleanupAllDuplicateCarts = async() => {
   try {

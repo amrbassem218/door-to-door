@@ -5,7 +5,7 @@ import type { ProductFilters, Product } from '@/types/types';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
 import { Checkbox } from '@/components/ui/checkbox';
-import { newPrice } from '@/utilities';
+import { newPrice, price } from '@/utilities';
 import { getProfile } from '@/userContext';
 import { useCurrencyRates } from '@/getRates';
 
@@ -50,7 +50,7 @@ const ProductsList: React.FC = () => {
     setFilters(prev => ({ ...prev, ...newFilters }));
   };
   const userProfile = getProfile();
-  const [userCurrency, setUserCurrency] = useState(userProfile?.userProfile?.currencies.countryCode ?? "USD");
+  const [userCurrency, setUserCurrency] = useState(userProfile?.userProfile?.currencies.currencyCode ?? "USD");
   const { rates, loading } = useCurrencyRates();
   if (loading) return <p>Loading prices...</p>;
   
@@ -181,11 +181,11 @@ const ProductsList: React.FC = () => {
 
                 <div className="flex items-center gap-2 md:justify-between mb-2">
                   <span className="md:text-xl text-lg font-bold text-green-600">
-                    ${newPrice(product, userCurrency, rates)}
+                    {newPrice(product, userCurrency, rates)} {userCurrency}
                   </span>
                   {product.discount && (
                     <span className="text-sm text-gray-500 line-through">
-                      ${Math.round(product.price)}
+                      {price(product, userCurrency, rates)}
                     </span>
                   )}
                 </div>

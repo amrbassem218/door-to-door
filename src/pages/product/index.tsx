@@ -14,7 +14,7 @@ import { FiMinus, FiPlus } from "react-icons/fi";
 import { Input } from '@/components/ui/input';
 import { FaHeart } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
-import { addProductToCart, camel, getProduct, measurements, price, unitChange, useUser } from '@/utilities';
+import { addProductToCart, camel, convertPrice, getProduct, measurements, newPrice, price, unitChange, useUser } from '@/utilities';
 import type { Product } from '@/types/types';
 import Error from '../error/Error';
 import { toast } from 'sonner';
@@ -26,6 +26,8 @@ import { LuShoppingCart } from 'react-icons/lu';
 import CartSheet from '@/components/ui/cartSheet';
 import ProductHighLight from '@/components/ui/productHighlightSection';
 import SimialrProducts from '@/components/ui/similarProducts';
+import { getProfile } from '@/userContext';
+import { useCurrencyRates } from '@/getRates';
 
 interface IProductProps {
 }
@@ -40,7 +42,10 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
     const user = useUser();
     const navigate = useNavigate();
     const [isCrop, setIsCrop] = useState(false);
-
+    const { rates, loading } = useCurrencyRates();
+    const userProfile = getProfile();
+    const [userCurrency, setUserCurrency] = useState<string>("USD");
+    useEffect(() => {setUserCurrency(userProfile?.userProfile?.currencies.currencyCode ?? "USD")}, [userProfile?.userProfile?.currencies.currencyCode])
     const sortingTypes = [
         "Most relevant",
         "Latest",
@@ -87,6 +92,8 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
     if(!product){
         return <Error/>
     }
+   
+      if(loading) return <p>loading...</p>
   return (
     <div className='bg-gray-100 flex flex-col gap-2  sm:mb-0'>
         <div className='sm:mx-15sm:grid grid-cols-16 gap-10 flex flex-col bg-white'>
@@ -143,7 +150,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
 
                     <div className='space-y-2'>
                         { !isCrop
-                        && <h1 className='text-2xl'>${Math.round(product.price).toFixed(2)}</h1>
+                        && <h1 className='text-2xl'>{newPrice(product, userCurrency, rates,true)} {userCurrency} </h1>
                         }
                         <p>{product.description}</p>
                     </div>
@@ -159,7 +166,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
             </div>
         </div>
         {/* Tabs for pc */}
-        <nav className='mb-10 hidden sm:block bg-white'>
+        {/* <nav className='mb-10 hidden sm:block bg-white'>
             <ul className='flex gap-2 text-text cursor-pointer mx-15'>
                 {['Customer Reviews', 'Specifications', 'Full Description', 'About Store'].map((e) => 
                     {
@@ -172,7 +179,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                     }
                 )}
             </ul>
-        </nav>
+        </nav> */}
         {/* Bottom bar for mobile */}
         <div className='sm:hidden fixed bottom-0 left-0 h-12 border-t-1 w-full bg-background flex items-center gap-4 px-2 z-10 '>
             <div className='flex  gap-2'>

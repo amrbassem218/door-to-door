@@ -61,13 +61,13 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
                 <div className='mx-4 mt-2 pb-2 border-b-2 space-y-1'>
                   <h1 className='text-lg font-medium'>L'Oreal Paris Makeup True Match Lumi Glotion</h1>
                   <div className='flex gap-2 text-md'>
-                    <p className='font-bold'>${newPrice(item)}</p>
+                    <p className='font-bold'>{newPrice(item)}</p>
                     <p className='line-through decoration-1'>${item.price}</p>
                   </div>
                 </div>
 
                 <div className='mx-4 py-2'>
-                  <p className='font-semibold text-green-600'>Save - ${item.price - newPrice(item)}</p>
+                  <p className='font-semibold text-green-600'>Save - {item.price - newPrice(item)}</p>
                 </div>
               </div>
               }

@@ -6,9 +6,12 @@ import type { Product } from '@/types/types';
 import { FaAngleRight, FaChevronDown, FaHeart } from 'react-icons/fa';
 import { CiLocationOn } from 'react-icons/ci';
 import { Button } from './button';
-import { measurements, unitChange } from '@/utilities';
+import { convertPrice, measurements, newPrice, unitChange } from '@/utilities';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import type {Dispatch, SetStateAction } from 'react';
+import { useCurrencyRates } from '@/getRates';
+import { getProfile } from '@/userContext';
+import { useState } from 'react';
 interface IProductSideBarProps {
   product: Product;
   measurement: string;
@@ -19,11 +22,15 @@ interface IProductSideBarProps {
 }
 
 const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({product, measurement, setMeasurement, quantity, setQuantity, handleMeasurementChange}) => {
+    const { rates, loading } = useCurrencyRates();
+    const userProfile = getProfile();
+    const [userCurrency, setUserCurrency] = useState(userProfile?.userProfile?.currencies.currencyCode ?? "USD");
+    if(loading) return <p>loading...</p>
   return (
     <div className='w-full border-1 p-4'>
             {/* Price */}
             <div className='flex flex-col items-start border-b-1 pb-3'>
-                <p className='text-2xl'>${Math.round(product.price)} <span className='text-sm text-text'>($14 / ounce)</span></p>
+                <p className='text-2xl'>{newPrice(product, userCurrency, rates)} {userCurrency} <span className='text-sm text-text'>(14 {userCurrency} / ounce)</span></p>
                 <Popover>
                     <PopoverTrigger>
                         <button className='text-primary text-left hover:underline decoration-1 cursor-pointer'>International Returns</button>

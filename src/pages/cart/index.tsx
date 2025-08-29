@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { CartItem, Product } from '@/types/types';
-import { getCart, measurements, newPrice, unitChange, useUser, cleanupDuplicateCarts } from '@/utilities';
+import { getCart, measurements, newPrice, unitChange, useUser, cleanupDuplicateCarts, price, save } from '@/utilities';
 import type { User } from '@supabase/supabase-js';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
@@ -33,7 +33,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
   const navigate = useNavigate();
   const { rates, loading } = useCurrencyRates();
   const userProfile = getProfile();
-  const [userCurrency, setUserCurrency] = useState(userProfile?.userProfile?.currencies.countryCode ?? "USD");
+  const [userCurrency, setUserCurrency] = useState(userProfile?.userProfile?.currencies.currencyCode ?? "USD");
   const id = (product: Product) => {
     return Number(product.id);
   }
@@ -177,11 +177,11 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                             <div>
                               {/* Price */}
                               <div className='flex gap-1 items-center'>
-                                <h1 className='text-md font-semibold '>US ${newPrice(product, userCurrency, rates)}</h1>
-                                <p className='line-through text-sm text-text'>US ${Math.round(product.price)}</p>
+                                <h1 className='text-md font-semibold '>{newPrice(product, userCurrency, rates)} {userCurrency}</h1>
+                                <p className='line-through text-sm text-text'>{price(product, userCurrency, rates)}</p>
                               </div>
-                              <p className='text-xs text-red-600 font-medium'>Save US${Math.round(product.price) - newPrice(product, userCurrency, rates)}</p>
-                              <p className='text-text text-xs'>Shipping: US$1542</p>
+                              <p className='text-xs text-red-600 font-medium'>Save {save(product, userCurrency, rates)} {userCurrency}</p>
+                              <p className='text-text text-xs'>Shipping: 543 {userCurrency}</p>
                             </div>
                           </div>
                         </div>
@@ -209,23 +209,23 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                 <CardContent className='space-y-2'>
                   <div className='flex justify-between text-text text-sm'>
                     <p className=''>Items total:</p>
-                    <p className='line-through'> US${total}</p>
+                    <p className='line-through'> {total} {userCurrency}</p>
                   </div>
                   <div className='flex justify-between text-text text-sm'>
                     <p>Items discount:</p>
-                    <p className='text-red-500'>-US ${total - subtotal}</p>
+                    <p className='text-red-500'>-{total - subtotal} {userCurrency}</p>
                   </div>
                   <div className='flex justify-between font-semibold'>
                     <p>Subtotal: </p>
-                    <p>US ${subtotal}</p>
+                    <p>{subtotal} {userCurrency}</p>
                   </div>
                   <div className='flex justify-between font-semibold'>
                     <p>Shipping: </p>
-                    <p>US $1000</p> 
+                    <p>1000 {userCurrency}</p> 
                   </div>
                   <div className='flex justify-between font-bold text-lg'>
                     <p>Total: </p>
-                    <p>US ${subtotal + 1000}</p>
+                    <p>{subtotal + 1000} {userCurrency}</p>
                   </div>
                   <Button className='w-full text-lg bg-red-500 hover:bg-red-600 transition-all'>Checkout</Button>
                 </CardContent>
