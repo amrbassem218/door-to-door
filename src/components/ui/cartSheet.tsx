@@ -7,7 +7,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { addProductToCart, getCart, measurements, price, unitChange, useUser } from '@/utilities';
+import { addProductToCart, getCart, measurements, newPrice, price, pricePerMes, unitChange, useUser } from '@/utilities';
 import { Button } from './button';
 import type { CartItem, Product } from '@/types/types';
 import { useState, useEffect } from 'react';
@@ -16,6 +16,8 @@ import { useNavigate } from 'react-router-dom';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { FaChevronDown } from 'react-icons/fa';
+import { getProfile } from '@/userContext';
+import { useCurrencyRates } from '@/getRates';
 
 interface ICardSheetProps {
   product: Product,
@@ -30,6 +32,10 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
   const [cartQuantity, setCartQuantity] = useState<Record<number,number>>({});
   const [cartMeasurement, setCartMeasurement] = useState<Record<number,string>>({});
   const navigate = useNavigate();
+  const { rates, loading } = useCurrencyRates();
+  const userProfile = getProfile();
+  const [userCurrency, setUserCurrency] = useState<string>("USD");
+  useEffect(() => {setUserCurrency(userProfile?.userProfile?.currencies.currencyCode ?? "USD")}, [userProfile?.userProfile?.currencies.currencyCode])
   const id = (product: Product) => {
     return Number(product.id);
   }
@@ -63,9 +69,22 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
     setCartQuantity({...cartQuantity, [pid]: convertedMeasurement});
     setCartMeasurement({...cartMeasurement, [pid]: mes}); 
   }
+
+  const handleQuantityChange = (product:Product, type: string, val?: string) => {
+    if(type == "plus"){
+      setCartQuantity({...cartQuantity, [product.id]: cartQuantity && cartQuantity[id(product)]+1})
+    }
+    else if(type == "minus"){
+        setCartQuantity({...cartQuantity, [product.id]: cartQuantity && cartQuantity[id(product)]-1})
+    }
+    else{
+      setCartQuantity({...cartQuantity, [id(product)]: Number(val)})
+    }
+  }
   // if(!cartQuantity || !cartMeasurement){
   //   return <div>loading...</div>
   // }
+  if(loading) return <p>loading...</p>
   return (
     <div>
       <Sheet>
@@ -79,7 +98,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
               <div className='flex flex-col justify-center items-center'>
                 <div className='mb-2 '>
                   <h2 className='text-center text-heading'>Subtotal</h2>
-                  <h3 className='text-center font-bold text-md text-orange-700 '>${subtotal}</h3>
+                  <h3 className='text-center font-bold text-md text-orange-700 '>{subtotal} {userCurrency}</h3>
                 </div>
                 <Button variant={'outline'} className='w-full h-7' onClick={() => navigate('/cart')}>Go to Cart</Button>
               </div>
@@ -94,7 +113,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                   {/* Product image */}
                   <div className='w-20 h-35 flex flex-col justify-center gap-2 items-center py-4'>
                     <img src={product.thumbnail} alt="" className='object-contain h-full max-w-full' />
-                    <span className='text-xs text-text'>(${Math.round(product.price)}/{cartMeasurement[id(product)]})</span>
+                    <span className='text-xs text-text'>( {pricePerMes(product, userCurrency, rates, cartMeasurement[id(product)])} {userCurrency} / {cartMeasurement[id(product)]})</span>
                   </div>
                   <div className='space-y-3 text-sm '>
                     
@@ -112,7 +131,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                           <div className='flex gap-1 w-full'>
                             <span className='text-text font-normal'>Qty: </span> 
                             <div className='flex items-center'>
-                                <button className='border-1 p-1 cursor-pointer' onClick={() => setCartQuantity({...cartQuantity, [product.id]: cartQuantity && cartQuantity[id(product)]-1})}>
+                                <button className='border-1 p-1 cursor-pointer' onClick={() => handleQuantityChange(product, "minus")}>
                                     <FiMinus size={10}/>  
                                 </button> 
                                 <input 
@@ -120,9 +139,9 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                                     value={cartQuantity[id(product)]} 
                                     className='border-1 min-w-10 max-w-5 h-5 text-center' 
                                     // style={{ width: `${Math.max(3, Math.min(8, cartQuantity[id(product)].toString().length + 1))}rem` }}
-                                    onChange={(e) => setCartQuantity({...cartQuantity, [id(product)]: Number(e.target.value)})}
+                                    onChange={(e) => handleQuantityChange(product, "other", e.target.value)}
                                 />
-                                <button className='border-1 p-1 cursor-pointer bg-primary text-white' onClick={() => setCartQuantity({...cartQuantity, [product.id]: cartQuantity && cartQuantity[id(product)]+1 })}>
+                                <button className='border-1 p-1 cursor-pointer bg-primary text-white' onClick={() => handleQuantityChange(product, "plus")}>
                                     <FiPlus size={10}/>  
                                 </button>
                             </div>
@@ -131,7 +150,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                       </div>
 
                       {/* total */}
-                      <p className='font-semibold'><span className='text-text font-normal'>total: </span> ${Math.round(product.price)}</p>
+                      <p className='font-semibold'><span className='text-text font-normal'>total: </span> {newPrice(product, userCurrency, rates, cartQuantity[id(product)], cartMeasurement[id(product)])} {userCurrency}</p>
                       
                     </div>
                     {/* Measurement change */}

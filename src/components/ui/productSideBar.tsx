@@ -19,12 +19,14 @@ interface IProductSideBarProps {
   quantity: number; 
   setQuantity: Dispatch<SetStateAction<number>>; 
   handleMeasurementChange: (mes: string) => void;
+  handleQuantityChange: (type: string) => void;
 }
 
-const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({product, measurement, setMeasurement, quantity, setQuantity, handleMeasurementChange}) => {
+const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({product, measurement, setMeasurement, quantity, setQuantity, handleMeasurementChange, handleQuantityChange}) => {
     const { rates, loading } = useCurrencyRates();
     const userProfile = getProfile();
     const [userCurrency, setUserCurrency] = useState(userProfile?.userProfile?.currencies.currencyCode ?? "USD");
+    
     if(loading) return <p>loading...</p>
   return (
     <div className='w-full border-1 p-4'>
@@ -89,7 +91,7 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({product,
                 {/* Quantity */}
                 <div className='flex justify-center items-center gap-4 w-full'>
                     <div className='flex items-center m-auto'>
-                        <button className='border-1 p-1 cursor-pointer' onClick={() => setQuantity(quantity-1)}>
+                        <button className='border-1 p-1 cursor-pointer' onClick={() => handleQuantityChange("minus")}>
                             <FiMinus size={20}/>  
                         </button>
                         <input 
@@ -97,9 +99,9 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({product,
                             value={quantity} 
                             className='border-1 px-2 min-w-15 max-w-40 w-auto h-8' 
                             style={{ width: `${Math.max(3, Math.min(8, quantity.toString().length + 1))}rem` }}
-                            onChange={(e) => setQuantity(Number(e.target.value))}
+                            onChange={(e) => handleQuantityChange(e.target.value)}
                         />
-                        <button className='border-1 p-1 cursor-pointer bg-primary text-white' onClick={() => setQuantity(quantity+1)}>
+                        <button className='border-1 p-1 cursor-pointer bg-primary text-white' onClick={() => handleQuantityChange("plus")}>
                             <FiPlus size={20}/>  
                         </button>
                     </div>

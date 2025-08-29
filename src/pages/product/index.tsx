@@ -56,12 +56,13 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
     const handleMeasurementChange = (mes: string) => {
         let converted = unitChange(quantity, measurement, mes);
         let minOrderOfNewUnit = unitChange(product?.minOrder ?? 0, 'kg', mes);
-        if(converted < minOrderOfNewUnit){
-            converted = minOrderOfNewUnit;
-        }
+        // if(converted < minOrderOfNewUnit){
+        //     converted = minOrderOfNewUnit;
+        // }
         setQuantity(Number(converted));
         setMeasurement(mes);
     }
+
     const handleQuantityChange = (type: string) => {
         if(type == "plus"){
             setQuantity(quantity + 1);
@@ -73,6 +74,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
             setQuantity(Number(type));
         }
     }
+
     useEffect(() => {
         if(id){
             const handleGetProduct = async() => {
@@ -150,7 +152,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
 
                     <div className='space-y-2'>
                         { !isCrop
-                        && <h1 className='text-2xl'>{newPrice(product, userCurrency, rates,true)} {userCurrency} </h1>
+                        && <h1 className='text-2xl'>{newPrice(product, userCurrency, rates,quantity, measurement)} {userCurrency} </h1>
                         }
                         <p>{product.description}</p>
                     </div>
@@ -162,7 +164,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
 
             {/* Right sideBar for pc*/}
             <div className='hidden sm:block sm:col-span-4 '>
-                <ProductSideBar product={product} quantity={quantity} setQuantity={setQuantity} measurement={measurement} setMeasurement={setMeasurement} handleMeasurementChange={handleMeasurementChange}/>
+                <ProductSideBar product={product} quantity={quantity} setQuantity={setQuantity} measurement={measurement} setMeasurement={setMeasurement} handleMeasurementChange={handleMeasurementChange} handleQuantityChange={handleQuantityChange}/>
             </div>
         </div>
         {/* Tabs for pc */}

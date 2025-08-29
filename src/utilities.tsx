@@ -68,7 +68,7 @@ export const unitChange = (value: number, currentUnit: string, targetUnit: strin
   
   const current = math.unit(value, currentUnit);
   const converted = current.to(targetUnit);
-  return converted.toNumber().toFixed(2);
+  return converted.toNumber().toFixed(6);
 }
 export const handleGoogleAuth = () => {
   supabase.auth.signInWithOAuth({
@@ -380,24 +380,79 @@ export const measurements = [
   "Ounces"
 ]
 
-export const newPrice = (product:Product, userCurrency: string, rates: Record<string, number>, here?: boolean) => {
+export const newPrice = (product:Product, userCurrency: string, rates: Record<string, number>, quantity?: number, measurement?: string) => {
   let newPriceInOriginalCurrency = product.price;
   if(product.discount > 0){
     newPriceInOriginalCurrency -= (product.price * (product.discount/100));
   }
-  const finalPrice = convertPrice(newPriceInOriginalCurrency, userCurrency, rates)?.toFixed(2);
-  if(here){
-    console.log("priced: ", product.price);
-    console.log("original: ", newPriceInOriginalCurrency);
-    console.log("final: ", finalPrice);
-    console.log("discount: ", product.discount);
-    console.log("curr: ", userCurrency);
-    console.log("rates: ", rates);
+  let finalPrice = Number(convertPrice(newPriceInOriginalCurrency, userCurrency, rates));
+  console.log("first_finalPrice: ", finalPrice);
+  if(quantity){
+    let commonGround = 1;
+    if(measurement){
+      switch (measurement) {
+        case "Ton":
+          commonGround *= 1000;
+          break;
+        case "Grams":
+          commonGround /= 1000;
+          break;
+        case "Ounces":
+          commonGround *= 35.274;
+          break;
+        default:
+          break;
+      }
+      commonGround *= quantity;
+
+      finalPrice *= commonGround;
+    }
   }
-  return Number(finalPrice) ?? 0;
+  return Number(finalPrice.toFixed(2)) ?? 0;
 }
-export const price = (product:Product, userCurrency: string, rates: Record<string, number>)  => {
+export const price = (product:Product, userCurrency: string, rates: Record<string, number>, quantity?: number, measurement?: string)  => {
   let productPrice = product.price ?? 0;
+  if(quantity){
+    let commonGround = 1;
+    if(measurement){
+      switch (measurement) {
+        case "Ton":
+          commonGround *= 1000;
+          break;
+        case "Grams":
+          commonGround /= 1000;
+          break;
+        case "Ounces":
+          commonGround *= 35.274;
+          break;
+        default:
+          break;
+      }
+      commonGround *= quantity;
+
+      productPrice *= commonGround;
+    }
+  }
+  return Number(convertPrice(productPrice, userCurrency, rates)?.toFixed(2));
+}
+
+export const pricePerMes = (product:Product, userCurrency: string, rates: Record<string, number>, measurement?: string)  => {
+  let productPrice = product.price ?? 0;
+  if(measurement){
+    switch (measurement) {
+      case "Ton":
+        productPrice *= 1000;
+        break;
+      case "Grams":
+        productPrice /= 1000;
+        break;
+      case "Ounces":
+        productPrice *= 35.274;
+        break;
+      default:
+        break;
+    }
+  }
   return Number(convertPrice(productPrice, userCurrency, rates)?.toFixed(2));
 }
 export const save = (product:Product, userCurrency: string, rates: Record<string, number>)  => {
