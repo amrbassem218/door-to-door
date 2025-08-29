@@ -147,7 +147,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                   {Object.keys(cart).map((sellerId) => (
                     <div key={sellerId} className='space-y-3 cursor-pointer'>
                       {cart[Number(sellerId)].map(({products: product, quantity, measurement}, index) => (
-                        <div key={index} className='flex gap-3 w-full p-3 border border-gray-200 rounded-lg hover:scale-101 transition-all' onClick={() => navigate(`/product/${product.id}`)}>
+                        <div key={index} className='flex gap-3 w-full p-3 border border-gray-200 rounded-lg transition-all'>
                           
                           <div className='w-15 h-20 flex-shrink-0 flex items-center justify-center'>
                             <img src={product.thumbnail} alt="" className='object-contain max-w-full h-full'/>
@@ -165,7 +165,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                                 </div>
                                 {/* Qty. */}
                                 <div>
-                                  <QuantityChange handleQuantityChange={handleQuantityChange} value={cartQuantity[id(product)]}/>
+                                  <QuantityChange handleQuantityChange={handleQuantityChange} value={cartQuantity[id(product)]} product={product}/>
                                 </div>
 
                                 {/* Delete */}
