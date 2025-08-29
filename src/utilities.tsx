@@ -511,9 +511,9 @@ export const currencyToPrimaryCountry: Record<string, string> = {
 
 export const convertPrice = (priceInEGP: number, targetCurrency: string, rates: Record<string, number>) => {
   targetCurrency = targetCurrency.toLowerCase();
-  console.log("target: ", targetCurrency);
-  console.log("exists: ", Object.keys(rates).includes(targetCurrency));
-  console.log("what happens: ", rates[targetCurrency])
+  // console.log("target: ", targetCurrency);
+  // console.log("exists: ", Object.keys(rates).includes(targetCurrency));
+  // console.log("what happens: ", rates[targetCurrency])
   if (!rates[targetCurrency]) return null;
   return Number((priceInEGP * rates[targetCurrency]).toFixed(2));
 }

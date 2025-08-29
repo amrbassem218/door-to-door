@@ -56,9 +56,9 @@ const Settings: React.FunctionComponent<ISettingsProps> = (props) => {
         </div>
 
         {/* Profile */}
-        <div className='border-b-1 px-5 py-3' onClick={() => navigate('/account/settings/profile')}>
+        {/* <div className='border-b-1 px-5 py-3' onClick={() => navigate('/account/settings/profile')}>
           <p className='font-medium'>Profile</p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ const Item: React.FunctionComponent<IItemProps> = ({item, col}) => {
   const navigate = useNavigate();
   const { rates, loading } = useCurrencyRates();
   const userProfile = getProfile();
-  const [userCurrency, setUserCurrency] = useState(userProfile?.userProfile?.currency?.currencycode ?? "USD");
+  const [userCurrency, setUserCurrency] = useState(userProfile?.userProfile?.currencies.currencyCode ?? "USD");
   if (loading) return <p>Loading prices...</p>;
   return (
     <div className={`${col} border-1 rounded-lg transition-transform duration-200 ease-in-out hover:scale-105 cursor-pointer bg-white`} onClick={() => navigate(`/product/${item.id}`)}>

@@ -7,7 +7,7 @@ import ProductsList from "./pages/productsList";
 import Cart from "./pages/cart";
 import ProductListing from "./pages/product";
 import AuthCallback from "./components/ui/authCallback";
-import Category from "./pages/category";
+import Category from "./pages/categories/categorySpecific";
 import Account from "./pages/account";
 import Settings from "./pages/settings";
 import Profile from "./pages/settings/profile";
@@ -15,6 +15,7 @@ import Country from "./pages/settings/country";
 import AdressPicker from "./components/ui/adressPicker";
 import LocationPage from "./pages/location";
 import Currency from "./pages/settings/currency";
+import Categories from "./pages/categories";
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -67,6 +68,10 @@ export const router = createBrowserRouter([
             {
                 path: '/location',
                 element: <LocationPage/>
+            },
+            {
+                path: '/categories',
+                element: <Categories/>
             },
             {
                 path: '/404',
