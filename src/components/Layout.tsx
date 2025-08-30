@@ -43,6 +43,19 @@ export default function Layout() {
       })
     }
   }, [location])
+
+  // Set CSS custom property for header height
+  useEffect(() => {
+    const setHeaderHeight = () => {
+      if (showHeader) {
+        const headerHeight = showSearch ? '9.25rem' : '6.75rem'; // 37*0.25rem and 27*0.25rem respectively
+        document.documentElement.style.setProperty('--header-height', headerHeight);
+      } else {
+        document.documentElement.style.setProperty('--header-height', '0rem');
+      }
+    };
+    setHeaderHeight();
+  }, [showHeader, showSearch])
   return (
     <div className='flex'>
       {

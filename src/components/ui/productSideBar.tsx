@@ -29,7 +29,7 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({product,
     
     if(loading) return <p>loading...</p>
   return (
-    <div className='w-full border-1 p-4'>
+    <div className='w-full border-1 p-4 sticky top-[var(--header-height,6.75rem)] h-[calc(100vh-var(--header-height,6.75rem))] overflow-hidden'>
             {/* Price */}
             <div className='flex flex-col items-start border-b-1 pb-3'>
                 <p className='text-2xl'>{newPrice(product, userCurrency, rates, quantity, measurement)} {userCurrency} <span className='text-sm text-text'>({newPrice(product, userCurrency, rates, 1, measurement)} {userCurrency} / {measurement})</span></p>
