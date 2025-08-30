@@ -7,7 +7,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { addProductToCart, getCart, measurements, newPrice, price, pricePerMes, unitChange, useUser } from '@/utilities';
+import { addProductToCart, getCart, measurements, newPrice, price, pricePerMes, unitChange, updateMes, updateQty, useUser } from '@/utilities';
 import { Button } from './button';
 import type { CartItem, Product } from '@/types/types';
 import { useState, useEffect } from 'react';
@@ -39,6 +39,18 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
   const id = (product: Product) => {
     return Number(product.id);
   }
+  useEffect(() => {
+    if(cart){
+      cart.forEach(({products: product}) => {
+        const pid = product.id;
+        setCartMeasurement({...cartMeasurement, [pid]: localStorage.getItem(`${product.id}_measurement`) ?? measurements[0]});
+        console.log("ma ho by7sl")
+        if(localStorage.getItem(`${product?.id}_quantity`)){
+          setCartQuantity({...cartQuantity, [pid]: (Number(localStorage.getItem(`${product?.id}_quantity`)) ?? product?.minOrder ?? 1)});
+        }
+      })   
+    }
+}, [cart]);
   const handleAddToCart = async() => {
     if(user){
         const status = await addProductToCart(user,props.product, props.quantity);
@@ -68,17 +80,29 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
     const convertedMeasurement = Number(unitChange(cartQuantity[pid], cartMeasurement[pid], mes));
     setCartQuantity({...cartQuantity, [pid]: convertedMeasurement});
     setCartMeasurement({...cartMeasurement, [pid]: mes}); 
+    localStorage.setItem(`${product.id}_measurement`, mes);
+    updateMes(product, mes);
+    localStorage.setItem(`${product.id}_quantity`, convertedMeasurement.toString());
+    updateQty(product, convertedMeasurement);
   }
 
   const handleQuantityChange = (product:Product, type: string, val?: string) => {
-    if(type == "plus"){
-      setCartQuantity({...cartQuantity, [product.id]: cartQuantity && cartQuantity[id(product)]+1})
-    }
-    else if(type == "minus"){
-        setCartQuantity({...cartQuantity, [product.id]: cartQuantity && cartQuantity[id(product)]-1})
-    }
-    else{
-      setCartQuantity({...cartQuantity, [id(product)]: Number(val)})
+    if(product){
+      let qnt = cartQuantity[id(product)];
+      if(type == "plus"){
+        setCartQuantity({...cartQuantity, [product.id]: cartQuantity && qnt+1})
+        qnt++; 
+      }
+      else if(type == "minus"){
+        setCartQuantity({...cartQuantity, [product.id]: cartQuantity && qnt-1})
+        qnt--;
+      }
+      else{
+        setCartQuantity({...cartQuantity, [id(product)]: Number(type)})
+        qnt = Number(type);
+      }
+      localStorage.setItem(`${product.id}_quantity`, qnt.toString());
+      updateQty(product, qnt);
     }
   }
   // if(!cartQuantity || !cartMeasurement){
@@ -94,7 +118,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
         <SheetContent className='w-60 pl-2 flex flex-col h-screen'>
           <SheetHeader className='h-32 mb-3'>
             <SheetTitle>Cart</SheetTitle>
-            <SheetDescription>
+            <div>
               <div className='flex flex-col justify-center items-center'>
                 <div className='mb-2 '>
                   <h2 className='text-center text-heading'>Subtotal</h2>
@@ -103,7 +127,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                 <Button variant={'outline'} className='w-full h-7' onClick={() => navigate('/cart')}>Go to Cart</Button>
               </div>
               
-            </SheetDescription>
+            </div>
           </SheetHeader>
           <ScrollArea className='flex-1 overflow-auto'>
             <div className='flex flex-col gap-10 mr-4'>

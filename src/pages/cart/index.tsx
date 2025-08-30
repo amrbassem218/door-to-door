@@ -37,6 +37,24 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
   const id = (product: Product) => {
     return Number(product.id);
   }
+  // useEffect(() => {
+  //   if (cartItems && cartItems.length == 0) {
+  //     const newCartMeasurement: Record<number, string> = {};
+  //     const newCartQuantity: Record<number, number> = {};
+      
+  //     cartItems.forEach(({products: product}) => {
+  //       const pid = Number(product.id);
+  //       newCartMeasurement[pid] = localStorage.getItem(`${product.id}_measurement`) ?? measurements[0];
+        
+  //       if (localStorage.getItem(`${product?.id}_quantity`)) {
+  //         newCartQuantity[pid] = Number(localStorage.getItem(`${product?.id}_quantity`)) ?? product?.minOrder ?? 1;
+  //       }
+  //     });
+  //     console.log("ma by run aho")
+  //     setCartMeasurement(newCartMeasurement);
+  //     setCartQuantity(newCartQuantity);
+  //   }
+  // }, [cartItems]);
   const paymentOptions = [
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRT27mNiyLBx_WW5a1PY7y7b6rncoD2Ir4Y5A&s",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/1200px-MasterCard_Logo.svg.png",
@@ -45,7 +63,6 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
   ]
   useEffect(() => {
     if(user){
-      console.log("getting called")
       const handleGetCartItems = async() => {
         try {
           // First clean up any duplicate carts
@@ -61,11 +78,16 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
             let sellerSeperatedCart: Record<number, CartItem[]> = {};
             data.forEach((item) => {
               let {products: product, quantity, measurement} = item;
-              currentTotal += Math.round(product.price)
-              currentSubTotal += newPrice(product, userCurrency, rates);
-              currentCartQuantity[id(product)] = quantity;
-              currentCartMeasurement[id(product)] = measurement;
-              console.log("id: ",product.sellerId);
+              console.log("quant: ", quantity);
+              console.log("measurement: ", measurement);
+              currentCartQuantity[id(product)] = Number(localStorage.getItem(`${product?.id}_quantity`)) ?? quantity;
+              currentCartMeasurement[id(product)] = localStorage.getItem(`${product.id}_measurement`) ?? measurement;
+
+              currentTotal += price(product, userCurrency, rates, currentCartQuantity[id(product)], currentCartMeasurement[id(product)]);
+              currentSubTotal += newPrice(product, userCurrency, rates, currentCartQuantity[id(product)], currentCartMeasurement[id(product)]);
+
+              
+
               if(sellerSeperatedCart[Number(product.sellerId)]){
                 sellerSeperatedCart[Number(product.sellerId)].push(item);
               }
@@ -84,25 +106,32 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
       }
       handleGetCartItems();
     }
-  }, [user])
+  }, [user, cartQuantity, cartMeasurement])
   const handleMeasurementChange = (mes: string, product?:Product) => {
     if(product){
       const pid = id(product);
       const convertedMeasurement = Number(unitChange(cartQuantity[pid], cartMeasurement[pid], mes));
       setCartQuantity({...cartQuantity, [pid]: convertedMeasurement});
       setCartMeasurement({...cartMeasurement, [pid]: mes}); 
+      localStorage.setItem(`${product.id}_measurement`, mes);
+      localStorage.setItem(`${product.id}_quantity`, convertedMeasurement.toString());
     }
   }
   const handleQuantityChange = (type: string, product?: Product) => {
     if(product){
+      const qnt = cartQuantity[id(product)];
       if(type == "plus"){
-        setCartQuantity({...cartQuantity, [product.id]: cartQuantity && cartQuantity[id(product)]+1})
+        setCartQuantity({...cartQuantity, [product.id]: cartQuantity && qnt+1})
+        localStorage.setItem(`${product.id}_quantity`, (qnt+1).toString());
       }
       else if(type == "minus"){
-        setCartQuantity({...cartQuantity, [product.id]: cartQuantity && cartQuantity[id(product)]-1})
+        setCartQuantity({...cartQuantity, [product.id]: cartQuantity && qnt-1})
+        localStorage.setItem(`${product.id}_quantity`, (qnt-1).toString());
+
       }
       else{
         setCartQuantity({...cartQuantity, [id(product)]: Number(type)})
+        localStorage.setItem(`${product.id}_quantity`, type);
       }
     }
   }
@@ -149,13 +178,13 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                       {cart[Number(sellerId)].map(({products: product, quantity, measurement}, index) => (
                         <div key={index} className='flex gap-3 w-full p-3 border border-gray-200 rounded-lg transition-all'>
                           
-                          <div className='w-15 h-20 flex-shrink-0 flex items-center justify-center'>
+                          <div className='w-15 h-20 flex-shrink-0 flex items-center justify-center'  onClick={() => navigate(`/product/${product.id}`)}>
                             <img src={product.thumbnail} alt="" className='object-contain max-w-full h-full'/>
                           </div>
 
                           <div className='flex flex-col flex-1 min-w-0'>
                             <div className='flex justify-between items-center w-full'>
-                              <div className='flex-1 min-w-0'>
+                              <div className='flex-1 min-w-0'  onClick={() => navigate(`/product/${product.id}`)}>
                                 <h1 className='truncate text-sm'>{product.name}</h1>
                               </div>
                               <div className='flex gap-2 items-center flex-shrink-0'>
@@ -174,13 +203,13 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                               
                               </div>
                             </div>
-                            <div>
+                            <div  onClick={() => navigate(`/product/${product.id}`)}>
                               {/* Price */}
                               <div className='flex gap-1 items-center'>
-                                <h1 className='text-md font-semibold '>{newPrice(product, userCurrency, rates)} {userCurrency}</h1>
-                                <p className='line-through text-sm text-text'>{price(product, userCurrency, rates)}</p>
+                                <h1 className='text-md font-semibold '>{newPrice(product, userCurrency, rates, cartQuantity[id(product)], cartMeasurement[id(product)])} {userCurrency}</h1>
+                                <p className='line-through text-sm text-text'>{price(product, userCurrency, rates, cartQuantity[id(product)], cartMeasurement[id(product)])}</p>
                               </div>
-                              <p className='text-xs text-red-600 font-medium'>Save {save(product, userCurrency, rates)} {userCurrency}</p>
+                              <p className='text-xs text-red-600 font-medium'>Save {save(product, userCurrency, rates, cartQuantity[id(product)], cartMeasurement[id(product)])} {userCurrency}</p>
                               <p className='text-text text-xs'>Shipping: 543 {userCurrency}</p>
                             </div>
                           </div>
@@ -209,15 +238,15 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                 <CardContent className='space-y-2'>
                   <div className='flex justify-between text-text text-sm'>
                     <p className=''>Items total:</p>
-                    <p className='line-through'> {total} {userCurrency}</p>
+                    <p className='line-through'> {total.toFixed(2)} {userCurrency}</p>
                   </div>
                   <div className='flex justify-between text-text text-sm'>
                     <p>Items discount:</p>
-                    <p className='text-red-500'>-{total - subtotal} {userCurrency}</p>
+                    <p className='text-red-500'>-{(total - subtotal).toFixed(2)} {userCurrency}</p>
                   </div>
                   <div className='flex justify-between font-semibold'>
                     <p>Subtotal: </p>
-                    <p>{subtotal} {userCurrency}</p>
+                    <p>{subtotal.toFixed(2)} {userCurrency}</p>
                   </div>
                   <div className='flex justify-between font-semibold'>
                     <p>Shipping: </p>
@@ -225,7 +254,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                   </div>
                   <div className='flex justify-between font-bold text-lg'>
                     <p>Total: </p>
-                    <p>{subtotal + 1000} {userCurrency}</p>
+                    <p>{(subtotal + 1000).toFixed(2)} {userCurrency}</p>
                   </div>
                   <Button className='w-full text-lg bg-red-500 hover:bg-red-600 transition-all'>Checkout</Button>
                 </CardContent>

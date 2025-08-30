@@ -386,7 +386,6 @@ export const newPrice = (product:Product, userCurrency: string, rates: Record<st
     newPriceInOriginalCurrency -= (product.price * (product.discount/100));
   }
   let finalPrice = Number(convertPrice(newPriceInOriginalCurrency, userCurrency, rates));
-  console.log("first_finalPrice: ", finalPrice);
   if(quantity){
     let commonGround = 1;
     if(measurement){
@@ -455,9 +454,57 @@ export const pricePerMes = (product:Product, userCurrency: string, rates: Record
   }
   return Number(convertPrice(productPrice, userCurrency, rates)?.toFixed(2));
 }
-export const save = (product:Product, userCurrency: string, rates: Record<string, number>)  => {
-  return (price(product, userCurrency, rates) - newPrice(product, userCurrency, rates)).toFixed(2);
+export const save = (product:Product, userCurrency: string, rates: Record<string, number>, quantity?: number, measurement?: string)  => {
+  return (price(product, userCurrency, rates, quantity, measurement) - newPrice(product, userCurrency, rates, quantity, measurement)).toFixed(2);
 }
+
+export const updateMes = async(product: Product, mes: string) => {
+  const {error} = await supabase
+  .from('cart_items')
+  .update({measurement: mes})
+  .eq('product_id', product.id)
+  .single();
+  if(error){
+    console.log("couldn't update the mes");
+    console.error(error);
+  }
+}
+export const updateQty = async(product: Product, qty: number) => {
+  const {error} = await supabase
+  .from('cart_items')
+  .update({quantity: qty})
+  .eq('product_id', product.id)
+  .single();
+  if(error){
+    console.log("couldn't update the qty");
+    console.error(error);
+  }
+}
+
+export const getMes = async(user: User, product: Product, mes: string) => {
+  const {error} = await supabase
+  .from('cart_items')
+  .select('measurement, carts!(user_id)')
+  .eq('carts.user_id', user.id)
+  .single();
+  if(error){
+    console.log("couldn't update the mes");
+    console.error(error);
+  }
+}
+export const getQty = async(product: Product, qty: number) => {
+  const {error} = await supabase
+  .from('cart_items')
+  .select('quantity')
+  .eq('product_id', product.id)
+  .single();
+  if(error){
+    console.log("couldn't update the qty");
+    console.error(error);
+  }
+}
+
+
 // Manual cleanup function that can be called from browser console
 export const manualCleanupAllDuplicateCarts = async() => {
   try {

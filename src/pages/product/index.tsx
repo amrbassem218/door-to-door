@@ -34,11 +34,11 @@ interface IProductProps {
 
 const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
     const {id} = useParams();
-    const [measurement, setMeasurement] = useState(measurements[0]);
     const [activeTab, setActiveTab] = useState("Customer Reviews");
     const [reviewSort, setReviewSort] = useState('Most relevant');
     const [product, setProduct] = useState<Product>();
-    const [quantity, setQuantity] = useState<number>(0);
+    const [measurement, setMeasurement] = useState(measurements[0]);
+    const [quantity, setQuantity] = useState<number>(1);
     const user = useUser();
     const navigate = useNavigate();
     const [isCrop, setIsCrop] = useState(false);
@@ -46,6 +46,27 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
     const userProfile = getProfile();
     const [userCurrency, setUserCurrency] = useState<string>("USD");
     useEffect(() => {setUserCurrency(userProfile?.userProfile?.currencies.currencyCode ?? "USD")}, [userProfile?.userProfile?.currencies.currencyCode])
+    useEffect(() => {
+        if(product){
+            setMeasurement(localStorage.getItem(`${product.id}_measurement`) ?? measurements[0]);
+            console.log("ma ho by7sl")
+            if(localStorage.getItem(`${product?.id}_quantity`)){
+                setQuantity(Number(localStorage.getItem(`${product?.id}_quantity`)) ?? product?.minOrder ?? 1);
+            }
+        }
+    }, [product]);
+
+    useEffect(() => {
+        if(product && quantity){
+            localStorage.setItem(`${product?.id}_quantity`, quantity.toString());
+        }
+    }, [quantity]);
+    
+    useEffect(() => {
+        if(product && measurement){
+            localStorage.setItem(`${product?.id}_measurement`, measurement);
+        }
+    }, [measurement])
     const sortingTypes = [
         "Most relevant",
         "Latest",
@@ -61,6 +82,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
         // }
         setQuantity(Number(converted));
         setMeasurement(mes);
+        
     }
 
     const handleQuantityChange = (type: string) => {
@@ -82,7 +104,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                 productInfo = camel(productInfo);
                 setProduct(productInfo);
                 setIsCrop(productInfo.tags?.includes("crops"));
-                setQuantity(productInfo?.minOrder ?? 0);
+                setQuantity(productInfo?.minOrder ?? 1);
             }
             handleGetProduct();
         }
