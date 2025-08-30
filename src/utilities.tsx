@@ -435,25 +435,25 @@ export const price = (product:Product, userCurrency: string, rates: Record<strin
   return Number(convertPrice(productPrice, userCurrency, rates)?.toFixed(2));
 }
 
-export const pricePerMes = (product:Product, userCurrency: string, rates: Record<string, number>, measurement?: string)  => {
-  let productPrice = product.price ?? 0;
-  if(measurement){
-    switch (measurement) {
-      case "Ton":
-        productPrice *= 1000;
-        break;
-      case "Grams":
-        productPrice /= 1000;
-        break;
-      case "Ounces":
-        productPrice *= 35.274;
-        break;
-      default:
-        break;
-    }
-  }
-  return Number(convertPrice(productPrice, userCurrency, rates)?.toFixed(2));
-}
+// export const pricePerMes = (product:Product, userCurrency: string, rates: Record<string, number>, measurement?: string)  => {
+//   let productPrice = newPrice(product, userCurrency, rates,1, measurement);
+//   if(measurement){
+//     switch (measurement) {
+//       case "Ton":
+//         productPrice *= 1000;
+//         break;
+//       case "Grams":
+//         productPrice /= 1000;
+//         break;
+//       case "Ounces":
+//         productPrice *= 35.274;
+//         break;
+//       default:
+//         break;
+//     }
+//   }
+//   return Number(convertPrice(productPrice, userCurrency, rates)?.toFixed(2));
+// }
 export const save = (product:Product, userCurrency: string, rates: Record<string, number>, quantity?: number, measurement?: string)  => {
   return (price(product, userCurrency, rates, quantity, measurement) - newPrice(product, userCurrency, rates, quantity, measurement)).toFixed(2);
 }

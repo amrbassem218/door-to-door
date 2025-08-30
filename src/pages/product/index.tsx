@@ -119,8 +119,8 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
    
       if(loading) return <p>loading...</p>
   return (
-    <div className='bg-gray-100 flex flex-col gap-2  sm:mb-0'>
-        <div className='sm:mx-15sm:grid grid-cols-16 gap-10 flex flex-col bg-white'>
+    <div className='bg-gray-100 flex flex-col gap-2 sm:mb-0'>
+        <div className='sm:px-10 sm:grid grid-cols-16 gap-10 flex flex-col bg-white sm:py-5'>
             {/* Product Main */}
             <div className='flex flex-col sm:flex-row gap-5 col-span-12 border-b-1 px-3'>
                 {/* Images */}

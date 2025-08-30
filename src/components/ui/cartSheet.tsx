@@ -7,7 +7,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { addProductToCart, getCart, measurements, newPrice, price, pricePerMes, unitChange, updateMes, updateQty, useUser } from '@/utilities';
+import { addProductToCart, getCart, measurements, newPrice, price, unitChange, updateMes, updateQty, useUser } from '@/utilities';
 import { Button } from './button';
 import type { CartItem, Product } from '@/types/types';
 import { useState, useEffect } from 'react';
@@ -137,7 +137,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                   {/* Product image */}
                   <div className='w-20 h-35 flex flex-col justify-center gap-2 items-center py-4'>
                     <img src={product.thumbnail} alt="" className='object-contain h-full max-w-full' />
-                    <span className='text-xs text-text'>( {pricePerMes(product, userCurrency, rates, cartMeasurement[id(product)])} {userCurrency} / {cartMeasurement[id(product)]})</span>
+                    <span className='text-xs text-text'>( {newPrice(product, userCurrency, rates, 1, cartMeasurement[id(product)])} {userCurrency} / {cartMeasurement[id(product)]})</span>
                   </div>
                   <div className='space-y-3 text-sm '>
                     
