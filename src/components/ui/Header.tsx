@@ -40,6 +40,7 @@ import { LuShoppingCart } from "react-icons/lu";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosMenu } from "react-icons/io";
 import MobileTopicBar from './mobileTopicBar';
+import Menu from './menu';
 
 
 interface IHeaderProps {
@@ -97,7 +98,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({showSearch}) => {
                   window.history.state && window.history.state.idx > 0 &&
                   <IoIosArrowBack size={24} className={`sm:hidden text-primary ${location.pathname == '/' && "hidden"}`} onClick={() => goBack()}/>
                 }
-                {/* <IoIosMenu  size={25} className='sm:hidden text-primary'/> */}
+                <Menu/>
               </div>
               <button className='cursor-pointer text-primary font-semibold lg:text-3xl text-lg' onClick={() => navigate('/')}>Door2Door</button>
             </div>

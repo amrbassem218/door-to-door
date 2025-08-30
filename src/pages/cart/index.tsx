@@ -78,8 +78,6 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
             let sellerSeperatedCart: Record<number, CartItem[]> = {};
             data.forEach((item) => {
               let {products: product, quantity, measurement} = item;
-              console.log("quant: ", quantity);
-              console.log("measurement: ", measurement);
               currentCartQuantity[id(product)] = Number(localStorage.getItem(`${product?.id}_quantity`)) ?? quantity;
               currentCartMeasurement[id(product)] = localStorage.getItem(`${product.id}_measurement`) ?? measurement;
 
