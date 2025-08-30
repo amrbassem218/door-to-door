@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useFetcher, useNavigate, useParams } from 'react-router-dom';
 import { Rating } from 'react-simple-star-rating'
 import { FaAngleDown, FaCaretDown, FaMinus, FaStar } from "react-icons/fa";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FaAngleRight } from "react-icons/fa6";
 import { CiLocationOn } from "react-icons/ci";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input';
 import { FaHeart } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { addProductToCart, camel, convertPrice, getProduct, measurements, newPrice, price, unitChange, useUser } from '@/utilities';
-import type { Product } from '@/types/types';
+import type { ReviewType, Product } from '@/types/types';
 import Error from '../error/Error';
 import { toast } from 'sonner';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
@@ -29,6 +29,8 @@ import SimialrProducts from '@/components/ui/similarProducts';
 import { getProfile } from '@/userContext';
 import { useCurrencyRates } from '@/getRates';
 import { Separator } from '@/components/ui/separator';
+import { supabase } from '@/supabase/supabaseClient';
+import Review from '@/components/ui/review';
 
 interface IProductProps {
 }
@@ -46,6 +48,14 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
     const { rates, loading } = useCurrencyRates();
     const userProfile = getProfile();
     const [userCurrency, setUserCurrency] = useState<string>("USD");
+    const [headerHeight, setHeaderHeight] = useState<number>(0);
+    const [reviews, setReviews] = useState<ReviewType[]>();
+
+    const reviewsRef = useRef<HTMLElement>(null);
+    const specificationsRef = useRef<HTMLElement>(null);
+    const descriptionRef = useRef<HTMLElement>(null);
+    const storeRef = useRef<HTMLElement>(null);
+
     useEffect(() => {setUserCurrency(userProfile?.userProfile?.currencies.currencyCode ?? "USD")}, [userProfile?.userProfile?.currencies.currencyCode])
     useEffect(() => {
         if(product){
@@ -54,6 +64,23 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
             if(localStorage.getItem(`${product?.id}_quantity`)){
                 setQuantity(Number(localStorage.getItem(`${product?.id}_quantity`)) ?? product?.minOrder ?? 1);
             }
+
+            const getReviews = async() => {
+                const {data: productReviews, error} = await supabase
+                .from('reviews')
+                .select('*, profiles(*)')
+                .eq('product_id', id);
+                if(error){
+                    console.log("couldn't get product reviews");
+                    console.error(error);
+                }
+                else if(productReviews){
+                    setReviews(camel(productReviews));
+                    console.log(productReviews);
+                    console.log("id: ", id);
+                }
+            }
+            getReviews();
         }
     }, [product]);
 
@@ -67,7 +94,8 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
         if(product && measurement){
             localStorage.setItem(`${product?.id}_measurement`, measurement);
         }
-    }, [measurement])
+    }, [measurement]);
+
     const sortingTypes = [
         "Most relevant",
         "Latest",
@@ -113,15 +141,86 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
     const [currentImage, setCurrentImage] = useState(0);
     useEffect(() => {
         window.scrollTo(0,0);
+        
+        // Calculate header height dynamically
+        const headerElement = document.querySelector('header') || document.querySelector('[class*="fixed"][class*="top-0"]');
+        if (headerElement) {
+            setHeaderHeight(headerElement.getBoundingClientRect().height);
+        }
     }, [product])
+    
+    // Also update header height on window resize
+    useEffect(() => {
+        const updateHeaderHeight = () => {
+            const headerElement = document.querySelector('header') || document.querySelector('[class*="fixed"][class*="top-0"]');
+            if (headerElement) {
+                setHeaderHeight(headerElement.getBoundingClientRect().height);
+            }
+        };
+        
+        updateHeaderHeight();
+        window.addEventListener('resize', updateHeaderHeight);
+        
+        return () => window.removeEventListener('resize', updateHeaderHeight);
+    }, [])
+
+    // Add scroll listener for tab activation
+    useEffect(() => {
+        const handleScroll = () => {
+            const sections = [
+                { name: "Customer Reviews", ref: reviewsRef },
+                { name: "Specifications", ref: specificationsRef },
+                { name: "Full Description", ref: descriptionRef },
+                { name: "About Store", ref: storeRef }
+            ];
+
+            const scrollPosition = window.scrollY + headerHeight + 60; // Add offset for sticky nav
+
+            for (let i = sections.length - 1; i >= 0; i--) {
+                const section = sections[i];
+                if (section.ref.current) {
+                    const sectionTop = section.ref.current.offsetTop;
+                    if (scrollPosition >= sectionTop) {
+                        setActiveTab(section.name);
+                        break;
+                    }
+                }
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [headerHeight]);
+
+    // Add click handler for tab navigation
+    const handleTabClick = (tabName: string) => {
+        setActiveTab(tabName);
+        
+        const sectionRefs = {
+            "Customer Reviews": reviewsRef,
+            "Specifications": specificationsRef,
+            "Full Description": descriptionRef,
+            "About Store": storeRef
+        };
+        
+        const targetRef = sectionRefs[tabName as keyof typeof sectionRefs];
+        if (targetRef.current) {
+            const offsetTop = targetRef.current.offsetTop - headerHeight - 10;
+            window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
+            });
+        }
+    };
+
     if(!product){
         return <Error/>
     }
    
       if(loading) return <p>loading...</p>
   return (
-    <div className='grid grid-cols-32 w-full sm:px-10 sm:py-5'>
-        <div className='bg-gray-100 sm:bg-white flex flex-col gap-2 sm:mb-0 col-span-25'>
+    <div className='grid grid-cols-32 w-full sm:px-5 sm:py-5'>
+        <div className='bg-gray-100 sm:bg-white flex flex-col gap-2 sm:mb-0 col-span-25 relative px-2'>
             {/* Main description of prod */}
             <div className='gap-10 flex flex-col bg-white'>
                 {/* Product Main */}
@@ -208,7 +307,10 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                 </div>
             </div>
             {/* Tabs for pc */}
-            <nav className='hidden sm:block bg-white'>
+            <nav 
+                className='hidden sm:flex items-center bg-white sm:mt-5 sticky z-40 h-10  '
+                style={{ top: `${headerHeight }px` }}
+            >
                 <ul className='flex gap-4 text-text cursor-pointer mx-5 sm:mx-0 text-sm'>
                     {['Customer Reviews', 'Specifications', 'Full Description', 'About Store'].map((e) => 
                         {
@@ -217,14 +319,14 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                                 <FaLocationDot size={15}/>
                                 {e}
                             </li> 
-                            : <li onClick={() => setActiveTab(e)} className=''>{e}</li>
+                            : <li onClick={() => handleTabClick(e)} className='hover:text-primary transition-colors'>{e}</li>
                         }
                     )}
                 </ul>
             </nav>
             
             {/* Review Section*/}
-            <section className='w-full h-50 py-2 px-3 sm:px-10 bg-white'>
+            <section ref={reviewsRef} className='w-full h-50 sm:h-150 py-2 px-3 sm:p-0 bg-white sm:space-y-3'>
                 {/* Header */}
                 <div className='space-y-2'>
                     <div className='flex gap-1 items-center justify-between '>
@@ -268,8 +370,10 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                 </div>
 
                 {/* Reviews content */}
-                <div>
-                    {/* Add later */}
+                <div className='space-y-3'>
+                    {reviews?.map(review => (
+                        <Review review={review}/>
+                    ))}
                 </div>
                 
                 
@@ -278,7 +382,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
             <Separator/>
 
             {/* Specification Section */}
-            <section className='w-full flex flex-col h-62 py-2 px-3 bg-white space-y-2'>
+            <section ref={specificationsRef} className='w-full flex flex-col h-62 py-2 px-3 sm:px-0 bg-white space-y-2'>
                 {/* Header */}
                 <div className='flex gap-1 items-center justify-between '>
                     <h1 className='text-lg sm:text-xl font-normal'>Specifications</h1>
@@ -294,8 +398,42 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
             
             <Separator/>
 
+            {/* Full Description Section */}
+            <section ref={descriptionRef} className='w-full flex flex-col py-2 px-3 sm:px-0 bg-white space-y-2'>
+                {/* Header */}
+                <div className='flex gap-1 items-center justify-between '>
+                    <h1 className='text-lg sm:text-xl font-normal'>Full Description</h1>
+                    <FaAngleRight className='text-text ' size={12}/>
+                </div>
+
+                {/* Description Content */}
+                <div className='w-full bg-gray-100 p-4'>
+                    <p>{product.description}</p>
+                    {/* Add more detailed description content here */}
+                </div>
+            </section>
+            
+            <Separator/>
+
+            {/* About Store Section */}
+            <section ref={storeRef} className='w-full flex flex-col py-2 px-3 sm:px-0 bg-white space-y-2'>
+                {/* Header */}
+                <div className='flex gap-1 items-center justify-between '>
+                    <h1 className='text-lg sm:text-xl font-normal'>About Store</h1>
+                    <FaAngleRight className='text-text ' size={12}/>
+                </div>
+
+                {/* Store Content */}
+                <div className='w-full bg-gray-100 p-4'>
+                    {/* Add store information content here */}
+                    <p>Store information and details...</p>
+                </div>
+            </section>
+
+            <Separator/>
+
             {/* Highlights Section */}
-            <section className='w-full flex flex-col  py-2 px-3 bg-white space-y-2'>
+            <section className='w-full flex flex-col  py-2 px-3 sm:px-0 bg-white space-y-2'>
                 {/* Header */}
                 <div className='flex gap-1 items-center justify-between '>
                     <h1 className='text-lg sm:text-xl font-normal'>Highlights</h1>

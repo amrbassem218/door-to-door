@@ -244,6 +244,54 @@ export type Database = {
           },
         ]
       }
+      reviews: {
+        Row: {
+          created_at: string
+          helpful_count: number | null
+          id: number
+          product_id: number | null
+          review_description: string | null
+          star_count: number | null
+          tags: string[] | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          helpful_count?: number | null
+          id?: number
+          product_id?: number | null
+          review_description?: string | null
+          star_count?: number | null
+          tags?: string[] | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          helpful_count?: number | null
+          id?: number
+          product_id?: number | null
+          review_description?: string | null
+          star_count?: number | null
+          tags?: string[] | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sellers: {
         Row: {
           created_at: string

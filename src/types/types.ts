@@ -68,6 +68,11 @@ export interface pos {
 
 type localProfiles = Database['public']['Tables']['profiles']['Row'];
 export type profilesRow = Camelize<localProfiles>;
+
 type localCurrencies = Database['public']['Tables']['currencies']['Row'];
 export type Currencies = Camelize<localCurrencies>
+
+type localReview = Database['public']['Tables']['reviews']['Row'];
+export type ReviewType = Camelize<localReview> & {profiles: profilesRow};
+
 export type UserProfile = profilesRow & {currencies: Currencies};

@@ -20,7 +20,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Check, ChevronDownIcon, ChevronsUpDown } from "lucide-react"
 import { ScrollArea } from './scroll-area';
 import { countries } from '../countries';
-import { Separator } from './separator';
+// import { Separator } from './separator';
 import {
   Command,
   CommandEmpty,
@@ -85,9 +85,9 @@ const Header: React.FunctionComponent<IHeaderProps> = ({showSearch}) => {
   }
   const location = useLocation();
   return (
-    <div className='fixed top-0 left-0 w-full bg-white z-50 shadow md:h-37'>
+    <div className='fixed top-0 left-0 w-full bg-white z-50  md:h-37'>
       {/* <TopBar/> */}
-      <div className='border-b-1 w-full '>
+      <div className=' w-full '>
         <div className='sm:px-20 px-2 mx-auto'>
           <div className='flex items-center justify-between w-full lg:h-20 lg:gap-15 h-12 '>
 
@@ -196,7 +196,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({showSearch}) => {
             </div>
           </div>
         </div>
-        <Separator className='w-full'/>
+        {/* <Separator className='w-full'/> */}
         <div className='hidden md:block'>
           <TopicBar/>
         </div>
@@ -209,7 +209,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({showSearch}) => {
             <SearchBar styles=''/>
             }
           </div>
-          <Separator className='w-full'/>
+          {/* <Separator className='w-full'/> */}
 
           {/* Mobile Tabs */}
           <div className='my-2 hidden'>

@@ -648,3 +648,29 @@ export const getUserCurrency = async(userId: string) => {
   console.log("got user currency");
   return camel(userCurrency);
 }
+
+export const viewDate = (date: Date, separator?: string) => {
+  const formatter = new Intl.DateTimeFormat("en-qz", {
+    dateStyle: "full",
+    timeStyle: "short",
+  });
+  let dateSeparator = "/";
+  if(separator) dateSeparator = separator;
+  const dateParts = formatter.formatToParts(date);
+  const part = (p: string) => {
+    return dateParts.find((e) => e.type == p)?.value;
+  };
+  let formattedDate = part("month") + dateSeparator + part("day") + dateSeparator + part("year");
+  let fullDate = part("weekday")?.slice(0, 3) + " " + formattedDate;
+  let time = part("hour") + ":" + part("minute");
+  // console.log(datePart);
+  return {
+    full: fullDate + " " + time,
+    dateFull: fullDate,
+    date: formattedDate,
+    timeFull: time + part("dayPeriod"),
+    time: time,
+    dateParts: dateParts,
+    part: part,
+  };
+};
