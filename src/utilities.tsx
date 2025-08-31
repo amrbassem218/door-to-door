@@ -1,7 +1,7 @@
 import { supabase } from "./supabase/supabaseClient"
 import { Index } from "flexsearch"
 import { Document } from "flexsearch"
-import type { CartItem, dbData, pos, Product } from "./types/types";
+import type { CartItem, dbData, FullLocation, pos, Product } from "./types/types";
 import { create, all, prod } from 'mathjs'
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
@@ -674,3 +674,29 @@ export const viewDate = (date: Date, separator?: string) => {
     part: part,
   };
 };
+
+export const reverseGeo = ({ lat, lng }: pos): (FullLocation | undefined) => {
+  if (!window.google) return;
+
+  const geocoder = new window.google.maps.Geocoder();
+  const latlng = { lat, lng };
+  let FullLocationRet: FullLocation = {country: "Egypt", city: "Cairo", adress: undefined};
+  geocoder.geocode({ location: latlng }, (results, status) => {
+    if (status === "OK" && results) {
+      if (results[0]) {
+        const comp = results[0].address_components;
+        let country = comp.find(c => c.types.includes("country"))?.long_name;
+        let city = comp.find(c => c.types.includes("locality") || 
+        c.types.includes("administrative_area_level_1"))?.long_name;
+        let adress = results[0].formatted_address;
+        FullLocationRet = {country, city, adress};
+        // return {country, city, adress};
+      } else {
+        console.log("No results found");
+      }
+    } else {
+      console.error("Geocoder failed due to:", status);
+    }
+  });
+  return FullLocationRet;
+}

@@ -202,8 +202,11 @@ export type Database = {
       }
       profiles: {
         Row: {
+          adress: string | null
           avatar_url: string | null
           country: string | null
+          country_code: string | null
+          country_name: string | null
           currency: number
           full_name: string | null
           id: string
@@ -213,8 +216,11 @@ export type Database = {
           website: string | null
         }
         Insert: {
+          adress?: string | null
           avatar_url?: string | null
           country?: string | null
+          country_code?: string | null
+          country_name?: string | null
           currency?: number
           full_name?: string | null
           id: string
@@ -224,8 +230,11 @@ export type Database = {
           website?: string | null
         }
         Update: {
+          adress?: string | null
           avatar_url?: string | null
           country?: string | null
+          country_code?: string | null
+          country_name?: string | null
           currency?: number
           full_name?: string | null
           id?: string

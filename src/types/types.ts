@@ -76,3 +76,9 @@ type localReview = Database['public']['Tables']['reviews']['Row'];
 export type ReviewType = Camelize<localReview> & {profiles: profilesRow};
 
 export type UserProfile = profilesRow & {currencies: Currencies};
+
+export interface FullLocation {
+    country: string | undefined;
+    city: string | undefined;
+    adress: string | undefined;
+}
