@@ -39,7 +39,7 @@ const Review: React.FunctionComponent<IReviewProps> = ({review}) => {
         </div>
 
         {/* Date */}
-        <p className='text-text text-xs'>Reviewed in {viewDate(createdAtDate, ", ").date}</p>
+        <p className='text-muted text-xs'>Reviewed in {viewDate(createdAtDate, ", ").date}</p>
         
         {/* Verified */}
         <p className='text-primary text-xs font-semibold'>Verified Purchase</p>
@@ -47,7 +47,7 @@ const Review: React.FunctionComponent<IReviewProps> = ({review}) => {
         {/* Review */}
         <p>{review.reviewDescription}</p>
 
-        <p className='text-text text-xs'>{review.helpfulCount ?? 0} people found this helpful</p>
+        <p className='text-muted text-xs'>{review.helpfulCount ?? 0} people found this helpful</p>
       </div>
       
       <div className='flex items-center space-x-2'>

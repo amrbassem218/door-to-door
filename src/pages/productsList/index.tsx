@@ -86,7 +86,7 @@ const ProductsList: React.FC = () => {
             <div className=''>
               <div className='mb-2'>
                 <h2 className='text-md font-medium'>Rating</h2>
-                <p className='text-sm text-text'>
+                <p className='text-sm text-muted'>
                   Based on a 5-star rating system 
                 </p>
               </div>
@@ -119,7 +119,7 @@ const ProductsList: React.FC = () => {
                     }
                   })}
                 />
-                <p className='text-lg text-text'>-</p>
+                <p className='text-lg text-muted'>-</p>
                 <input
                   type="number"
                   placeholder="Max"

@@ -102,7 +102,7 @@ const Currency: React.FunctionComponent<ICurrencyProps> = () => {
         {/* Current Currency */}
         <div className='space-y-1'>
           <div className='px-2'>
-            <p className='text-xs text-text'>Current Currency</p>
+            <p className='text-xs text-muted'>Current Currency</p>
           </div>
           <div className='w-full bg-white  px-5 py-2 flex items-center justify-between'>
             <div className='flex items-center gap-2'>
@@ -121,7 +121,7 @@ const Currency: React.FunctionComponent<ICurrencyProps> = () => {
             (currency.currencyName && currenciesData[i-1]?.currencyName &&
             currency.currencyName[0] > currenciesData[i-1].currencyName[0])) && (
             <div className='px-2'>
-              <p className='text-xs text-text'>{currency.currencyName?.[0] ?? ''}</p>
+              <p className='text-xs text-muted'>{currency.currencyName?.[0] ?? ''}</p>
             </div>
           )}
           <div className='w-full bg-white px-5 py-2 flex items-center gap-2'>

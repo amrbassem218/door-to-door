@@ -9,7 +9,7 @@ interface ITopBarProps {
 
 const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   return (
-  <div className='text-text bg-background-secondary h-10 flex justify-between px-20 items-center'>
+  <div className='text-muted bg-background-secondary h-10 flex justify-between px-20 items-center'>
     <p className="">Welcome to Door to Door (DTD)</p>
     {/* right nav */}
     <div className='flex gap-2'>

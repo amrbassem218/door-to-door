@@ -205,10 +205,10 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                               {/* Price */}
                               <div className='flex gap-1 items-center'>
                                 <h1 className='text-md font-semibold '>{newPrice(product, userCurrency, rates, cartQuantity[id(product)], cartMeasurement[id(product)])} {userCurrency}</h1>
-                                <p className='line-through text-sm text-text'>{price(product, userCurrency, rates, cartQuantity[id(product)], cartMeasurement[id(product)])}</p>
+                                <p className='line-through text-sm text-muted'>{price(product, userCurrency, rates, cartQuantity[id(product)], cartMeasurement[id(product)])}</p>
                               </div>
                               <p className='text-xs text-red-600 font-medium'>Save {save(product, userCurrency, rates, cartQuantity[id(product)], cartMeasurement[id(product)])} {userCurrency}</p>
-                              <p className='text-text text-xs'>Shipping: 543 {userCurrency}</p>
+                              <p className='text-muted text-xs'>Shipping: 543 {userCurrency}</p>
                             </div>
                           </div>
                         </div>
@@ -234,11 +234,11 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                   </ScrollArea>
                 </CardHeader>
                 <CardContent className='space-y-2'>
-                  <div className='flex justify-between text-text text-sm'>
+                  <div className='flex justify-between text-muted text-sm'>
                     <p className=''>Items total:</p>
                     <p className='line-through'> {total.toFixed(2)} {userCurrency}</p>
                   </div>
-                  <div className='flex justify-between text-text text-sm'>
+                  <div className='flex justify-between text-muted text-sm'>
                     <p>Items discount:</p>
                     <p className='text-red-500'>-{(total - subtotal).toFixed(2)} {userCurrency}</p>
                   </div>
@@ -269,13 +269,13 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                       </div>
                     ))}
                     <div className='p-1 border-1 flex items-center justify-center'>
-                      <p className='text-text text-xs'>more...</p>
+                      <p className='text-muted text-xs'>more...</p>
                     </div>
                   </div>
                   <Separator className='my-4' />
                   <div>
                     <h1 className=' text-heading font-semibold'>Free International Returns</h1>
-                    <p className='text-text text-sm'>Free International returns are available for the shipping address you chose in case product came in unexpected state.</p>
+                    <p className='text-muted text-sm'>Free International returns are available for the shipping address you chose in case product came in unexpected state.</p>
                   </div>
                 </CardContent>
               </Card>

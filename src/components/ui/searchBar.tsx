@@ -45,13 +45,13 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({styles}) => {
     navigate(`/search/${suggestionQuery ? suggestionQuery : query}`)
   }
   return (
-    <div ref={searchRef} className={`justify-center relative h-10 bg-background-secondary-3 w-120 max-w-full flex items-center gap-1 rounded-md ${styles}`}>
+    <div ref={searchRef} className={`justify-center relative h-10 bg-background w-120 max-w-full flex items-center gap-1 rounded-md ${styles}`}>
       <IoSearchOutline className='text-primary absolute left-2' size={18}/>
       <form className='w-full h-full' action="" onSubmit={(e) => {e.preventDefault(); handleSearchSubmit()}}>
         <Input 
           type="text" 
           placeholder='Search crops, furniture and more...' 
-          className='w-full border-0 px-8 h-full' 
+          className='w-full border-0 px-8 h-full text-primary' 
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
@@ -61,7 +61,7 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({styles}) => {
       </Button>
       {/* Suggestions dropdown */}
       {suggestions.length > 0 && query && (
-        <div className='absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto'>
+        <div className='absolute top-full left-0 right-0 bg-background border border-border rounded-md shadow-lg z-50 max-h-60 overflow-y-auto'>
           {suggestions.map((suggestion, index) => (
             <div 
               key={suggestion.id || index} 
@@ -73,9 +73,9 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({styles}) => {
               }}
             >
               <div>
-                <div className='font-medium'>{suggestion.name}</div>
+                <div className='font-medium text-primary'>{suggestion.name}</div>
                 {suggestion.tags && (
-                  <div className='text-sm text-gray-500'>
+                  <div className='text-sm text-muted'>
                     {Array.isArray(suggestion.tags) ? suggestion.tags.join(', ') : suggestion.tags}
                   </div>
                 )}

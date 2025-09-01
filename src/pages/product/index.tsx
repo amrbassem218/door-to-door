@@ -290,7 +290,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
             {/* Bottom bar for mobile */}
             <div className='sm:hidden fixed bottom-0 left-0 h-12 border-t-1 w-full bg-background flex items-center gap-4 px-2 z-10 '>
                 <div className='flex  gap-2'>
-                    <LuShoppingCart className='text-text text-2xl' onClick={() => navigate('/cart')}/>
+                    <LuShoppingCart className='text-muted text-2xl' onClick={() => navigate('/cart')}/>
 
                     {/* <QuantityChange handleQuantityChange={handleQuantityChange} value={quantity} mobile={true} styles='w-25'/> */}
                     
@@ -311,7 +311,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                 className='hidden sm:flex items-center bg-white sm:mt-5 sticky z-40 h-10  '
                 style={{ top: `${headerHeight }px` }}
             >
-                <ul className='flex gap-4 text-text cursor-pointer mx-5 sm:mx-0 text-sm'>
+                <ul className='flex gap-4 text-muted cursor-pointer mx-5 sm:mx-0 text-sm'>
                     {['Customer Reviews', 'Specifications', 'Full Description', 'About Store'].map((e) => 
                         {
                             return e == activeTab 
@@ -319,7 +319,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                                 <FaLocationDot size={15}/>
                                 {e}
                             </li> 
-                            : <li onClick={() => handleTabClick(e)} className='hover:text-primary transition-colors'>{e}</li>
+                            : <li onClick={() => handleTabClick(e)} className='hover:text-secondary transition-colors'>{e}</li>
                         }
                     )}
                 </ul>
@@ -333,7 +333,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                         <h1 className='text-lg sm:text-xl font-normal'>Reviews</h1>
                         <div className='flex gap-1 text-sm items-center'>
                             <p>See all  </p>
-                            <FaAngleRight className='text-text ' size={12}/>
+                            <FaAngleRight className='text-muted ' size={12}/>
                         </div>
                     </div>
 
@@ -356,7 +356,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                         <DropdownMenu>
                             <DropdownMenuTrigger>
                                 <div className='flex gap-1 items-center'>
-                                    <p className='text-sm'>Sort by <span className='hover:text-primary'>{reviewSort}</span></p>
+                                    <p className='text-sm'>Sort by <span className='hover:text-secondary'>{reviewSort}</span></p>
                                     <FaChevronDown size={12} className=''/>
                                 </div>
                             </DropdownMenuTrigger>
@@ -386,7 +386,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                 {/* Header */}
                 <div className='flex gap-1 items-center justify-between '>
                     <h1 className='text-lg sm:text-xl font-normal'>Specifications</h1>
-                    <FaAngleRight className='text-text ' size={12}/>
+                    <FaAngleRight className='text-muted ' size={12}/>
                 </div>
 
                 {/* Specification Content */}
@@ -403,7 +403,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                 {/* Header */}
                 <div className='flex gap-1 items-center justify-between '>
                     <h1 className='text-lg sm:text-xl font-normal'>Full Description</h1>
-                    <FaAngleRight className='text-text ' size={12}/>
+                    <FaAngleRight className='text-muted ' size={12}/>
                 </div>
 
                 {/* Description Content */}
@@ -420,7 +420,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                 {/* Header */}
                 <div className='flex gap-1 items-center justify-between '>
                     <h1 className='text-lg sm:text-xl font-normal'>About Store</h1>
-                    <FaAngleRight className='text-text ' size={12}/>
+                    <FaAngleRight className='text-muted ' size={12}/>
                 </div>
 
                 {/* Store Content */}
@@ -437,7 +437,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                 {/* Header */}
                 <div className='flex gap-1 items-center justify-between '>
                     <h1 className='text-lg sm:text-xl font-normal'>Highlights</h1>
-                    {/* <FaAngleRight className='text-text ' size={12}/> */}
+                    {/* <FaAngleRight className='text-muted ' size={12}/> */}
                 </div>
 
                 {/* Highlights Content */}

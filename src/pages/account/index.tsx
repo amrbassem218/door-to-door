@@ -57,7 +57,7 @@ const Account: React.FunctionComponent<IAccountProps> = (props) => {
             <h1 className='text-lg sm:text-xl font-normal'>My Orders</h1>
             <div className='flex gap-1 text-sm items-center'>
                 <p>View all</p>
-                <FaAngleRight className='text-text ' size={12}/>
+                <FaAngleRight className='text-muted ' size={12}/>
             </div>
         </div>
 

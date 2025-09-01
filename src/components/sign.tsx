@@ -31,15 +31,15 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
         ? 
         <div>
           <DropdownMenu>
-            <DropdownMenuTrigger className='font-medium text-text hover:text-primary hover:underline text-left flex sm:gap-1 items-center'>
+            <DropdownMenuTrigger className='font-medium text-left flex sm:gap-1 items-center'>
               <div className='flex items-center'>
                 <div>
-                  <p className='text-xs sm:block hidden'>Hello there,</p>
-                  <p className='text-heading text-sm font-semibold'>{getDisplayName(user)}</p>
+                  <p className='text-xs sm:block hidden text-muted-foreground'>Hello there,</p>
+                  <p className=' text-sm font-semibold'>{getDisplayName(user)}</p>
                 </div>
                 <FaAngleRight size={10} className='sm:hidden text-heading'/>
               </div>
-              <LuUser className='text-primary text-2xl lg:text-3xl'/>
+              <LuUser className='text-2xl lg:text-3xl'/>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuItem>Profile</DropdownMenuItem>
@@ -54,9 +54,9 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
           :<Dialog>
             <DialogTrigger className='flex items-center gap-1'>
               {/* Sign in for pc */}
-              <div className='font-medium text-text text-xs hover:text-primary hover:underline sm:block hidden'>
+              <div className='font-medium text-muted text-xssm:block hidden'>
                 <p>Hello there</p>
-                <p className='text-heading hover:text-primary'>Sign in/Register</p>
+                <p className='text-heading'>Sign in/Register</p>
               </div>
 
               {/* Sign in for mobile */}
@@ -97,7 +97,7 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
             </div>
             {/* TOS */}
             <div className='mt-4'>
-            <p className='text-xs text-text text-center'>By continuing, you confirm that you are an adult and have read and accepted our Free Membership Agreement and Privacy Policy. Your information may be used for marketing purposes, but you can opt out at any time.</p>
+            <p className='text-xs text-muted text-center'>By continuing, you confirm that you are an adult and have read and accepted our Free Membership Agreement and Privacy Policy. Your information may be used for marketing purposes, but you can opt out at any time.</p>
             </div>
           </DialogContent>
         </Dialog>

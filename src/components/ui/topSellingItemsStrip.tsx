@@ -11,7 +11,7 @@ const TopSellingItemsStrip: React.FunctionComponent<ITopSellingItemsStripProps> 
           {/* Top Selling Header */}
           <div className='border-b-1 border-border flex justify-between'>
             <div className='border-b-primary border-b-2 w-fit'>
-                <h1 className='text-text text-xl font-semibold'>Grab the <span className='text-primary'>Best Deals</span></h1>
+                <h1 className='text-muted text-xl font-semibold'>Grab the <span className='text-primary'>Best Deals</span></h1>
             </div>
             <div className='flex items-center '>
               <button onClick={() => setTopSellingSeeMore(!topSellingSeeMore)} className='hover:underline text-heading cursor-pointer'>{topSellingSeeMore ? "View less" : "View More"}</button>

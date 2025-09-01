@@ -29,25 +29,25 @@ const BottomBar: React.FunctionComponent<IBottomBarProps> = (props) => {
     <div className='sm:hidden fixed bottom-0 left-0 h-12 border-t-1 w-full bg-background flex items-center gap-4 px-2 border-1 shadow-sm'>
       <div className='flex justify-around w-full text-[1.75rem]'>
           {/* Home */}
-          <div className={`flex flex-col items-center ${activeTab == "home" ? "text-primary/80" : "text-text"}`} onClick={() => handleNavigationClick("home", "/")}>
+          <div className={`flex flex-col items-center ${activeTab == "home" ? "text-primary/80" : "text-muted"}`} onClick={() => handleNavigationClick("home", "/")}>
             <FaHome/>
             <p className='text-xs'>Home</p>
           </div>
 
           {/* Categories */}
-          <div className={`flex flex-col items-center  ${activeTab == "categories" ? "text-primary/80" : "text-text"}`} onClick={() => handleNavigationClick("categories", "/categories")}>
+          <div className={`flex flex-col items-center  ${activeTab == "categories" ? "text-primary/80" : "text-muted"}`} onClick={() => handleNavigationClick("categories", "/categories")}>
             <BiCategory />
             <p className='text-xs'>Categories</p>
           </div>
 
           {/* Cart */}
-          <div className={`flex flex-col items-center  ${activeTab == "cart" ? "text-primary/80" : "text-text"}`} onClick={() => handleNavigationClick("cart", "/cart")}>
+          <div className={`flex flex-col items-center  ${activeTab == "cart" ? "text-primary/80" : "text-muted"}`} onClick={() => handleNavigationClick("cart", "/cart")}>
             <LuShoppingCart/>
             <p className='text-xs'>Cart</p>
           </div>
 
           {/* Account */}
-          <div className={`flex flex-col items-center  ${activeTab == "account" ? "text-primary/80" : "text-text"}`} onClick={() => handleNavigationClick("account", "/account")}>
+          <div className={`flex flex-col items-center  ${activeTab == "account" ? "text-primary/80" : "text-muted"}`} onClick={() => handleNavigationClick("account", "/account")}>
             <LuUser/>
             <p className='text-xs'>Account</p>
           </div>

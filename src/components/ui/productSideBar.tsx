@@ -32,7 +32,7 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({product,
     <div className='w-full border-1 p-4 sticky top-[var(--header-height,6.75rem)] h-[calc(100vh-var(--header-height,6.75rem))] overflow-hidden'>
             {/* Price */}
             <div className='flex flex-col items-start border-b-1 pb-3'>
-                <p className='text-2xl'>{newPrice(product, userCurrency, rates, quantity, measurement)} {userCurrency} <span className='text-sm text-text'>({newPrice(product, userCurrency, rates, 1, measurement)} {userCurrency} / {measurement})</span></p>
+                <p className='text-2xl'>{newPrice(product, userCurrency, rates, quantity, measurement)} {userCurrency} <span className='text-sm text-muted'>({newPrice(product, userCurrency, rates, 1, measurement)} {userCurrency} / {measurement})</span></p>
                 <Popover>
                     <PopoverTrigger>
                         <button className='text-primary text-left hover:underline decoration-1 cursor-pointer'>International Returns</button>
@@ -74,7 +74,7 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({product,
                             <DropdownMenuTrigger className='m-auto'>
                                 <Button variant={'link'} className='text-heading decoration-0 bg-background-secondary p-1 px-2 rounded-lg border-gray-300 border-1 flex items-center gap-4'>
                                     Size: {measurement}
-                                    <FaChevronDown size={15} className='text-text'/>
+                                    <FaChevronDown size={15} className='text-muted'/>
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
@@ -110,7 +110,7 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({product,
                 {/* Buy now & Heart */}
                 <div className='flex gap-2 w-full'>
                     <Button className='m-auto flex-1'>Buy Now</Button>
-                    <Button variant={'outline'} className='text-text w-10 hover:text-red-500'>
+                    <Button variant={'outline'} className='text-muted w-10 hover:text-red-500'>
                         <FaHeart className=''/>
                     </Button>
                 </div>

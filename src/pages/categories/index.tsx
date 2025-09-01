@@ -70,7 +70,7 @@ const Categories: React.FunctionComponent<ICategoryProps> = (props) => {
                                 <div className='w-25 h-25 border-2 rounded-full flex items-center justify-center'>
                                   <img src={prod.thumbnail} alt="this is alt" className='object-contain w-full h-full rounded-full '/>
                                 </div>
-                                <span className="text-text font-semibold line-clamp-1">{prod.name}</span>
+                                <span className="text-muted font-semibold line-clamp-1">{prod.name}</span>
                               </div>
                             </CarouselItem>
                           ))}

@@ -87,7 +87,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({showSearch}) => {
   }
   const location = useLocation();
   return (
-    <div className='fixed top-0 left-0 w-full bg-white z-50  md:h-37'>
+    <div className='fixed sm:absolute top-0 left-0 w-full bg-primary text-primary-foreground z-50  '>
       {/* <TopBar/> */}
       <div className=' w-full '>
         <div className='sm:px-20 px-2 mx-auto'>
@@ -98,11 +98,11 @@ const Header: React.FunctionComponent<IHeaderProps> = ({showSearch}) => {
               <div className='flex items-center'>
                 {
                   window.history.state && window.history.state.idx > 0 &&
-                  <IoIosArrowBack size={24} className={`sm:hidden text-primary ${location.pathname == '/' && "hidden"}`} onClick={() => goBack()}/>
+                  <IoIosArrowBack size={24} className={`sm:hidden  ${location.pathname == '/' && "hidden"}`} onClick={() => goBack()}/>
                 }
                 <Menu/>
               </div>
-              <button className='cursor-pointer text-primary font-semibold lg:text-3xl text-lg' onClick={() => navigate('/')}>Door2Door</button>
+              <button className='cursor-pointer  font-semibold lg:text-3xl text-lg' onClick={() => navigate('/')}>EGEEX</button>
             </div>
 
             <div className='flex-1 hidden sm:inline'>
@@ -121,23 +121,23 @@ const Header: React.FunctionComponent<IHeaderProps> = ({showSearch}) => {
                     <div>
                       <Flag code={userCountry.code} className='w-7 h-7' />
                     </div>
-                    <div className='text-xs text-text'>
-                      <p>{userLanguage}/</p>
-                      <p className='text-heading'>{userCurrency}</p>
+                    <div className='text-xs'>
+                      <p className='text-muted-foreground'>{userLanguage}/</p>
+                      <p className=''>{userCurrency}</p>
                     </div>
                   </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className='w-70 bg-white px-5 py-3 space-y-3'>
                   {/*  Location */}
                   <div>
-                    <h1 className='text-xl text-heading font-bold'>Ship to</h1>
+                    <h1 className='text-xl font-bold'>Ship to</h1>
                     {/* <LocationDialog userProfile ={userProfile}/> */}
                     
                   </div>
                   
                   {/* Currency */}
                   <div className='space-y-1'>
-                    <h1 className='text-xl text-heading font-bold'>Currency</h1>
+                    <h1 className='text-xl  font-bold'>Currency</h1>
                     <Popover open={open} onOpenChange={setOpen}>
                       <PopoverTrigger asChild>
                         <Button variant={'outline'} role='combobox' aria-expanded={open} className='w-full border-1 flex justify-between items-center p-2'>
@@ -196,12 +196,12 @@ const Header: React.FunctionComponent<IHeaderProps> = ({showSearch}) => {
 
               {/* Cart */}
               <div className='flex gap-1 items-center cursor-pointer' onClick={() => navigate('/cart')}>
-                <LuShoppingCart  className='text-primary text-2xl lg:text-3xl'/>
+                <LuShoppingCart  className='text-2xl lg:text-3xl'/>
                 <div className='flex-col  justify-center items-center hidden md:flex'>
-                  <div className='w-10 h-3 bg-primary text-white flex items-center justify-center p-2 rounded-md'>
-                    <p className='text-sm font-bold'>{cartLength}</p>
+                  <div className='w-10 h-3 bg-secondary flex items-center justify-center p-2 rounded-md'>
+                    <p className='text-sm font-bold text-secondary-foreground'>{cartLength}</p>
                   </div>
-                  <button className='text-text text-sm font-semibold '>Cart</button>
+                  <button className='text-sm font-semibold '>Cart</button>
                 </div>
               </div>
             </div>
@@ -220,7 +220,6 @@ const Header: React.FunctionComponent<IHeaderProps> = ({showSearch}) => {
             <SearchBar styles=''/>
             }
           </div>
-          {/* <Separator className='w-full'/> */}
 
           {/* Mobile Tabs */}
           <div className='my-2 hidden'>

@@ -47,7 +47,7 @@ const Settings: React.FunctionComponent<ISettingsProps> = (props) => {
         {/* Currency */}
         <div className='border-b-1 px-5 py-3 flex justify-between' onClick={() => navigate('/account/settings/currency')}>
           <p className='font-medium'>Currency</p>
-          <p className='text-text'>{userCurrency?.currencyCode}</p>
+          <p className='text-muted'>{userCurrency?.currencyCode}</p>
         </div>
 
         {/* Ship to */}

@@ -111,7 +111,7 @@ const FolderMenu: React.FunctionComponent<IFolderMenuProps> = (props) => {
                                                         <TabsTrigger
                                                         key={subTopic.name}
                                                         value={subTopic.name}
-                                                        className="  flex justify-start text-text
+                                                        className="  flex justify-start text-muted
                                                                     data-[state=active]:underline
                                                                     data-[state=active]:shadow-none
                                                                     data-[state=active]:text-primary

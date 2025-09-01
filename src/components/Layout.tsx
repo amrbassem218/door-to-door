@@ -62,7 +62,7 @@ export default function Layout() {
         showHeader &&
         <Header showSearch={showSearch}/>
       }
-      <main className={`${showHeader && (showSearch ? "mt-27 sm:mt-37" : "mt-17 sm:mt-27")} flex-1 mb-12`}>
+      <main className={`${showHeader && (showSearch ? "mt-26 sm:mt-36" : "mt-17 sm:mt-27")} flex-1 mb-12`}>
         <Outlet />
       </main>
       {

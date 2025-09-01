@@ -137,7 +137,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                   {/* Product image */}
                   <div className='w-20 h-35 flex flex-col justify-center gap-2 items-center py-4'>
                     <img src={product.thumbnail} alt="" className='object-contain h-full max-w-full' />
-                    <span className='text-xs text-text'>( {newPrice(product, userCurrency, rates, 1, cartMeasurement[id(product)])} {userCurrency} / {cartMeasurement[id(product)]})</span>
+                    <span className='text-xs text-muted'>( {newPrice(product, userCurrency, rates, 1, cartMeasurement[id(product)])} {userCurrency} / {cartMeasurement[id(product)]})</span>
                   </div>
                   <div className='space-y-3 text-sm '>
                     
@@ -153,7 +153,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                         {
                           cartQuantity && cartMeasurement &&
                           <div className='flex gap-1 w-full'>
-                            <span className='text-text font-normal'>Qty: </span> 
+                            <span className='text-muted font-normal'>Qty: </span> 
                             <div className='flex items-center'>
                                 <button className='border-1 p-1 cursor-pointer' onClick={() => handleQuantityChange(product, "minus")}>
                                     <FiMinus size={10}/>  
@@ -174,17 +174,17 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                       </div>
 
                       {/* total */}
-                      <p className='font-semibold'><span className='text-text font-normal'>total: </span> {newPrice(product, userCurrency, rates, cartQuantity[id(product)], cartMeasurement[id(product)])} {userCurrency}</p>
+                      <p className='font-semibold'><span className='text-muted font-normal'>total: </span> {newPrice(product, userCurrency, rates, cartQuantity[id(product)], cartMeasurement[id(product)])} {userCurrency}</p>
                       
                     </div>
                     {/* Measurement change */}
                     <div>
-                      <span className='text-text font-normal'>mes: </span> 
+                      <span className='text-muted font-normal'>mes: </span> 
                         <DropdownMenu>
                             <DropdownMenuTrigger className='m-auto'>
-                                <Button variant={'link'} className='h-4 px-0 text-text text-sm decoration-0 bg-background-secondary rounded-lg border-gray-300 border-1 gap-4'>
+                                <Button variant={'link'} className='h-4 px-0 text-muted text-sm decoration-0 bg-background-secondary rounded-lg border-gray-300 border-1 gap-4'>
                                     {cartMeasurement[id(product)]}
-                                    <FaChevronDown size={5} className='text-text'/>
+                                    <FaChevronDown size={5} className='text-muted'/>
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
