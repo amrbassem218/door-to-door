@@ -37,6 +37,7 @@ const Menu: React.FunctionComponent<IMenuProps> = (props) => {
   const handleNavigationClick = (path: string) => {
     setOpen(false);
     navigate(path);
+    
   }
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -60,12 +61,12 @@ const Menu: React.FunctionComponent<IMenuProps> = (props) => {
             </div>
             <div className='space-y-2'>
               {popularCategories.map((cat) => (
-                <div className='flex gap-4 items-center'>
+                <button className='flex gap-4 items-center' onClick={() => handleNavigationClick(`/search/${cat.name}`)}>
                   <div className='w-10 h-10'>
                     <img src={cat.image} alt=""  className='object-contain w-full max-h-full'/>
                   </div>
                   <p>{cat.name}</p>
-                </div>
+                </button>
               ))}
             </div>
           </div>

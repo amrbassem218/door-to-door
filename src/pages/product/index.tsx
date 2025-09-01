@@ -455,7 +455,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
         </div>
         {/* Right sideBar for pc*/}
         <div className='hidden sm:block sm:col-span-7'>
-            <ProductSideBar product={product} quantity={quantity} setQuantity={setQuantity} measurement={measurement} setMeasurement={setMeasurement} handleMeasurementChange={handleMeasurementChange} handleQuantityChange={handleQuantityChange}/>
+            <ProductSideBar product={product} quantity={quantity} setQuantity={setQuantity} measurement={measurement} setMeasurement={setMeasurement} handleMeasurementChange={handleMeasurementChange} handleQuantityChange={handleQuantityChange} headerHeight={headerHeight}/>
         </div>
     </div>
   );

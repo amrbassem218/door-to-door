@@ -20,16 +20,17 @@ interface IProductSideBarProps {
   setQuantity: Dispatch<SetStateAction<number>>; 
   handleMeasurementChange: (mes: string) => void;
   handleQuantityChange: (type: string) => void;
+  headerHeight: number;
 }
 
-const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({product, measurement, setMeasurement, quantity, setQuantity, handleMeasurementChange, handleQuantityChange}) => {
+const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({product, measurement, setMeasurement, quantity, setQuantity, handleMeasurementChange, handleQuantityChange, headerHeight}) => {
     const { rates, loading } = useCurrencyRates();
     const userProfile = getProfile();
     const [userCurrency, setUserCurrency] = useState(userProfile?.userProfile?.currencies.currencyCode ?? "USD");
     
     if(loading) return <p>loading...</p>
   return (
-    <div className='w-full border-1 p-4 sticky top-[var(--header-height,6.75rem)] h-[calc(100vh-var(--header-height,6.75rem))] overflow-hidden'>
+    <div className='w-full border-1 p-4 sticky top-0 h-[100vh] overflow-hidden' style={{ top: `${headerHeight }px` }}>
             {/* Price */}
             <div className='flex flex-col items-start border-b-1 pb-3'>
                 <p className='text-2xl'>{newPrice(product, userCurrency, rates, quantity, measurement)} {userCurrency} <span className='text-sm text-muted'>({newPrice(product, userCurrency, rates, 1, measurement)} {userCurrency} / {measurement})</span></p>
