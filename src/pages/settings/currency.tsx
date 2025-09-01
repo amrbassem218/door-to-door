@@ -104,7 +104,7 @@ const Currency: React.FunctionComponent<ICurrencyProps> = () => {
           <div className='px-2'>
             <p className='text-xs text-muted'>Current Currency</p>
           </div>
-          <div className='w-full bg-white  px-5 py-2 flex items-center justify-between'>
+          <div className='w-full bg-background  px-5 py-2 flex items-center justify-between'>
             <div className='flex items-center gap-2'>
               <Flag code={userCurrency?.countryCode ?? "US"} className='w-7 h-7' />
               <p>{userCurrency?.currencyName ?? "United States Dollar"}</p>
@@ -124,7 +124,7 @@ const Currency: React.FunctionComponent<ICurrencyProps> = () => {
               <p className='text-xs text-muted'>{currency.currencyName?.[0] ?? ''}</p>
             </div>
           )}
-          <div className='w-full bg-white px-5 py-2 flex items-center gap-2'>
+          <div className='w-full bg-background px-5 py-2 flex items-center gap-2'>
             <Flag code={currency.countryCode ?? "US"} className='w-7 h-7' />
             <p>{currency.currencyName}</p>
           </div>

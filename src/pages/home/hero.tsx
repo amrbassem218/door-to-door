@@ -46,7 +46,7 @@ const Hero: React.FunctionComponent<IHeroProps> = (props) => {
                 <SearchBar styles='w-full h-12'/>
                 <div className='flex gap-2'>
                     {suggestedKeywords.map((word) => (
-                        <div className='p-3 h-5 border-1 border-white flex items-center justify-center rounded-md text-white hover:bg-white hover:text-black cursor-pointer transition-all' onClick={() => navigate(`/search/${word}`)}>
+                        <div className='p-3 h-5 border-1 border-white flex items-center justify-center rounded-md text-white hover:bg-background hover:text-black cursor-pointer transition-all' onClick={() => navigate(`/search/${word}`)}>
                             <p className=''>{word}</p>
                         </div>
                     ))}

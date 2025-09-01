@@ -52,7 +52,7 @@ const LocationDialog: React.FunctionComponent<ISetLocationProps> = ({userProfile
     <div>
       <h1 className='text-xl text-heading font-bold'>Ship to</h1>
       <AlertDialog>
-      {/* <AlertDialogTrigger className='w-full border-1 flex justify-between items-center p-2 bg-white hover:bg-gray-100 rounded-sm'>
+      {/* <AlertDialogTrigger className='w-full border-1 flex justify-between items-center p-2 bg-background hover:bg-gray-100 rounded-sm'>
           <div className='flex gap-2 items-center'>
             <Flag code={fullLocation?.country ?? "Egypt"} className='w-7 h-7'/>
             <p>{fullLocation?.country ?? "Egypt"}</p>
@@ -60,13 +60,13 @@ const LocationDialog: React.FunctionComponent<ISetLocationProps> = ({userProfile
           <FaAngleRight className='opacity-50'/>
       </AlertDialogTrigger> */}
       <AlertDialogContent>
-        <AlertDialogHeader className='bg-white'>
+        <AlertDialogHeader className='bg-background'>
           <AlertDialogTitle>Add a new Adress</AlertDialogTitle>
         </AlertDialogHeader>
         <div>
           
         </div>
-        <AlertDialogFooter className='bg-white'>
+        <AlertDialogFooter className='bg-background'>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction>Continue</AlertDialogAction>
         </AlertDialogFooter>

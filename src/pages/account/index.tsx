@@ -17,7 +17,7 @@ const Account: React.FunctionComponent<IAccountProps> = (props) => {
     <div className='space-y-5 bg-gray-100'>
 
       {/* Account info */}
-      <section className='px-3 space-y-4 bg-white py-3'>
+      <section className='px-3 space-y-4 bg-background py-3'>
         {
           user
           ? <div className='flex gap-2 items-center'>
@@ -52,7 +52,7 @@ const Account: React.FunctionComponent<IAccountProps> = (props) => {
       </section>
 
       {/* Order info */}
-      {/* <section className='py-4 pt-7 px-3 space-y-3 bg-white'>
+      {/* <section className='py-4 pt-7 px-3 space-y-3 bg-background'>
         <div className='flex gap-1 items-center justify-between px-2'>
             <h1 className='text-lg sm:text-xl font-normal'>My Orders</h1>
             <div className='flex gap-1 text-sm items-center'>
@@ -81,7 +81,7 @@ const Account: React.FunctionComponent<IAccountProps> = (props) => {
       </section> */}
 
       {/* Help Menu */}
-      <section className='py-4 px-3 space-y-3 bg-white'>
+      <section className='py-4 px-3 space-y-3 bg-background'>
         <ul>
           <li>
             <MenuItem name='Settings' route={() => navigate('/account/settings')}/>

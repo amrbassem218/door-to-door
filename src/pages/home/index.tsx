@@ -85,9 +85,9 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
           {/* Today's deals */}
           <section className='mb-15 space-y-7'>
             <h1 className='text-center text-3xl font-bold'>Today's deals</h1>
-            <div className='grid grid-cols-12 md:gap-10 gap-5'>
+            <div className='grid grid-cols-12 gap-5'>
               {/* Best sellers */}
-              <Card className='md:col-span-4 col-span-12 hover:bg-background-secondary transition-all'>
+              <Card className='md:col-span-4 col-span-12 transition-all text-card-foreground'>
                 <CardHeader>
                   <CardTitle className='mx-auto text-2xl font-semibold'>
                     Bestsellers
@@ -99,11 +99,11 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className='grid grid-cols-12 md:gap-10 gap-2'>
+                  <div className='grid grid-cols-12 gap-2'>
                     {items && items.map((item, i) => 
                       {
                         return (topSellingSeeMore || i < 2) &&
-                        <Item item={item} col='md:col-span-6 col-span-12'/>
+                        <Item item={item} col='md:col-span-6 col-span-12' style='bg-card'/>
                       }
                     )}
                   </div>
@@ -111,7 +111,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
               </Card>
 
               {/* Big save */}
-              <Card className='md:col-span-4 col-span-12 hover:bg-background-secondary transition-all'>
+              <Card className='md:col-span-4 col-span-12 transition-all text-card-foreground'>
                 <CardHeader>
                   <CardTitle className='mx-auto text-2xl font-semibold'>
                     Big Save
@@ -123,11 +123,11 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className='grid grid-cols-12 md:gap-10 gap-2'>
+                  <div className='grid grid-cols-12 gap-2'>
                     {items && items.map((item, i) => 
                       {
                         return (topSellingSeeMore || i < 2) &&
-                        <Item item={item} col='md:col-span-6 col-span-12'/>
+                        <Item item={item} col='md:col-span-6 col-span-12' style='bg-card'/>
                       }
                     )}
                   </div>
@@ -135,7 +135,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
               </Card>
 
               {/* Super deals */}
-              <Card className='md:col-span-4 col-span-12 hover:bg-background-secondary transition-all'>
+              <Card className='md:col-span-4 col-span-12 transition-all text-card-foreground'>
                 <CardHeader>
                   <CardTitle className='mx-auto text-2xl font-semibold'>
                     SuperDeals
@@ -147,11 +147,11 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
                   </CardDescription>
                 </CardHeader>
                   <CardContent>
-                  <div className='grid grid-cols-12 md:gap-10 gap-2'>
+                  <div className='grid grid-cols-12 gap-2'>
                     {items && items.map((item, i) => 
                       {
                         return (topSellingSeeMore || i < 2) &&
-                        <Item item={item} col='md:col-span-6 col-span-12'/>
+                        <Item item={item} col='md:col-span-6 col-span-12' style='bg-card'/>
                       }
                     )}
                   </div>

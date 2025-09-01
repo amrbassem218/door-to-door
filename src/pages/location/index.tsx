@@ -115,7 +115,7 @@ const LocationPage: React.FunctionComponent = () => {
       </div>
 
       {/* Bottom bar */}
-      <div className="absolute bottom-0 bg-white h-15 left-1/2 -translate-x-1/2 z-10 flex items-center gap-3 w-full px-5 py-3">
+      <div className="absolute bottom-0 bg-background h-15 left-1/2 -translate-x-1/2 z-10 flex items-center gap-3 w-full px-5 py-3">
         <Button
           variant="outline"
           className="flex-1 h-10 border"

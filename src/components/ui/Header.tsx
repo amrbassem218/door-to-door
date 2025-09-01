@@ -127,7 +127,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({showSearch}) => {
                     </div>
                   </div>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className='w-70 bg-white px-5 py-3 space-y-3'>
+                <DropdownMenuContent className='w-70 bg-background px-5 py-3 space-y-3'>
                   {/*  Location */}
                   <div>
                     <h1 className='text-xl font-bold'>Ship to</h1>

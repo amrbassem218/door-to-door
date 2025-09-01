@@ -220,9 +220,9 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
       if(loading) return <p>loading...</p>
   return (
     <div className='grid grid-cols-32 w-full sm:px-5 sm:py-5'>
-        <div className='bg-gray-100 sm:bg-white flex flex-col gap-2 sm:mb-0 col-span-25 relative px-2'>
+        <div className='bg-gray-100 sm:bg-background flex flex-col gap-2 sm:mb-0 col-span-25 relative px-2'>
             {/* Main description of prod */}
-            <div className='gap-10 flex flex-col bg-white'>
+            <div className='gap-10 flex flex-col bg-background'>
                 {/* Product Main */}
                 <div className='flex flex-col sm:flex-row gap-5 border-b-1 px-3'>
                     {/* Images */}
@@ -308,7 +308,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
             </div>
             {/* Tabs for pc */}
             <nav 
-                className='hidden sm:flex items-center bg-white sm:mt-5 sticky z-40 h-10  '
+                className='hidden sm:flex items-center bg-background sm:mt-5 sticky z-40 h-10  '
                 style={{ top: `${headerHeight }px` }}
             >
                 <ul className='flex gap-4 text-muted cursor-pointer mx-5 sm:mx-0 text-sm'>
@@ -326,7 +326,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
             </nav>
             
             {/* Review Section*/}
-            <section ref={reviewsRef} className='w-full h-50 sm:h-150 py-2 px-3 sm:p-0 bg-white sm:space-y-3'>
+            <section ref={reviewsRef} className='w-full h-50 sm:h-150 py-2 px-3 sm:p-0 bg-background sm:space-y-3'>
                 {/* Header */}
                 <div className='space-y-2'>
                     <div className='flex gap-1 items-center justify-between '>
@@ -382,7 +382,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
             <Separator/>
 
             {/* Specification Section */}
-            <section ref={specificationsRef} className='w-full flex flex-col h-62 py-2 px-3 sm:px-0 bg-white space-y-2'>
+            <section ref={specificationsRef} className='w-full flex flex-col h-62 py-2 px-3 sm:px-0 bg-background space-y-2'>
                 {/* Header */}
                 <div className='flex gap-1 items-center justify-between '>
                     <h1 className='text-lg sm:text-xl font-normal'>Specifications</h1>
@@ -399,7 +399,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
             <Separator/>
 
             {/* Full Description Section */}
-            <section ref={descriptionRef} className='w-full flex flex-col py-2 px-3 sm:px-0 bg-white space-y-2'>
+            <section ref={descriptionRef} className='w-full flex flex-col py-2 px-3 sm:px-0 bg-background space-y-2'>
                 {/* Header */}
                 <div className='flex gap-1 items-center justify-between '>
                     <h1 className='text-lg sm:text-xl font-normal'>Full Description</h1>
@@ -416,7 +416,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
             <Separator/>
 
             {/* About Store Section */}
-            <section ref={storeRef} className='w-full flex flex-col py-2 px-3 sm:px-0 bg-white space-y-2'>
+            <section ref={storeRef} className='w-full flex flex-col py-2 px-3 sm:px-0 bg-background space-y-2'>
                 {/* Header */}
                 <div className='flex gap-1 items-center justify-between '>
                     <h1 className='text-lg sm:text-xl font-normal'>About Store</h1>
@@ -433,7 +433,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
             <Separator/>
 
             {/* Highlights Section */}
-            <section className='w-full flex flex-col  py-2 px-3 sm:px-0 bg-white space-y-2'>
+            <section className='w-full flex flex-col  py-2 px-3 sm:px-0 bg-background space-y-2'>
                 {/* Header */}
                 <div className='flex gap-1 items-center justify-between '>
                     <h1 className='text-lg sm:text-xl font-normal'>Highlights</h1>
