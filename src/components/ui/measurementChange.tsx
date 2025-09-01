@@ -16,7 +16,7 @@ const MeasurementChange: React.FunctionComponent<IMeasurementChangeProps> = ({pr
       <div>
           <DropdownMenu>
               <DropdownMenuTrigger className='m-auto'>
-                  <button className={`text-xs flex items-center justify-between h-4 p-2  text-muted decoration-0 bg-background-secondary rounded-lg border-gray-300 border-1 ${styles}`}>
+                  <button className={`text-xs flex items-center justify-between h-4 p-2  text-muted decoration-0 bg-background rounded-lg border-gray-300 border-1 ${styles}`}>
                       {label}
                       <FaCaretDown className='text-muted'/>
                   </button>

@@ -6,12 +6,14 @@ import type { Product } from '@/types/types';
 import { FaAngleRight, FaChevronDown, FaHeart } from 'react-icons/fa';
 import { CiLocationOn } from 'react-icons/ci';
 import { Button } from './button';
-import { convertPrice, measurements, newPrice, unitChange } from '@/utilities';
+import { addProductToCart, convertPrice, measurements, newPrice, unitChange, useUser } from '@/utilities';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import type {Dispatch, SetStateAction } from 'react';
 import { useCurrencyRates } from '@/getRates';
 import { getProfile } from '@/userContext';
 import { useState } from 'react';
+import MeasurementChange from './measurementChange';
+import { useNavigate } from 'react-router-dom';
 interface IProductSideBarProps {
   product: Product;
   measurement: string;
@@ -27,7 +29,21 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({product,
     const { rates, loading } = useCurrencyRates();
     const userProfile = getProfile();
     const [userCurrency, setUserCurrency] = useState(userProfile?.userProfile?.currencies.currencyCode ?? "USD");
-    
+    const user = useUser();
+    const navigate = useNavigate();
+    const handleBuyNow = async() => {
+        if(user){
+            addProductToCart(user, product, quantity).then((status) => {
+                if(status == "success"){
+                    console.log("product added sucessfully");
+                }
+                else{
+                    console.log("couldn't add product");
+                }
+                navigate('/cart');
+            })
+        }
+    }
     if(loading) return <p>loading...</p>
   return (
     <div className='w-full border-1 p-4 sticky top-0 h-[100vh] overflow-hidden' style={{ top: `${headerHeight }px` }}>
@@ -71,17 +87,18 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({product,
 
                     {/* Measurement change */}
                     <div>
+                        {/* <MeasurementChange handleMeasurementChange={handleMeasurementChange} label={measurement} product={product} styles='w-20 h-10'/> */}
                         <DropdownMenu>
                             <DropdownMenuTrigger className='m-auto'>
-                                <Button variant={'link'} className='text-heading decoration-0 bg-background-secondary p-1 px-2 rounded-lg border-gray-300 border-1 flex items-center gap-4'>
+                                <Button variant={'link'} className='text-heading decoration-0 bg-background p-1 px-2 rounded-lg border-gray-300 border-1 flex items-center gap-4 hover:bg-gray-100'>
                                     Size: {measurement}
-                                    <FaChevronDown size={15} className='text-muted'/>
+                                    <FaChevronDown  className='text-muted text-sm'/>
                                 </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent>
+                            <DropdownMenuContent className='hover:bg-gray-100'>
                                 {
                                     measurements.map((mes) => (
-                                        <DropdownMenuItem onClick={() => handleMeasurementChange(mes)}>{mes}</DropdownMenuItem>
+                                        <DropdownMenuItem className='hover:bg-gray-100' onClick={() => handleMeasurementChange(mes)}>{mes}</DropdownMenuItem>
                                     ))
                                 }
                             </DropdownMenuContent>
@@ -110,7 +127,7 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({product,
                 </div>
                 {/* Buy now & Heart */}
                 <div className='flex gap-2 w-full'>
-                    <Button className='m-auto flex-1'>Buy Now</Button>
+                    <Button className='m-auto flex-1' onClick={() => handleBuyNow()}>Buy Now</Button>
                     <Button variant={'outline'} className='text-muted w-10 hover:text-red-500'>
                         <FaHeart className=''/>
                     </Button>

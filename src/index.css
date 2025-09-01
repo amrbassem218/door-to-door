@@ -62,8 +62,9 @@
   --secondary-foreground: #1A1A1A; /* text/icons on secondary bg */
   --background-secondary: #102A44; /* for dropdowns/buttons */
 
-  --accent: #3A7D44;           /* success/positive / small highlights */
-  --accent-foreground: #FFFFFF;
+   /* --accent: #3A7D44;           success/positive / small highlights */
+  --accent: #F3F4F6;           /* success/positive / small highlights */
+  --accent-foreground: #0A2342;
 
   /* Functional */
   --destructive: #E03131;      /* errors/warnings */
