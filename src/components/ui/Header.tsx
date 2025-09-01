@@ -20,7 +20,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Check, ChevronDownIcon, ChevronsUpDown } from "lucide-react"
 import { ScrollArea } from './scroll-area';
 import { countries } from '../countries';
-// import { Separator } from './separator';
+// import { Separator } from './separator';r
 import {
   Command,
   CommandEmpty,
@@ -87,7 +87,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({showSearch}) => {
   }
   const location = useLocation();
   return (
-    <div className='fixed sm:absolute top-0 left-0 w-full bg-primary text-primary-foreground z-50  '>
+    <div className={`fixed top-0 left-0 w-full bg-primary text-primary-foreground z-50  ${location.pathname == '/' && "sm:absolute"}`}>
       {/* <TopBar/> */}
       <div className=' w-full '>
         <div className='sm:px-20 px-2 mx-auto'>
@@ -208,7 +208,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({showSearch}) => {
           </div>
         </div>
         {/* <Separator className='w-full'/> */}
-        <div className='hidden md:block'>
+        <div className={`hidden sm:block ${(location.pathname != '/') && "sm:hidden"}`}>
           <TopicBar/>
         </div>
 

@@ -65,7 +65,7 @@ const TopicBar: React.FunctionComponent<ITopicBarProps> = (props) => {
         </HoverCard>
         <div className='flex gap-5 items-center'>
             {popularCategories.map((cat) => (
-                <button className=' flex items-center justify-center p-2 rounded-sm'>
+                <button className=' flex items-center justify-center p-2 rounded-sm hover:text-primary-foreground/90'>
                     <p>{cat}</p>
                 </button>
             ))}

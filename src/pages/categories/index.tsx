@@ -59,19 +59,19 @@ const Categories: React.FunctionComponent<ICategoryProps> = (props) => {
             <div className='space-y-5'>
               {
               cat.sub_categories.map((sub) => (
-                <div>
+                <div className='sm:text-center  sm:flex sm:items-center sm:flex-col sm:w-full'>
                   <h1 className='text-xl font-semibold'>{capetalize(sub.name)}</h1>
-                  <div>
-                    <Carousel className="w-full max-w-4xl">
+                  <div className=''>
+                    <Carousel className="w-full ">
                       <CarouselContent className='flex gap-2 w-full'>
                           {sub.products.map((prod, index) => (
                             <CarouselItem key={index} className='basis-1/3 max-w-30' onClick={() => navigate(`/product/${prod.id}`)}> 
-                              <div className='w-30 flex items-center justify-center flex-col text-center'>
+                              <button className='w-30 flex items-center justify-center flex-col text-center'>
                                 <div className='w-25 h-25 border-2 rounded-full flex items-center justify-center'>
                                   <img src={prod.thumbnail} alt="this is alt" className='object-contain w-full h-full rounded-full '/>
                                 </div>
                                 <span className="text-muted font-semibold line-clamp-1">{prod.name}</span>
-                              </div>
+                              </button>
                             </CarouselItem>
                           ))}
                       </CarouselContent>
