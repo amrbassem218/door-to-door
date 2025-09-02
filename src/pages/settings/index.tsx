@@ -32,7 +32,7 @@ const Settings: React.FunctionComponent<ISettingsProps> = (props) => {
     <div>
       {/* Header */}
       <div className='flex px-2 gap-1 items-center pb-2 pt-3 border-b-1 shadow-sm '>
-        <IoIosArrowBack className='sm:hidden text-xl' onClick={() => navigate(-1)}/>
+        <IoIosArrowBack className=' text-xl' onClick={() => navigate('/')}/>
         <h1 className='text-lg'>Settings</h1>
       </div>
 

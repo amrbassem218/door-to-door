@@ -79,31 +79,31 @@ const Menu: React.FunctionComponent<IMenuProps> = (props) => {
             </div>
             <div className='space-y-4'>
               <div onClick={() => handleNavigationClick('/location')}>
-                <div className='flex gap-4 items-center'>
+                <button className='flex gap-4 items-center'>
                   <CiLocationOn className='text-2xl '/>
                   <p>Ship to</p>
-                </div>
+                </button>
               </div>
 
               <div onClick={() => handleNavigationClick('/account/settings/currency')}>
-                <div className='flex gap-4 items-center'>
+                <button className='flex gap-4 items-center'>
                   <HiOutlineCurrencyDollar className='text-2xl '/>
                   <p>Currency</p>
-                </div>
+                </button>
               </div>
               
               <div onClick={() => handleNavigationClick('/account/settings/language')}>
-                <div className='flex gap-4 items-center'>
+                <button className='flex gap-4 items-center'>
                   <GrLanguage className='text-xl '/>
                   <p>Language</p>
-                </div>
+                </button>
               </div>
               
               <div onClick={() => handleNavigationClick('/support')}>
-                <div className='flex gap-4 items-center'>
+                <button className='flex gap-4 items-center'>
                   <BiSupport className='text-xl '/>
                   <p>Contact Support</p>
-                </div>
+                </button>
               </div>
               
             </div>

@@ -98,7 +98,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({showSearch}) => {
               <div className='flex items-center'>
                 {
                   window.history.state && window.history.state.idx > 0 &&
-                  <IoIosArrowBack size={24} className={`sm:hidden  ${location.pathname == '/' && "hidden"}`} onClick={() => goBack()}/>
+                  <IoIosArrowBack size={24} className={` ${location.pathname == '/' && "hidden"}`} onClick={() => goBack()}/>
                 }
                 <Menu/>
               </div>

@@ -26,7 +26,7 @@ const TopicBar: React.FunctionComponent<ITopicBarProps> = (props) => {
     const navigate = useNavigate();
     const handleTopicClick = (topic: string) => {
         setActiveTab(topic);
-        navigate('/categories');
+        navigate(`/search/${topic}`);
     }
     const popularCategories = [
     "Men Clothes",

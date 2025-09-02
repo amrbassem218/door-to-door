@@ -93,7 +93,7 @@ const Currency: React.FunctionComponent<ICurrencyProps> = () => {
     <div className=''>
       {/* Header */}
       <div className='flex px-2 gap-1 items-center pb-2 pt-3 border-b-1 shadow-sm '>
-        <IoIosArrowBack className='sm:hidden text-xl' onClick={() => navigate(-1)}/>
+        <IoIosArrowBack className='text-xl' onClick={() => navigate(-1)}/>
         <h1 className='text-lg'>Currency</h1>
       </div>
 
@@ -124,10 +124,10 @@ const Currency: React.FunctionComponent<ICurrencyProps> = () => {
               <p className='text-xs text-muted'>{currency.currencyName?.[0] ?? ''}</p>
             </div>
           )}
-          <div className='w-full bg-background px-5 py-2 flex items-center gap-2'>
+          <button className='w-full bg-background px-5 py-2 flex items-center gap-2'>
             <Flag code={currency.countryCode ?? "US"} className='w-7 h-7' />
             <p>{currency.currencyName}</p>
-          </div>
+          </button>
         </div>
       ))} 
       </div>
