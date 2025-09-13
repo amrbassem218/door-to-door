@@ -22,7 +22,7 @@ const Item: React.FunctionComponent<IItemProps> = ({item, col, style}) => {
     <div className={`${col} border-1 rounded-lg transition-transform duration-200 ease-in-out hover:scale-105 cursor-pointer bg-background ${style} px-2 w-40`} onClick={() => navigate(`/product/${item.id}`)}>
       {/* Item Image */}
       <div className="h-24 rounded-t-lg flex items-center justify-center overflow-hidden ">
-        <img
+        <img loading="lazy"
           src={item.thumbnail}
           alt=""
           className=" object-contain h-full max-w-full"

@@ -63,7 +63,7 @@ const Menu: React.FunctionComponent<IMenuProps> = (props) => {
               {popularCategories.map((cat) => (
                 <button className='flex gap-4 items-center' onClick={() => handleNavigationClick(`/search/${cat.name}`)}>
                   <div className='w-10 h-10'>
-                    <img src={cat.image} alt=""  className='object-contain w-full max-h-full'/>
+                    <img loading="lazy" src={cat.image} alt=""  className='object-contain w-full max-h-full'/>
                   </div>
                   <p>{cat.name}</p>
                 </button>

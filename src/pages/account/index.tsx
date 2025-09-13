@@ -23,12 +23,12 @@ const Account: React.FunctionComponent<IAccountProps> = (props) => {
           ? <div className='flex gap-2 items-center'>
             {/* <User size={60}/> */}
             <div className='w-12 h-12'>
-              <img src={"/avatar.png"} alt="" />
+              <img loading="lazy" src={"/avatar.png"} alt="" />
             </div>
             <p className='font-semibold text-lg'>{getDisplayName(user)}</p>
           </div>
           :<div className='flex gap-2'>
-            <img src="/avatar.png" alt="" />
+            <img loading="lazy" src="/avatar.png" alt="" />
             <p className='font-semibold text-lg'>Sign In / Register</p>
           </div>
         }

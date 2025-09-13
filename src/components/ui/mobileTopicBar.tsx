@@ -25,7 +25,7 @@ const MobileTopicBar: React.FunctionComponent<MobileTopicBarProps> = (props) => 
   return (
     <div className='flex justify-around text-lg '>
       {tabs.map((tab, i) => (
-        <button className={`${activeTab == i ? "font-bold underline underline-offset-3" : ""} text-heading`} onClick={() => handleTabClick(i)}>{tab}</button>
+        <button key={tab} className={`${activeTab == i ? "font-bold underline underline-offset-3" : ""} text-heading`} onClick={() => handleTabClick(i)}>{tab}</button>
       ))}
     </div>
   );

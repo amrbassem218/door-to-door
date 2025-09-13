@@ -10,6 +10,8 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import { Navigate, useNavigate } from 'react-router-dom';
+import { useTranslate } from '@/utilities';
+import T from './translate';
 interface ITopicBarProps {
 }
 
@@ -43,7 +45,7 @@ const TopicBar: React.FunctionComponent<ITopicBarProps> = (props) => {
             <HoverCardTrigger className='w-50 h-10  bg-secondary text-secondary-foreground flex justify-between items-center px-2 rounded-sm'>
                 <div className='flex items-center gap-1'>
                     <IoIosMenu className='text-lg '/>
-                    <p>All Categories</p>
+                    <p><T t='All Categories'/></p>
                 </div>
                 {
                     categoriesOpen
@@ -54,7 +56,7 @@ const TopicBar: React.FunctionComponent<ITopicBarProps> = (props) => {
             <HoverCardContent className='w-full'>
                 <div className=''>
                     {topics.map((topic) => (
-                        <button className={`h-9 ${topic == activeTab ? "text-primary-foreground bg-primary" : "text-heading bg-background-secondary-3 hover:bg-secondary/10"} cursor-pointer px-4 gap-1 flex items-center justify-center rounded-xl `} onClick={() => handleTopicClick(topic)}>
+                        <button key={topic} className={`h-9 ${topic == activeTab ? "text-primary-foreground bg-primary" : "text-heading bg-background-secondary-3 hover:bg-secondary/10"} cursor-pointer px-4 gap-1 flex items-center justify-center rounded-xl `} onClick={() => handleTopicClick(topic)}>
                             <p className=''>
                                 {topic}
                             </p>
@@ -65,7 +67,7 @@ const TopicBar: React.FunctionComponent<ITopicBarProps> = (props) => {
         </HoverCard>
         <div className='flex gap-5 items-center'>
             {popularCategories.map((cat) => (
-                <button className=' flex items-center justify-center p-2 rounded-sm hover:text-primary-foreground/90'>
+                <button key={cat} className=' flex items-center justify-center p-2 rounded-sm hover:text-primary-foreground/90'>
                     <p>{cat}</p>
                 </button>
             ))}

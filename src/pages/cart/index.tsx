@@ -177,7 +177,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                         <div key={index} className='flex gap-3 w-full p-3 border border-gray-200 rounded-lg transition-all'>
                           
                           <div className='w-15 h-20 flex-shrink-0 flex items-center justify-center'  onClick={() => navigate(`/product/${product.id}`)}>
-                            <img src={product.thumbnail} alt="" className='object-contain max-w-full h-full'/>
+                            <img loading="lazy" src={product.thumbnail} alt="" className='object-contain max-w-full h-full'/>
                           </div>
 
                           <div className='flex flex-col flex-1 min-w-0'>
@@ -226,7 +226,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                     <div className='flex gap-3 '>
                       {cartItems && cartItems.map(({products:product}) => (
                         <div className='w-10 h-15  overflow-auto flex items-center justify-center'>
-                          <img src={product.thumbnail} alt="" className='object-contain max-w-full h-full' />
+                          <img loading="lazy" src={product.thumbnail} alt="" className='object-contain max-w-full h-full' />
                         </div>
                       ))}
 
@@ -265,7 +265,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                   <div className='flex gap-2'>
                     {paymentOptions.map((pay) => (
                       <div className='p-1 w-7 h-7 border-1 flex items-center justify-center'>
-                        <img src={pay} alt=""  className='object-contain max-w-full h-full'/>
+                        <img loading="lazy" src={pay} alt=""  className='object-contain max-w-full h-full'/>
                       </div>
                     ))}
                     <div className='p-1 border-1 flex items-center justify-center'>

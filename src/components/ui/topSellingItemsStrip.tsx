@@ -27,7 +27,7 @@ const TopSellingItemsStrip: React.FunctionComponent<ITopSellingItemsStripProps> 
                <div className='lg:col-span-2   md:col-span-3 sm:col-span-5  border-1 rounded-lg transition-transform duration-200 ease-in-out hover:scale-105 cursor-pointer' onClick={() => navigate(`/product/${item.id}`)}>
                 {/* Item Image */}
                 <div className="w-full h-48 bg-background-secondary rounded-t-lg flex items-center justify-center overflow-hidden">
-                  <img
+                  <img loading="lazy"
                     src={item.thumbnail}
                     alt=""
                     className="object-contain h-full max-w-full"

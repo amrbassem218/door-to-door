@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import camelcaseKeys from 'camelcase-keys';
 import { getAllCountries } from "country-currency-map";
+import { getProfile } from "./userContext";
 
 export const getProducts = async() => {
     const {data: products, error} = await supabase
@@ -699,4 +700,41 @@ export const reverseGeo = ({ lat, lng }: pos): (FullLocation | undefined) => {
     }
   });
   return FullLocationRet;
+}
+export const useTranslate = () => {
+  const userProfile = getProfile();
+
+  const translate = async(text: string) =>  {
+    let userLang = userProfile?.userProfile?.language;
+    console.log("User language:", userLang, "User profile:", userProfile?.userProfile);
+    
+    if(userLang && userLang != "en"){
+      try {
+        console.log(`Attempting to translate "${text}" to ${userLang}`);
+        const res = await fetch(
+        "https://tlzmbkutwmlixjwnkylg.functions.supabase.co/translate",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text, target: userLang }),
+        }
+      );
+
+      if (!res.ok) {
+        console.error(`Translation failed: ${res.status} ${res.statusText}`);
+        return text; // Return original text if translation fails
+      }
+
+      const data = await res.json();
+      console.log("Translation result:", data);
+      return data.translatedText || text;
+      } catch (error) {
+        console.error("Translation error:", error);
+        return text; // Return original text if translation fails
+      }
+    }
+    return text;
+  }
+
+  return translate;
 }

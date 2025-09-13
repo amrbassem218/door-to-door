@@ -140,7 +140,7 @@ const FolderMenu: React.FunctionComponent<IFolderMenuProps> = (props) => {
                                         <div className=' w-full grid gap-5 grid-cols-16 '>
                                             {subTopic.products.map((product) => (
                                                 <div className='col-span-2  hover:scale-105 transition-all cursor-pointer justify-center items-center'>
-                                                        <img 
+                                                        <img loading="lazy" 
                                                             src={product.image} alt=""
                                                             className=""
                                                         />

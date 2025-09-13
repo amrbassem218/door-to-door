@@ -232,14 +232,14 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                             <div className='flex flex-col gap-1'>
                                 {product.images.map((image, i) => (
                                 <div className={`w-20 h-20 border-1 flex justify-center items-center ${currentImage == i && "border-primary"} cursor-pointer`} onClick={() => setCurrentImage(i)}>
-                                    <img src={`${image}`} alt="" className='object-contain h-full max-w-full ' />
+                                    <img loading="lazy" src={`${image}`} alt="" className='object-contain h-full max-w-full ' />
                                 </div>
                                 ))}
                             </div>
                         </ScrollArea>
                         {/* Main image */}
                         <div className='w-90 h-90 border-1 flex justify-center items-center '>
-                            <img src={`${product.images[currentImage]}`} alt="" className='object-contain h-full max-w-full ' />
+                            <img loading="lazy" src={`${product.images[currentImage]}`} alt="" className='object-contain h-full max-w-full ' />
                         </div>
                     </div>
 
@@ -249,7 +249,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                             <CarouselContent className='flex gap-2'>
                                 {product.images.map((image) => (
                                     <CarouselItem className='basis-[80%] h-70 shrink-0 flex items-center justify-center'>
-                                        <img src={image} alt="" className='object-contain max-w-full h-full rounded-md' />
+                                        <img loading="lazy" src={image} alt="" className='object-contain max-w-full h-full rounded-md' />
                                     </CarouselItem>
                                 ))}
                             </CarouselContent>

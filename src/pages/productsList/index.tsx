@@ -170,7 +170,7 @@ const ProductsList: React.FC = () => {
           {filteredProducts.map((product) => (
             <div key={product.id} className="flex items-center gap-2 md:gap-0 w-full px-2 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer col-span-12" onClick={() => navigate(`/product/${product.id}`)}>
               <div className='w-30 h-30  '>
-                <img
+                <img loading="lazy"
                   src={product.thumbnail}
                   alt={product.name}
                   className="object-contain h-full max-w-full mx-auto"

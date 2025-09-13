@@ -70,7 +70,7 @@ const Category: React.FunctionComponent<ICategoryProps> = (props) => {
                       <CarouselItem key={index} className='basis-1/3' onClick={() => navigate(`/product/${prod.id}`)}> 
                         <div className='w-30  flex items-center justify-center flex-col text-center'>
                           <div className='w-25 h-25 border-2 rounded-full flex items-center justify-center'>
-                            <img src={prod.thumbnail} alt="this is alt" className='object-contain w-full h-full rounded-full '/>
+                            <img loading="lazy" src={prod.thumbnail} alt="this is alt" className='object-contain w-full h-full rounded-full '/>
                           </div>
                           <span className="text-muted font-semibold line-clamp-1">{prod.name}</span>
                         </div>

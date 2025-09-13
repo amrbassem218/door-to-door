@@ -120,18 +120,23 @@ function App() {
   useEffect(() => {
     if(user){
       const getUserData = async() => {
-        const {data: userData, error} = await supabase
-        .from('profiles')
-        .select('*, currencies(*)')
-        .eq('id', user.id)
-        .single();
-        if(error){
-          console.log("couldn't get user profile");
-          console.error(error);
-        }
-        if(userData){
-          const camelUser = camel(userData) as UserProfile;
-          setUserProfile(camelUser);
+        try {
+          const {data: userData, error} = await supabase
+          .from('profiles')
+          .select('*, currencies(*)')
+          .eq('id', user.id)
+          .single();
+          if(error){
+            console.log("couldn't get user profile");
+            console.error(error);
+          }
+          if(userData){
+            const camelUser = camel(userData) as UserProfile;
+            setUserProfile(camelUser);
+          }
+        } catch (error) {
+          console.error("Network error fetching user profile:", error);
+          // Don't crash the app, just log the error
         }
       }
       getUserData();
