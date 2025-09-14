@@ -220,7 +220,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
       if(loading) return <p>loading...</p>
   return (
     <div className='grid grid-cols-32 w-full sm:px-5 sm:py-5'>
-        <div className='bg-gray-100 sm:bg-background flex flex-col gap-2 sm:mb-0 col-span-25 relative px-2'>
+        <div className='bg-gray-100 sm:bg-background flex flex-col gap-2 sm:mb-0 sm:col-span-25 col-span-32 relative px-2'>
             {/* Main description of prod */}
             <div className='gap-10 flex flex-col bg-background'>
                 {/* Product Main */}

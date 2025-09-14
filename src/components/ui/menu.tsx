@@ -30,7 +30,7 @@ const Menu: React.FunctionComponent<IMenuProps> = (props) => {
     { name: "Crops", image: "/product_pics/crops/fresh fruits/strawberry.webp" },
     { name: "Carpets", image: "https://png.pngtree.com/png-clipart/20230526/ourmid/pngtree-persian-modern-carpet-png-image_7109855.png" },
     { name: "Office Chairs", image: "https://png.pngtree.com/png-vector/20240203/ourmid/pngtree-black-office-chair-png-image_11537176.png" },
-    { name: "Pottery bottles", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKU8Y6ujZXo2nkeK0FQvrHuSNz1RtO-PTYOg&s" },
+    { name: "Pottery", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKU8Y6ujZXo2nkeK0FQvrHuSNz1RtO-PTYOg&s" },
     { name: "Jewelry & Accessories", image: "https://png.pngtree.com/png-clipart/20250416/original/pngtree-elegant-gold-plated-bridal-jewelry-set-png-image_20781575.png" }
   ];
   const [open, setOpen] = useState(false);
