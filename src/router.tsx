@@ -16,6 +16,7 @@ import AdressPicker from "./components/ui/adressPicker";
 import LocationPage from "./pages/location";
 import Currency from "./pages/settings/currency";
 import Categories from "./pages/categories";
+import AddProduct from "./pages/add_product";
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -72,6 +73,10 @@ export const router = createBrowserRouter([
             {
                 path: '/categories',
                 element: <Categories/>
+            },
+            {
+                path: '/add_product',
+                element: <AddProduct/>
             },
             {
                 path: '/404',

@@ -133,6 +133,7 @@ export type Database = {
           min_order: number | null
           name: string
           price: number | null
+          price_after: number | null
           rating: number | null
           review_count: number | null
           seller: string | null
@@ -153,6 +154,7 @@ export type Database = {
           min_order?: number | null
           name: string
           price?: number | null
+          price_after?: number | null
           rating?: number | null
           review_count?: number | null
           seller?: string | null
@@ -173,6 +175,7 @@ export type Database = {
           min_order?: number | null
           name?: string
           price?: number | null
+          price_after?: number | null
           rating?: number | null
           review_count?: number | null
           seller?: string | null

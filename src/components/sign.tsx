@@ -18,12 +18,14 @@ import { getDisplayName, handleGoogleAuth, handleLogout, useUser } from '@/utili
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { FaAngleRight } from "react-icons/fa";
 import { LuUser } from 'react-icons/lu';
+import { useNavigate } from 'react-router-dom';
 
 interface ISignProps {
 }
 
 const Sign: React.FunctionComponent<ISignProps> = (props) => {
   const user = useUser();
+  const navigate = useNavigate();
   return (
     <div>
       {
@@ -44,6 +46,9 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
             <DropdownMenuContent>
                 <DropdownMenuItem>Profile</DropdownMenuItem>
                 <DropdownMenuItem>
+                  <button className='' onClick={() => navigate('/add_product')}>Add a product</button>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
                   <button className='text-red-500' onClick={() => handleLogout()}>Log out</button>
                 </DropdownMenuItem>
               {/* <DropdownMenuGroup>
@@ -54,9 +59,9 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
           :<Dialog>
             <DialogTrigger className='flex items-center gap-1'>
               {/* Sign in for pc */}
-              <div className='font-medium text-muted text-xssm:block hidden'>
-                <p>Hello there</p>
-                <p className='text-heading'>Sign in/Register</p>
+              <div className='text-left font-medium text-muted text-xs sm:block hidden'>
+                <p className='text-muted'>Hello there</p>
+                <p className='text-primary-foreground'>Sign in/Register</p>
               </div>
 
               {/* Sign in for mobile */}
@@ -66,7 +71,7 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
 
               </div>
 
-              <LuUser className='text-primary text-2xl lg:text-3xl'/>
+              <LuUser className='text-primary-foreground text-2xl lg:text-3xl'/>
             </DialogTrigger>
           <DialogContent className='p-10 w-120 '>
             <DialogHeader className='mx-auto'>

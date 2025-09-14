@@ -276,7 +276,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
 
                         <div className='space-y-2'>
                             { !isCrop
-                            && <h1 className='text-2xl'>{newPrice(product, userCurrency, rates,quantity, measurement)} {userCurrency} </h1>
+                            && <h1 className='text-2xl'>{newPrice(product, userCurrency, rates, 1, measurement)} {userCurrency} <span className='text-muted text-sm'>(per {measurement})</span></h1>
                             }
                             <p>{product.description}</p>
                         </div>
