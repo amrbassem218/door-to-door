@@ -140,7 +140,7 @@ const handleCreateProductSubmit = async (values: zodSchema) => {
     const productData = {
       created_at: new Date().toISOString(),
       description: values.description,
-      discount: ( ((values.price ?? 0) - (values.priceAfter ?? 0)) / (values.price ?? 1) ) * 100,
+      discount: ( ((values.price ?? 0) - (values.priceAfter ?? 0)) / (values.price == 0 ? 1 : (values.price ?? 1)) ) * 100,
       display_name: values.displayName,
       images: imageUrls.length > 0 ? imageUrls : null,
       min_order: values.minOrder,
