@@ -399,20 +399,17 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
             <Separator/>
 
             {/* Full Description Section */}
-            <section ref={descriptionRef} className='w-full flex flex-col py-2 px-3 sm:px-0 bg-background space-y-2'>
-                {/* Header */}
+            {/* <section ref={descriptionRef} className='w-full flex flex-col py-2 px-3 sm:px-0 bg-background space-y-2'>
                 <div className='flex gap-1 items-center justify-between '>
                     <h1 className='text-lg sm:text-xl font-normal'>Full Description</h1>
                     <FaAngleRight className='text-muted ' size={12}/>
                 </div>
 
-                {/* Description Content */}
                 <div className='w-full bg-gray-100 p-4'>
                     <p>{product.description}</p>
-                    {/* Add more detailed description content here */}
                 </div>
             </section>
-            
+             */}
             <Separator/>
 
             {/* About Store Section */}

@@ -36,7 +36,7 @@ function App() {
     })
   }, [])
 
-  const searchProducts = async (query: string): Promise<Product[]> => {
+  const searchProducts = async(query: string): Promise<Product[]> => {
     if (!query || !indexes.length || !products.length) return [];
     
     return await getSuggestion({
