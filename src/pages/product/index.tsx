@@ -231,7 +231,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
                         <ScrollArea className='w-20 h-90 '>
                             <div className='flex flex-col gap-1'>
                                 {product.images.map((image, i) => (
-                                <div className={`w-20 h-20 border-1 flex justify-center items-center ${currentImage == i && "border-primary"} cursor-pointer`} onClick={() => setCurrentImage(i)}>
+                                <div key={i} className={`w-20 h-20 border-1 flex justify-center items-center ${currentImage == i && "border-primary"} cursor-pointer`} onClick={() => setCurrentImage(i)}>
                                     <img loading="lazy" src={`${image}`} alt="" className='object-contain h-full max-w-full ' />
                                 </div>
                                 ))}

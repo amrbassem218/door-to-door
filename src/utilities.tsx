@@ -8,6 +8,7 @@ import type { User } from "@supabase/supabase-js";
 import camelcaseKeys from 'camelcase-keys';
 import { getAllCountries } from "country-currency-map";
 import { getProfile } from "./userContext";
+import { loadGoogle } from "./googleLoader";
 
 export const getProducts = async() => {
     const {data: products, error} = await supabase
@@ -676,31 +677,42 @@ export const viewDate = (date: Date, separator?: string) => {
   };
 };
 
-export const reverseGeo = ({ lat, lng }: pos): (FullLocation | undefined) => {
-  if (!window.google) return;
+export const reverseGeo = async({ lat, lng }: pos): Promise<FullLocation> => {
+  try {
+    await loadGoogle();
+    return new Promise((resolve, reject) => {
+      const geocoder = new window.google.maps.Geocoder();
+      const latlng = { lat, lng };
+      
+      console.log("google:", window.google);
+      console.log("maps:", window.google?.maps);
 
-  const geocoder = new window.google.maps.Geocoder();
-  const latlng = { lat, lng };
-  let FullLocationRet: FullLocation = {country: "Egypt", city: "Cairo", adress: undefined};
-  geocoder.geocode({ location: latlng }, (results, status) => {
-    if (status === "OK" && results) {
-      if (results[0]) {
-        const comp = results[0].address_components;
-        let country = comp.find(c => c.types.includes("country"))?.long_name;
-        let city = comp.find(c => c.types.includes("locality") || 
-        c.types.includes("administrative_area_level_1"))?.long_name;
-        let adress = results[0].formatted_address;
-        FullLocationRet = {country, city, adress};
-        // return {country, city, adress};
-      } else {
-        console.log("No results found");
-      }
-    } else {
-      console.error("Geocoder failed due to:", status);
-    }
-  });
-  return FullLocationRet;
-}
+      geocoder.geocode({ location: latlng }, (results: any, status: any) => {
+        console.log("h2");
+        if (status === "OK" && results && results[0]) {
+          const comp = results[0].address_components;
+          let country = comp.find((c: any) => c.types.includes("country"))?.long_name;
+          let city = comp.find((c: any) =>
+            c.types.includes("locality") ||
+            c.types.includes("administrative_area_level_1")
+          )?.long_name;
+          let adress: string = results[0].formatted_address ?? "";
+          if(adress.includes("+")){
+            console.log("trying over here");
+            adress = adress.slice(adress.indexOf(',')+2);
+          }
+          resolve({ country, city, adress });
+        } else {
+          reject(new Error("Geocoder failed: " + status));
+        }
+      });
+    });
+  } catch (error) {
+    console.error("Failed to load Google Maps for geocoding:", error);
+    throw new Error("Geocoding service unavailable");
+  }
+};
+
 export const useTranslate = () => {
   const userProfile = getProfile();
 
@@ -721,7 +733,7 @@ export const useTranslate = () => {
       );
 
       if (!res.ok) {
-        console.error(`Translation failed: ${res.status} ${res.statusText}`);
+        console.warn(`Translation service unavailable: ${res.status} ${res.statusText}. Using original text.`);
         return text; // Return original text if translation fails
       }
 
@@ -729,7 +741,7 @@ export const useTranslate = () => {
       console.log("Translation result:", data);
       return data.translatedText || text;
       } catch (error) {
-        console.error("Translation error:", error);
+        console.warn("Translation service error:", error);
         return text; // Return original text if translation fails
       }
     }

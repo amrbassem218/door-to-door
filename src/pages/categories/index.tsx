@@ -55,12 +55,12 @@ const Categories: React.FunctionComponent<ICategoryProps> = (props) => {
     <div className='overflow-hidden hidden  '>
       {
         Object.keys(subCategories).map((cat) => (
-          <div className='mx-5 py-5 '>
+          <div key={cat} className='mx-5 py-5 '>
             <h1 className='font-bold text-lg'>{cat}</h1>
             <div className='space-y-5'>
               {
               subCategories[cat].map((sub) => (
-                <div className='sm:text-center sm:flex sm:items-center sm:flex-col sm:w-full'>
+                <div key={sub.name} className='sm:text-center sm:flex sm:items-center sm:flex-col sm:w-full'>
                   {
                     subCategories[sub].length > 0 &&
                     <div>

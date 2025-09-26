@@ -2,18 +2,19 @@ import * as React from 'react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import CartSheet from '@/components/ui/cartSheet';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import type { Product } from '@/types/types';
+import type { pos, Product } from '@/types/types';
 import { FaAngleRight, FaChevronDown, FaHeart } from 'react-icons/fa';
 import { CiLocationOn } from 'react-icons/ci';
 import { Button } from './button';
-import { addProductToCart, convertPrice, measurements, newPrice, unitChange, useUser } from '@/utilities';
+import { addProductToCart, convertPrice, measurements, newPrice, reverseGeo, unitChange, useUser } from '@/utilities';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import type {Dispatch, SetStateAction } from 'react';
 import { useCurrencyRates } from '@/getRates';
 import { getProfile } from '@/userContext';
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import MeasurementChange from './measurementChange';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/supabase/supabaseClient';
 interface IProductSideBarProps {
   product: Product;
   measurement: string;
@@ -30,6 +31,7 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({product,
     const userProfile = getProfile();
     const [userCurrency, setUserCurrency] = useState(userProfile?.userProfile?.currencies.currencyCode ?? "USD");
     const user = useUser();
+    const profile = getProfile();
     const navigate = useNavigate();
     const handleBuyNow = async() => {
         if(user){
@@ -44,6 +46,48 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({product,
             })
         }
     }
+    const handleGetAdress = () => {
+        if(profile?.userProfile?.adress) return profile?.userProfile?.adress;
+        else if(profile?.userProfile?.location && typeof profile?.userProfile?.location != 'string'){
+            console.log("location provided: ", profile.userProfile.location);
+            reverseGeo(profile.userProfile.location as unknown as pos).then(({adress}) => {
+                if(!adress){
+                    console.log("couldn't get the adress but full should be fine");
+                    return;
+                }
+                console.log("I can see adress: ", adress);
+                const setUserAdress = async() => {
+                    const {error} = await supabase
+                    .from('profiles')
+                    .update({adress: adress})
+                    .eq('id', user?.id);
+                    if(error){
+                        console.log("couldn't set user adress from location upon checking in productSideBar");
+                        console.error(error);
+                    }
+                }
+                setUserAdress();
+                let tempUserProfile = userProfile?.userProfile;
+                if(tempUserProfile){
+                    tempUserProfile.adress = adress;
+                    userProfile?.setUserProfile(tempUserProfile);   
+                }
+
+                return adress;
+            }).catch((error) => {
+                console.log("error while retreving adress");
+                console.error(error);
+                return;
+            })
+            
+        }
+    }
+    useEffect(() => {
+        if(!userProfile?.userProfile?.adress){
+            console.log("so you were saying?")
+            handleGetAdress();
+        }
+    }, [userProfile?.userProfile?.adress])
     if(loading) return <p>loading...</p>
   return (
     <div className='w-full border-1 p-4 sticky top-0 h-[100vh] overflow-hidden' style={{ top: `${headerHeight }px` }}>
@@ -75,7 +119,7 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({product,
                 <p className='font-medium '>Ship to</p>
                 <div className='flex flex-1 items-center w-10 justify-end cursor-pointer'>
                     <CiLocationOn/>
-                    <p className='truncate text-ellipsis overflow-hidden hover:underline'>Said St. by Helw St.</p>
+                    <p className='truncate text-ellipsis overflow-hidden hover:underline'>{userProfile?.userProfile?.adress}</p>
                     <FaAngleRight size={15}/>
                 </div>
             </div>
@@ -98,7 +142,7 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({product,
                             <DropdownMenuContent className='hover:bg-gray-100'>
                                 {
                                     measurements.map((mes) => (
-                                        <DropdownMenuItem className='hover:bg-gray-100' onClick={() => handleMeasurementChange(mes)}>{mes}</DropdownMenuItem>
+                                        <DropdownMenuItem key={mes} className='hover:bg-gray-100' onClick={() => handleMeasurementChange(mes)}>{mes}</DropdownMenuItem>
                                     ))
                                 }
                             </DropdownMenuContent>

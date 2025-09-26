@@ -112,7 +112,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
   return (
     <div>
       <Sheet>
-        <SheetTrigger>
+        <SheetTrigger asChild>
           <Button variant={'outline'} className={`sm:flex-1 max-w-40 ${props.styles}`} onClick={() => handleAddToCart()}>Add to Cart</Button>
         </SheetTrigger>
         <SheetContent className='w-60 pl-2 flex flex-col h-screen'>
@@ -131,8 +131,8 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
           </SheetHeader>
           <ScrollArea className='flex-1 overflow-auto'>
             <div className='flex flex-col gap-10 mr-4'>
-              {cart?.map(({products: product}) => (
-                <div className='flex hover:bg-background-secondary cursor-pointer items-center h-40 gap-5' onClick={() => navigate(`/product/${product.id}`)}>
+              {cart?.map(({products: product}, index) => (
+                <div key={product.id || index} className='flex hover:bg-background-secondary cursor-pointer items-center h-40 gap-5' onClick={() => navigate(`/product/${product.id}`)}>
                   
                   {/* Product image */}
                   <div className='w-20 h-35 flex flex-col justify-center gap-2 items-center py-4'>
@@ -191,7 +191,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                               <DropdownMenuLabel>Measurement</DropdownMenuLabel>
                                 {
                                     measurements.map((mes) => (
-                                        <DropdownMenuItem onClick={() => handleMeasurementChange(product, mes)}>{mes}</DropdownMenuItem>
+                                        <DropdownMenuItem key={mes} onClick={() => handleMeasurementChange(product, mes)}>{mes}</DropdownMenuItem>
                                     ))
                                 }
                             </DropdownMenuContent>
