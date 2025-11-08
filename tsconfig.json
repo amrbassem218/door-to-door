@@ -1,14 +1,28 @@
 {
   "files": [],
+  "include": [
+    "./dist/types/**/*.ts",
+    "./next-env.d.ts"
+  ],
+  "exclude": [
+    "./node_modules"
+  ],
   "references": [
     { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
+    "plugins": [
+      {"name": "next"}
+    ],
     "lib": ["ESNext", "DOM"],
     "types": ["node"],
     "noUnusedLocals": false,

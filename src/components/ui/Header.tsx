@@ -9,7 +9,7 @@ import { CiLogin } from "react-icons/ci";
 import TopicBar from './topicBar';
 import { useLocation, useNavigate } from 'react-router-dom';
 import TopBar from './topbar';
-import { useSearch } from '@/searchContext';
+import { useSearch } from '@/app/contexts/searchContext';
 import { useState, useEffect, useRef } from 'react';
 import { LuUser } from "react-icons/lu";
 import { IoCartOutline } from "react-icons/io5";

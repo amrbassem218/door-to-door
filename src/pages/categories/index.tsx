@@ -12,7 +12,7 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import type { Product } from '@/types/types';
 import { capetalize } from '@/utilities';
-import { useSearch } from '@/searchContext';
+import { useSearch } from '@/app/contexts/searchContext';
 interface ICategoryProps {
 }
 

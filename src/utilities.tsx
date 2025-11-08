@@ -586,7 +586,7 @@ async function getAddressFromLatLng(pos: pos | null): Promise<string | undefined
   if(!pos) return;
   const lat = pos.lat;
   const lng = pos.lng;
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  const apiKey = process.env.VITE_GOOGLE_MAPS_API_KEY;
   const res = await fetch(
     `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`
   );

@@ -14,7 +14,7 @@ interface ILocationPageProps {
 const AdressPicker: React.FunctionComponent<ILocationPageProps> = ({position, setPosition, styles}) => {
   const containerStyle = styles;
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+    googleMapsApiKey: process.env.VITE_GOOGLE_MAPS_API_KEY
   });
 
 

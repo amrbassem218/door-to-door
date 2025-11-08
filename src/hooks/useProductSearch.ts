@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSearch } from '@/searchContext';
+import { useSearch } from '@/app/contexts/searchContext';
 import type { Product, ProductFilters } from '@/types/types';
 
 export const useProductSearch = () => {

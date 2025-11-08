@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearch } from '@/searchContext';
+import { useSearch } from '@/app/contexts/searchContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { ProductFilters, Product } from '@/types/types';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';

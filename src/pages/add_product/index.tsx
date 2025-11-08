@@ -54,7 +54,7 @@ export const schema = z.object({
   tags: z.array(z.string()).nullable(),
 });
 type zodSchema = z.infer<typeof schema>;
-// const R2_ACCOUNT_ID = import.meta.env.
+// const R2_ACCOUNT_ID = process.env.
 const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [images, setImages] = useState<File[]>([]);

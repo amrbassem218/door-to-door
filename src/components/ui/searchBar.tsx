@@ -1,4 +1,4 @@
-import { useSearch } from '@/searchContext';
+import { useSearch } from '@/app/contexts/searchContext';
 import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { IoFilter, IoSearchOutline } from 'react-icons/io5';

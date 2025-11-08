@@ -1,20 +1,19 @@
+'use client'
+import * as React from 'react';
 import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import Header from './components/ui/Header'
-import TopBar from './components/ui/topbar'
-import { RouterProvider } from 'react-router-dom'
-import { router } from './router'
-import Auth from './auth'
-import { getProducts, indexProducts, getSuggestion, useUser, camel } from './utilities'
-import type { dbData, SearchContextType, Product, ProductFilters, LangContextType, UserProfile } from './types/types'
+import { getProducts, indexProducts, getSuggestion, useUser, camel } from '../utilities'
+import type { dbData, SearchContextType, Product, ProductFilters, LangContextType, UserProfile } from '../types/types'
 import type { Index } from 'flexsearch'
-import { SearchContext } from './app/contexts/searchContext'
-import { LangContext } from './app/contexts/langContext'
-import { UserContext } from './userContext'
-import { supabase } from './supabase/supabaseClient'
-function App() {
+import { SearchContext } from '../contexts/searchContext'
+import { UserContext } from '../userContext'
+import { supabase } from '../supabase/supabaseClient'
+import { RouterProvider } from 'react-router-dom';
+import { router } from '@/router';
+interface IProvidersProps {
+}
+
+const Providers: React.FunctionComponent<IProvidersProps> = (props) => {
   const [indexes, setIndexes] = useState<Index<string>[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
@@ -110,11 +109,6 @@ function App() {
     searchProducts,
     filterProducts
   };
-
-  const langContextValue: LangContextType = {
-    lang,
-    setLang  
-  }
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const user = useUser();
   useEffect(() => {
@@ -152,6 +146,6 @@ function App() {
       </SearchContext.Provider>
     </UserContext.Provider>
   )
-}
+};
 
-export default App
+export default Providers;
