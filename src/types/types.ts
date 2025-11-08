@@ -75,7 +75,7 @@ export type Currencies = Camelize<localCurrencies>
 type localReview = Database['public']['Tables']['reviews']['Row'];
 export type ReviewType = Camelize<localReview> & {profiles: profilesRow};
 
-export type UserProfile = profilesRow & {currencies: Currencies};
+export type UserProfile = profilesRow & {currencies: Currencies} & {currency: string; country: string; language: string;};
 
 export interface FullLocation {
     country: string | undefined;
