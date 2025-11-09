@@ -1,17 +1,17 @@
-import type { Metadata } from 'next'
-import Providers from './providers'
-import TopBar from '@/components/ui/topbar'
-import Header from '@/components/ui/Header'
- 
+import type { Metadata } from "next";
+import Providers from "./providers";
+import TopBar from "@/components/ui/topbar";
+import Header from "@/components/header/Header";
+
 export const metadata: Metadata = {
-  title: 'EGEEX',
-  description: 'The first global egyptian market',
-}
- 
+  title: "EGEEX",
+  description: "The first global egyptian market",
+};
+
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
@@ -23,5 +23,5 @@ export default function RootLayout({
         </Providers>
       </body>
     </html>
-  )
+  );
 }

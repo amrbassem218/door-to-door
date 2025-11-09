@@ -1,10 +1,10 @@
-import { useSearch } from '@/app/contexts/searchContext';
 import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { IoFilter, IoSearchOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import { Input } from './input';
 import { Button } from './button';
+import { useSearch } from '@/contexts/searchContext';
 interface ISearchBarProps {
   styles?: string;
 }
