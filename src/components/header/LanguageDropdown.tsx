@@ -1,8 +1,6 @@
-"use client";
+'use client';
 import * as React from "react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from './dropdown-menu';
 import { useState, useEffect, useRef } from 'react';
-import Flag from 'react-world-flags'
 interface ILanguageDropdownProps {}
 
 const LanguageDropdown: React.FunctionComponent<ILanguageDropdownProps> = (

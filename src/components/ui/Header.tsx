@@ -15,6 +15,7 @@ import Menu from "./menu";
 import { getProfile } from "@/userContext";
 import GoBackButton from "../header/goBackButton";
 import CurrencyDropDown from "../header/currencyDropDown";
+import ChangeInfo from "../header/changeInfo";
 
 interface IHeaderProps {
   showSearch?: boolean;
@@ -28,9 +29,6 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
   const [userLanguage, setUserLanguage] = useState("EN");
   const [cartLength, setCartLength] = useState(0);
   const user = useUser();
-  const rawUserProfile = getProfile();
-  const userProfile = rawUserProfile?.userProfile;
-  const setUserProfile = rawUserProfile?.setUserProfile;
   useEffect(() => {
     if (user) {
       const handleGetCart = async () => {
@@ -84,30 +82,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
 
             <div className="flex gap-5">
               {/* Language & currency */}
-              <DropdownMenu>
-                <DropdownMenuTrigger className="hidden sm:block">
-                  <div className="flex items-center gap-2 cursor-pointer">
-                    {/* flag */}
-                    <div>
-                      <Flag code={userCountry.code} className="w-7 h-7" />
-                    </div>
-                    <div className="text-xs">
-                      <p className="text-muted-foreground">{userLanguage}/</p>
-                      <p className="">{userProfile?.currency}</p>
-                    </div>
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-70 bg-background px-5 py-3 space-y-3">
-                  {/*  Location */}
-                  <div>
-                    <h1 className="text-xl font-bold">Ship to</h1>
-                    {/* <LocationDialog userProfile ={userProfile}/> */}
-                  </div>
-
-                  {/* Currency */}
-                  <CurrencyDropDown />
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <ChangeInfo/>
               {/* Sign */}
               <div className="flex gap-1 items-center ">
                 <Sign />
