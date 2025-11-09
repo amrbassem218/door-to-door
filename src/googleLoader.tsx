@@ -1,7 +1,7 @@
 import { Loader } from "@googlemaps/js-api-loader";
 
 const loader = new Loader({
-  apiKey: process.env.VITE_GOOGLE_MAPS_API_KEY || "YOUR_API_KEY",
+  apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "YOUR_API_KEY",
   libraries: ["places", "geocoding"],
   version: "weekly",
 });

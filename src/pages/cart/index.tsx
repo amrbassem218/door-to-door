@@ -1,15 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { CartItem, Product } from '@/types/types';
-import { getCart, measurements, newPrice, unitChange, useUser, cleanupDuplicateCarts, price, save } from '@/utilities';
-import type { User } from '@supabase/supabase-js';
+import { newPrice, unitChange, price, save } from '@/utilities';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { FiMinus, FiPlus } from 'react-icons/fi';
 import { MdDeleteOutline } from "react-icons/md";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { FaChevronDown } from 'react-icons/fa';
-import { FaCaretDown } from "react-icons/fa";
 import { supabase } from '@/supabase/supabaseClient';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
@@ -18,6 +13,8 @@ import MeasurementChange from '@/components/ui/measurementChange';
 import QuantityChange from '@/components/ui/quantityChange';
 import { getProfile } from '@/userContext';
 import { useCurrencyRates } from '@/getRates';
+import { useUser } from '@/utils/getUser';
+import { cleanupDuplicateCarts, getCart } from '@/utils/cart-utils';
 
 interface ICartProps {
 }
@@ -37,24 +34,6 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
   const id = (product: Product) => {
     return Number(product.id);
   }
-  // useEffect(() => {
-  //   if (cartItems && cartItems.length == 0) {
-  //     const newCartMeasurement: Record<number, string> = {};
-  //     const newCartQuantity: Record<number, number> = {};
-      
-  //     cartItems.forEach(({products: product}) => {
-  //       const pid = Number(product.id);
-  //       newCartMeasurement[pid] = localStorage.getItem(`${product.id}_measurement`) ?? measurements[0];
-        
-  //       if (localStorage.getItem(`${product?.id}_quantity`)) {
-  //         newCartQuantity[pid] = Number(localStorage.getItem(`${product?.id}_quantity`)) ?? product?.minOrder ?? 1;
-  //       }
-  //     });
-  //     console.log("ma by run aho")
-  //     setCartMeasurement(newCartMeasurement);
-  //     setCartQuantity(newCartQuantity);
-  //   }
-  // }, [cartItems]);
   const paymentOptions = [
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRT27mNiyLBx_WW5a1PY7y7b6rncoD2Ir4Y5A&s",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/1200px-MasterCard_Logo.svg.png",

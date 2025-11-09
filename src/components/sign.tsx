@@ -14,11 +14,13 @@ import { FcGoogle } from "react-icons/fc";
 import { FaArrowRight, FaFacebook } from "react-icons/fa";
 import { FaApple } from "react-icons/fa";
 import { FaRightLeft, FaSquareXTwitter } from "react-icons/fa6";
-import { getDisplayName, handleGoogleAuth, handleLogout, useUser } from '@/utilities';
+import { handleGoogleAuth} from '@/utilities';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { FaAngleRight } from "react-icons/fa";
 import { LuUser } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '@/utils/getUser';
+import { getDisplayName, handleLogout } from '@/utils/user-utils';
 
 interface ISignProps {
 }

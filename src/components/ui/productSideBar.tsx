@@ -6,7 +6,7 @@ import type { pos, Product } from '@/types/types';
 import { FaAngleRight, FaChevronDown, FaHeart } from 'react-icons/fa';
 import { CiLocationOn } from 'react-icons/ci';
 import { Button } from './button';
-import { addProductToCart, convertPrice, measurements, newPrice, reverseGeo, unitChange, useUser } from '@/utilities';
+import {  measurements, newPrice, reverseGeo, } from '@/utilities';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import type {Dispatch, SetStateAction } from 'react';
 import { useCurrencyRates } from '@/getRates';
@@ -15,6 +15,8 @@ import { useState, useEffect} from 'react';
 import MeasurementChange from './measurementChange';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/supabase/supabaseClient';
+import { useUser } from '@/utils/getUser';
+import { addProductToCart } from '@/utils/cart-utils';
 interface IProductSideBarProps {
   product: Product;
   measurement: string;

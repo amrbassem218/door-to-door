@@ -1,7 +1,5 @@
 import { createContext, useContext } from "react";
-import { Index } from "flexsearch";
-import type { SearchContextType } from "../../types/types";
-import { getSuggestion } from "./utilities";
+import type { SearchContextType } from "@/types/types";
 
 export const SearchContext = createContext<SearchContextType | null>(null);
 

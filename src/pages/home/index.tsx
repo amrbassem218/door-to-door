@@ -1,12 +1,8 @@
 import * as React from "react";
-import { MdNavigateNext } from "react-icons/md";
 import { useState, useEffect } from "react";
 import type { Product } from "@/types/types";
 import { useNavigate } from "react-router-dom";
-import Header from "@/components/header/Header";
 import Hero from "../../components/home/hero";
-import FolderMenu from "../../components/ui/folderMenu";
-import { convertPrice, getProducts, newPrice } from "@/utilities";
 import {
   Card,
   CardContent,
@@ -15,9 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Item from "@/components/ui/item";
-import BottomBar from "@/components/ui/bottomBar";
-import { useCurrencyRates } from "@/getRates";
-import { getProfile, UserContext } from "@/userContext";
+import { getProducts } from "@/utils/products-utils";
 interface IHomeProps {}
 
 const Home: React.FunctionComponent<IHomeProps> = (props) => {

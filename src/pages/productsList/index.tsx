@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useSearch } from '@/app/contexts/searchContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { ProductFilters, Product } from '@/types/types';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
@@ -8,6 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { newPrice, price } from '@/utilities';
 import { getProfile } from '@/userContext';
 import { useCurrencyRates } from '@/getRates';
+import { useSearch } from '@/contexts/searchContext';
 
 const ProductsList: React.FC = () => {
   const { query } = useParams<{ query: string }>();

@@ -1,9 +1,7 @@
-import * as React from 'react';
+import * as React from "react";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import { useState, useEffect } from "react";
-import type { pos } from '@/types/types';
-
-
+import type { pos } from "@/types/types";
 
 interface ILocationPageProps {
   position: pos | null;
@@ -11,12 +9,15 @@ interface ILocationPageProps {
   styles: Object;
 }
 
-const AdressPicker: React.FunctionComponent<ILocationPageProps> = ({position, setPosition, styles}) => {
+const AdressPicker: React.FunctionComponent<ILocationPageProps> = ({
+  position,
+  setPosition,
+  styles,
+}) => {
   const containerStyle = styles;
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.VITE_GOOGLE_MAPS_API_KEY
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
   });
-
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -27,7 +28,7 @@ const AdressPicker: React.FunctionComponent<ILocationPageProps> = ({position, se
         });
       },
       () => {
-        setPosition({ lat: 30.0444, lng: 31.2357 }); 
+        setPosition({ lat: 30.0444, lng: 31.2357 });
       }
     );
   }, []);
@@ -40,7 +41,7 @@ const AdressPicker: React.FunctionComponent<ILocationPageProps> = ({position, se
       center={position}
       zoom={15}
       options={{
-        disableDefaultUI: true
+        disableDefaultUI: true,
       }}
       onClick={(e) => {
         if (e.latLng) {

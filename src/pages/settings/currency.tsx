@@ -5,11 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import Flag from 'react-world-flags';
 import countries from "world-countries";
 import { useState, useEffect } from 'react';
-import { camel, currencyToPrimaryCountry, getUserCurrency, useUser } from '@/utilities';
+import { camel  } from '@/utilities';
 import { supabase } from '@/supabase/supabaseClient';
 import { Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { getProfile } from '@/userContext';
+import { useUser } from '@/utils/getUser';
 interface ICurrencyProps {
 }
 

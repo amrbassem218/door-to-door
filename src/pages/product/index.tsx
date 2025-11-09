@@ -21,15 +21,10 @@ import { Input } from "@/components/ui/input";
 import { FaHeart } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import {
-  addProductToCart,
   camel,
-  convertPrice,
-  getProduct,
   measurements,
   newPrice,
-  price,
   unitChange,
-  useUser,
 } from "@/utilities";
 import type { ReviewType, Product } from "@/types/types";
 import Error from "../error/Error";
@@ -51,6 +46,7 @@ import { useCurrencyRates } from "@/getRates";
 import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/supabase/supabaseClient";
 import Review from "@/components/ui/review";
+import { getProduct } from "@/utils/products-utils";
 
 interface IProductProps {}
 
@@ -61,7 +57,6 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
   const [product, setProduct] = useState<Product>();
   const [measurement, setMeasurement] = useState(measurements[0]);
   const [quantity, setQuantity] = useState<number>(1);
-  const user = useUser();
   const navigate = useNavigate();
   const [isCrop, setIsCrop] = useState(false);
   const { rates, loading } = useCurrencyRates();

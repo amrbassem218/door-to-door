@@ -1,9 +1,9 @@
 'use client'
 import * as React from 'react';
-import {getProducts} from '@/utilities';
 import { useState, useEffect } from 'react';
 import type { Product } from '@/types/types';
 import Item from '@/components/ui/item';
+import { getProducts } from '@/utils/products-utils';
 interface IListProdProps {
     limit?: number;
     size: string;

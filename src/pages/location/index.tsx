@@ -1,18 +1,17 @@
-import AdressPicker from '@/components/ui/adressPicker';
-import { Button } from '@/components/ui/button';
-import { supabase } from '@/supabase/supabaseClient';
-import type { pos } from '@/types/types';
-import { useUser } from '@/utilities';
-import * as React from 'react';
-import { useState, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
+import AdressPicker from "@/components/ui/adressPicker";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/supabase/supabaseClient";
+import type { pos } from "@/types/types";
+import * as React from "react";
+import { useState, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { Autocomplete, useLoadScript } from "@react-google-maps/api";
-import { IoSearchOutline } from 'react-icons/io5';
-import { Input } from '@/components/ui/input';
+import { IoSearchOutline } from "react-icons/io5";
+import { useUser } from "@/utils/getUser";
 
 // Define libraries array outside component to prevent re-renders
-const libraries: ("places")[] = ["places"];
+const libraries: "places"[] = ["places"];
 
 const LocationPage: React.FunctionComponent = () => {
   const [position, setPosition] = useState<pos | null>(null); // Changed from undefined to null
@@ -20,20 +19,21 @@ const LocationPage: React.FunctionComponent = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const from = (location.state as { from?: string } | null)?.from || '/';
+  const from = (location.state as { from?: string } | null)?.from || "/";
   const user = useUser();
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.VITE_GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "",
     libraries, // Use the constant defined outside
   });
 
   const handleLocationSubmit = async () => {
-    if (user && position) { // Check if position exists
+    if (user && position) {
+      // Check if position exists
       const { error } = await supabase
-        .from('profiles')
+        .from("profiles")
         .update({ location: position })
-        .eq('id', user.id);
+        .eq("id", user.id);
 
       if (error) {
         console.error("can't update user location", error);
@@ -48,24 +48,24 @@ const LocationPage: React.FunctionComponent = () => {
   };
 
   const onLoad = (autocomplete: google.maps.places.Autocomplete) => {
-    console.log('Autocomplete loaded:', autocomplete);
+    console.log("Autocomplete loaded:", autocomplete);
     autocompleteRef.current = autocomplete;
   };
 
   const onPlaceChanged = () => {
     if (autocompleteRef.current) {
       const place = autocompleteRef.current.getPlace();
-      console.log('Place selected:', place);
-      
+      console.log("Place selected:", place);
+
       if (place.geometry?.location) {
         const newPosition = {
           lat: place.geometry.location.lat(),
           lng: place.geometry.location.lng(),
         };
-        console.log('New position:', newPosition);
+        console.log("New position:", newPosition);
         setPosition(newPosition);
       } else {
-        console.warn('No geometry found for selected place');
+        console.warn("No geometry found for selected place");
         toast.error("Could not get location for selected place");
       }
     }
@@ -73,8 +73,12 @@ const LocationPage: React.FunctionComponent = () => {
 
   // Handle loading error
   if (loadError) {
-    console.error('Google Maps load error:', loadError);
-    return <div>Error loading Google Maps. Please check your API key and try again.</div>;
+    console.error("Google Maps load error:", loadError);
+    return (
+      <div>
+        Error loading Google Maps. Please check your API key and try again.
+      </div>
+    );
   }
 
   if (!isLoaded) return <div>Loading Google Maps...</div>;
@@ -82,23 +86,26 @@ const LocationPage: React.FunctionComponent = () => {
   return (
     <div className="w-full h-full overflow-hidden">
       {/* Search bar */}
-      <div className='w-full h-screen relative'>
+      <div className="w-full h-screen relative">
         <div className="absolute top-3 sm:top-15 left-1/2 -translate-x-1/2 z-20 w-[90%] max-w-md">
-          <div className='justify-center relative h-10 bg-background w-full max-w-full flex items-center gap-1 rounded-md border shadow-md'>
-            <IoSearchOutline className='text-gray-500 absolute left-2' size={18}/>
+          <div className="justify-center relative h-10 bg-background w-full max-w-full flex items-center gap-1 rounded-md border shadow-md">
+            <IoSearchOutline
+              className="text-gray-500 absolute left-2"
+              size={18}
+            />
             <Autocomplete
               onLoad={onLoad}
               onPlaceChanged={onPlaceChanged}
               options={{
-                types: ['establishment', 'geocode'],
-                fields: ['place_id', 'geometry', 'name', 'formatted_address'],
+                types: ["establishment", "geocode"],
+                fields: ["place_id", "geometry", "name", "formatted_address"],
               }}
-              className='w-full h-full'
+              className="w-full h-full"
             >
-              <input 
-                type="text" 
-                placeholder='Search for a place...' 
-                className='w-full pl-8 pr-3 h-full bg-transparent outline-none rounded-md' 
+              <input
+                type="text"
+                placeholder="Search for a place..."
+                className="w-full pl-8 pr-3 h-full bg-transparent outline-none rounded-md"
               />
             </Autocomplete>
           </div>
@@ -123,8 +130,8 @@ const LocationPage: React.FunctionComponent = () => {
         >
           Cancel
         </Button>
-        <Button 
-          className="w-50 h-10" 
+        <Button
+          className="w-50 h-10"
           onClick={handleLocationSubmit}
           disabled={!position} // Disable if no position selected
         >

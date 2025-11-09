@@ -1,6 +1,7 @@
 import MenuItem from '@/components/ui/menuItem';
 import { Separator } from '@/components/ui/separator';
-import { getDisplayName, useUser } from '@/utilities';
+import { useUser } from '@/utils/getUser';
+import { getDisplayName } from '@/utils/user-utils';
 import { User } from 'lucide-react';
 import * as React from 'react';
 import { FaAngleRight, FaRegHeart } from "react-icons/fa";

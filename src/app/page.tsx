@@ -1,4 +1,3 @@
-import "../../index.css";
 import * as React from "react";
 import Hero from "@/components/home/hero";
 import {

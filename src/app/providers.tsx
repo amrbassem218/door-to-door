@@ -1,8 +1,7 @@
 'use client'
 import * as React from 'react';
 import { useEffect, useState } from 'react'
-import './App.css'
-import { getProducts, indexProducts, getSuggestion, useUser, camel } from '../utilities'
+import {camel } from '../utilities'
 import type { dbData, SearchContextType, Product, ProductFilters, LangContextType, UserProfile } from '../types/types'
 import type { Index } from 'flexsearch'
 import { SearchContext } from '../contexts/searchContext'
@@ -10,6 +9,9 @@ import { UserContext } from '../userContext'
 import { supabase } from '../supabase/supabaseClient'
 import { RouterProvider } from 'react-router-dom';
 import { router } from '@/router';
+import { getProducts, indexProducts } from '@/utils/products-utils';
+import { getSuggestion } from '@/utils/search-utils';
+import { useUser } from '@/utils/getUser';
 interface IProvidersProps {
 }
 

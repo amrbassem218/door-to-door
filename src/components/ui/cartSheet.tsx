@@ -7,7 +7,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { addProductToCart, getCart, measurements, newPrice, price, unitChange, updateMes, updateQty, useUser } from '@/utilities';
+import { measurements, newPrice, price, unitChange, updateMes, updateQty,  } from '@/utilities';
 import { Button } from './button';
 import type { CartItem, Product } from '@/types/types';
 import { useState, useEffect } from 'react';
@@ -18,6 +18,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { FaChevronDown } from 'react-icons/fa';
 import { getProfile } from '@/userContext';
 import { useCurrencyRates } from '@/getRates';
+import { useUser } from '@/utils/getUser';
+import { addProductToCart, getCart } from '@/utils/cart-utils';
 
 interface ICardSheetProps {
   product: Product,
