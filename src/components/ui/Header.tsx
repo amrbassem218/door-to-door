@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Button } from "./button";
 import TopicBar from "./topicBar";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Sign from "../sign";
 import SearchBar from "./searchBar";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -16,48 +16,23 @@ import { getProfile } from "@/userContext";
 import GoBackButton from "../header/goBackButton";
 import CurrencyDropDown from "../header/currencyDropDown";
 import ChangeInfo from "../header/changeInfo";
+import Link from "next/link";
+import CartHeader from "../header/cart";
 
 interface IHeaderProps {
   showSearch?: boolean;
 }
 
 const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
-  const navigate = useNavigate();
-  // const countries
-  const egypt = { code: "EG", name: "Egypt" };
-  const [userCountry, setUserCountry] = useState(egypt);
-  const [userLanguage, setUserLanguage] = useState("EN");
-  const [cartLength, setCartLength] = useState(0);
-  const user = useUser();
-  useEffect(() => {
-    if (user) {
-      const handleGetCart = async () => {
-        try {
-          // First clean up any duplicate carts
-          await cleanupDuplicateCarts(user);
-
-          // Then get the cart data
-          const data = await getCart(user);
-          if (data) {
-            setCartLength(data.length);
-          }
-        } catch (error) {
-          console.error("Error handling cart in Header:", error);
-          setCartLength(0);
-        }
-      };
-      handleGetCart();
-    } else {
-      setCartLength(0);
-    }
-  }, [user]);
   const location = useLocation();
+  // ${
+  //         location.pathname == "/" && "sm:absolute"
+  //       }
   return (
     <div
-      className={`fixed top-0 left-0 w-full bg-primary text-primary-foreground z-50  ${
-        location.pathname == "/" && "sm:absolute"
-      }`}
+      className={`fixed top-0 left-0 w-full bg-primary text-primary-foreground z-50 `}
     >
+      
       {/* <TopBar/> */}
       <div className=" w-full ">
         <div className="sm:px-20 px-2 mx-auto">
@@ -68,12 +43,12 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
                 <GoBackButton />
                 <Menu />
               </div>
-              <button
-                className="cursor-pointer  font-semibold lg:text-3xl text-lg"
-                onClick={() => navigate("/")}
+              <Link
+                className="cursor-pointer font-semibold lg:text-3xl text-lg"
+                href={"/"}
               >
                 EGEEX
-              </button>
+              </Link>
             </div>
 
             <div className="flex-1 hidden sm:inline">
@@ -82,27 +57,14 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
 
             <div className="flex gap-5">
               {/* Language & currency */}
-              <ChangeInfo/>
+              <ChangeInfo />
               {/* Sign */}
               <div className="flex gap-1 items-center ">
                 <Sign />
               </div>
 
               {/* Cart */}
-              <div
-                className="flex gap-1 items-center cursor-pointer"
-                onClick={() => navigate("/cart")}
-              >
-                <LuShoppingCart className="text-2xl lg:text-3xl" />
-                <div className="flex-col  justify-center items-center hidden md:flex">
-                  <div className="w-10 h-3 bg-secondary flex items-center justify-center p-2 rounded-md">
-                    <p className="text-sm font-bold text-secondary-foreground">
-                      {cartLength}
-                    </p>
-                  </div>
-                  <button className="text-sm font-semibold ">Cart</button>
-                </div>
-              </div>
+              <CartHeader />
             </div>
           </div>
         </div>

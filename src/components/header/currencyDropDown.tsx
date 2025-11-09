@@ -71,6 +71,7 @@ const egypt = {code: "EG", name: "Egypt"};
                   >
                     <div className="flex gap-2 items-center">
                       <Flag code={country.code} className="w-5 h-5" />
+                      {/* TODO: Should change this to currency instead*/}
                       <p>{country.name}</p>
                     </div>
                     <Check
