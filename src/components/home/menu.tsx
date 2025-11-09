@@ -1,25 +1,20 @@
 'use client'
 import * as React from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { IoIosMenu } from "react-icons/io";
-import { FaAngleRight, FaHome } from "react-icons/fa";
+import { FaAngleRight } from "react-icons/fa";
 import { Separator } from "@/components/ui/separator";
 import { CiLocationOn } from "react-icons/ci";
 import { HiOutlineCurrencyDollar } from "react-icons/hi2";
 import { GrLanguage } from "react-icons/gr";
 import { BiSupport } from "react-icons/bi";
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import Link from "next/link";
 interface IMenuProps {}
 

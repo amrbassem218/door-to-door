@@ -1,3 +1,4 @@
+'use client'
 import { createContext, useContext, type Dispatch, type SetStateAction } from "react";
 import type { UserProfile } from "./types/types";
 interface UserProfileState {

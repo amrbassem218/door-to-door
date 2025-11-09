@@ -6,7 +6,6 @@ import Header from "./components/header/Header";
 import TopBar from "./components/ui/topbar";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
-import Auth from "./auth";
 import {
   getProducts,
   indexProducts,

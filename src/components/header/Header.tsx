@@ -1,20 +1,10 @@
 import * as React from "react";
-import { Button } from "../ui/button";
-import TopicBar from "../ui/topicBar";
+import TopicBar from "./topic bar/topicBar";
 import { useLocation } from "react-router-dom";
 import Sign from "../sign";
 import SearchBar from "../ui/searchBar";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { countries } from "../countries";
-// import { Separator } from './separator';r
-import { cn } from "@/lib/utils";
-import { getCart, useUser, cleanupDuplicateCarts } from "@/utilities";
-import { LuShoppingCart } from "react-icons/lu";
-import MobileTopicBar from "../ui/mobileTopicBar";
 import Menu from "../home/menu";
-import { getProfile } from "@/userContext";
 import GoBackButton from "./goBackButton";
-import CurrencyDropDown from "./currencyDropDown";
 import ChangeInfo from "./changeInfo";
 import Link from "next/link";
 import CartHeader from "./cart";
