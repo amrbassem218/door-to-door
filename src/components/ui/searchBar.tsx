@@ -1,3 +1,4 @@
+"use client"
 import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { IoFilter, IoSearchOutline } from 'react-icons/io5';
@@ -21,7 +22,7 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({styles}) => {
   useEffect(() => {
     if(query && search){
       search.searchProducts(query).then(results => {
-        setSuggestions(results);
+      setSuggestions(results);
       });
     } else {
       setSuggestions([]);
