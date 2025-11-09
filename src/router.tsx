@@ -12,7 +12,6 @@ import Account from "./pages/account";
 import Settings from "./pages/settings";
 import Profile from "./pages/settings/profile";
 import Country from "./pages/settings/country";
-import AdressPicker from "./components/ui/adressPicker";
 import LocationPage from "./pages/location";
 import Currency from "./pages/settings/currency";
 import Categories from "./pages/categories";

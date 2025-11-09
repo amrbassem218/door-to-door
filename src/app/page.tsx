@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import ListProd from "@/components/home/ListProds";
-
+import "../App.css"
 export function generateStaticParams() {
   return [{ slug: [""] }];
 }

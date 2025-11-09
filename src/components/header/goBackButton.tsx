@@ -1,12 +1,17 @@
 "use client";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import * as React from "react";
-
+import { useState, useEffect } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 interface IGoBackButtonProps {}
 
 const GoBackButton: React.FunctionComponent<IGoBackButtonProps> = (props) => {
+  const [isMounted, setIsMounted] = useState<boolean>(false);
   const router = useRouter();
+  useEffect(() => {
+    setIsMounted(true);
+  }, []) 
+  if(!isMounted) return null;
   return (
     <div>
       {window.history.state && window.history.state.idx > 0 && (
