@@ -1,5 +1,5 @@
 // src/components/Layout.tsx
-import { Outlet, useLocation, useViewTransitionState } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Header from "./header/Header";
 import BottomBar from "./ui/bottomBar";
 import { useEffect, useState } from "react";
@@ -68,7 +68,7 @@ export default function Layout() {
   const getMarginClasses = () => {
     if (!showHeader) return "mb-12";
 
-    let baseMargin = showSearch ? "mt-26" : "mt-17";
+    const baseMargin = showSearch ? "mt-26" : "mt-17";
     let smMargin = showSearch ? "sm:mt-36" : "sm:mt-27";
 
     // If topic bar is hidden on sm and up, subtract its height (h-15 = 3.75rem = 15*0.25rem)

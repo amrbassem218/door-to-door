@@ -5,7 +5,7 @@ import { camel } from "@/utilities";
 export const getCartId = async(user: User) =>{
   try {
     // First, try to get an existing cart
-    let {data: cartId, error} = await supabase
+    const {data: cartId, error} = await supabase
       .from('carts')
       .select('id')
       .eq('user_id', user.id)
@@ -15,7 +15,7 @@ export const getCartId = async(user: User) =>{
       if(error.code == "PGRST116"){
         // No cart exists, try to create one
         // Use upsert to prevent duplicate creation
-        let {data: newCart, error: createCartError} = await supabase
+        const {data: newCart, error: createCartError} = await supabase
           .from('carts')
           .upsert({
             user_id: user.id
@@ -153,7 +153,7 @@ export const addProductToCart = async(user: User, product: Product, quantity: nu
   .eq('cart_id', cartId);
   let isFound = false;
   if(data){
-    for(let e of data){
+    for(const e of data){
       if(e.product_id == product.id){
         isFound = true;
         return "error";
@@ -176,14 +176,14 @@ export const addProductToCart = async(user: User, product: Product, quantity: nu
 }
 
 export const getCart = async(user: User) => {
-  let cartId = await getOrCreateCart(user);
+  const cartId = await getOrCreateCart(user);
   
   if(!cartId) {
     console.error("Failed to get or create cart for user");
     return null;
   }
   
-  let {data, error} = await supabase
+  const {data, error} = await supabase
   .from('cart_items')
   .select('measurement, quantity, products(*)')
   .eq('cart_id', cartId)
@@ -192,7 +192,7 @@ export const getCart = async(user: User) => {
     console.error(error);
   }
   else if(data){
-    let camelData: CartItem[] = camel(data);
+    const camelData: CartItem[] = camel(data);
     return camelData;
   }
 }

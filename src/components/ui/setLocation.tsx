@@ -4,16 +4,12 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { FaAngleRight } from 'react-icons/fa';
 import { type pos, type profilesRow } from '@/types/types';
 import { useState, useEffect } from 'react';
-import Flag from 'react-world-flags';
 import { reverseGeo } from '@/utilities';
 interface ISetLocationProps {
   userProfile: profilesRow | null;

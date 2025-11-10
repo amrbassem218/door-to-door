@@ -12,46 +12,49 @@ The enhanced search context provides a centralized way to manage product data, s
 ## Types
 
 ### SearchContextType
+
 ```typescript
 interface SearchContextType {
-    indexes: Index<string>[];
-    products: Item[];
-    allProducts: Item[];
-    searchProducts: (query: string) => Item[];
-    filterProducts: (filters: ProductFilters) => Item[];
+  indexes: Index<string>[];
+  products: Item[];
+  allProducts: Item[];
+  searchProducts: (query: string) => Item[];
+  filterProducts: (filters: ProductFilters) => Item[];
 }
 ```
 
 ### ProductFilters
+
 ```typescript
 interface ProductFilters {
-    category?: string;
-    priceRange?: {
-        min: number;
-        max: number;
-    };
-    rating?: number;
-    inStock?: boolean;
-    seller?: string;
+  category?: string;
+  priceRange?: {
+    min: number;
+    max: number;
+  };
+  rating?: number;
+  inStock?: boolean;
+  seller?: string;
 }
 ```
 
 ### Item
+
 ```typescript
 interface Item {
-    title: string;
-    price: number;
-    priceBefore: number;
-    id: string;
-    images: string[];
-    thumbnail: string;
-    rating?: number;
-    reviewCount?: number;
-    stockCount?: number;
-    description?: string;
-    seller?: string;
-    sellerId?: string;
-    minOrder?: number;
+  title: string;
+  price: number;
+  priceBefore: number;
+  id: string;
+  images: string[];
+  thumbnail: string;
+  rating?: number;
+  reviewCount?: number;
+  stockCount?: number;
+  description?: string;
+  seller?: string;
+  sellerId?: string;
+  minOrder?: number;
 }
 ```
 
@@ -60,24 +63,24 @@ interface Item {
 ### Basic Usage with useSearch Hook
 
 ```typescript
-import { useSearch } from '@/searchContext';
+import { useSearch } from "@/searchContext";
 
 const MyComponent = () => {
   const search = useSearch();
-  
+
   // Get all products
   const allProducts = search.allProducts;
-  
+
   // Search products
   const results = search.searchProducts("apple");
-  
+
   // Filter products
   const filtered = search.filterProducts({
     priceRange: { min: 10, max: 50 },
     rating: 4,
-    inStock: true
+    inStock: true,
   });
-  
+
   return (
     <div>
       <p>Total products: {allProducts.length}</p>
@@ -91,7 +94,7 @@ const MyComponent = () => {
 ### Using the Custom Hook
 
 ```typescript
-import { useProductSearch } from '@/hooks/useProductSearch';
+import { useProductSearch } from "@/hooks/useProductSearch";
 
 const ProductList = () => {
   const {
@@ -100,7 +103,7 @@ const ProductList = () => {
     searchProducts,
     filterProducts,
     getProductsByCategory,
-    clearFilters
+    clearFilters,
   } = useProductSearch();
 
   const handleSearch = (query: string) => {
@@ -110,7 +113,7 @@ const ProductList = () => {
   const handleFilter = () => {
     filterProducts({
       priceRange: { min: 20, max: 100 },
-      rating: 4
+      rating: 4,
     });
   };
 
@@ -126,8 +129,8 @@ const ProductList = () => {
       <button onClick={() => handleSearch("organic")}>Search Organic</button>
       <button onClick={handleFilter}>Apply Filters</button>
       <button onClick={clearFilters}>Clear Filters</button>
-      
-      {results.map(product => (
+
+      {results.map((product) => (
         <div key={product.id}>
           <h3>{product.name}</h3>
           <p>${Math.round(product.price)}</p>
@@ -141,6 +144,7 @@ const ProductList = () => {
 ## Search Functions
 
 ### searchProducts(query: string)
+
 Performs a text search using FlexSearch indexes on product titles and tags.
 
 ```typescript
@@ -148,27 +152,28 @@ const results = search.searchProducts("organic vegetables");
 ```
 
 ### filterProducts(filters: ProductFilters)
+
 Filters products based on various criteria.
 
 ```typescript
 // Filter by price range
 const expensiveProducts = search.filterProducts({
-  priceRange: { min: 50, max: 200 }
+  priceRange: { min: 50, max: 200 },
 });
 
 // Filter by rating
 const highRatedProducts = search.filterProducts({
-  rating: 4
+  rating: 4,
 });
 
 // Filter by category
 const categoryProducts = search.filterProducts({
-  category: "vegetables"
+  category: "vegetables",
 });
 
 // Filter in-stock items
 const availableProducts = search.filterProducts({
-  inStock: true
+  inStock: true,
 });
 
 // Combine multiple filters
@@ -176,18 +181,18 @@ const filteredProducts = search.filterProducts({
   priceRange: { min: 10, max: 50 },
   rating: 4,
   category: "fruits",
-  inStock: true
+  inStock: true,
 });
 ```
 
 ## Example Components
 
 ### Search Bar Component
+
 ```typescript
 const SearchBar = () => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const search = useSearch();
-  const navigate = useNavigate();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -211,10 +216,11 @@ const SearchBar = () => {
 ```
 
 ### Category Filter Component
+
 ```typescript
 const CategoryFilter = () => {
   const search = useSearch();
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
@@ -234,18 +240,19 @@ const CategoryFilter = () => {
 ```
 
 ### Price Range Filter
+
 ```typescript
 const PriceRangeFilter = () => {
   const search = useSearch();
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
 
   const applyPriceFilter = () => {
     const filtered = search.filterProducts({
       priceRange: {
         min: Number(minPrice) || 0,
-        max: Number(maxPrice) || 999999
-      }
+        max: Number(maxPrice) || 999999,
+      },
     });
     // Update your component state with filtered results
   };
@@ -302,4 +309,4 @@ const MyComponent = () => {
 - Search operations are fast due to FlexSearch indexing
 - Filter operations are performed on the client-side for immediate results
 - Consider pagination for large result sets
-- Use React.memo for components that receive search results as props 
+- Use React.memo for components that receive search results as props

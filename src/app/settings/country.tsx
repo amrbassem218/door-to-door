@@ -15,11 +15,9 @@ import {
 import { Button } from '@/components/ui/button';
 import Flag from 'react-world-flags';
 import { useState, useEffect } from 'react';
-import { useUser } from '@/utilities';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { countries } from '@/components/countries';
 import { cn } from '@/lib/utils';
-import { supabase } from '@/supabase/supabaseClient';
 interface ICountryProps {
 }
 
@@ -31,8 +29,6 @@ const Country: React.FunctionComponent<ICountryProps> = (props) => {
   useEffect(() => {
     if(userCountry){
       const setCountry = async() => {
-        const {error} = await supabase
-        .from('')
       };
       setCountry();
     }

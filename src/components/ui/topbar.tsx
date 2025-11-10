@@ -1,4 +1,3 @@
-import { CiLocationOn, CiDeliveryTruck } from "react-icons/ci";
 import { MdOutlineLocalOffer, MdOutlineLocationOn } from "react-icons/md";
 import { LuTruck } from "react-icons/lu";
 

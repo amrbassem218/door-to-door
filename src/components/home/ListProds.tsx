@@ -13,14 +13,14 @@ const ListProd: React.FunctionComponent<IListProdProps> = ({limit, size}) => {
   const [items, setItems] = useState<Product[]>();
   useEffect(() => {
     const getProd = async() => {
-      let prod = await getProducts();
+      const prod = await getProducts();
       if(prod){
         setItems(prod);
       }
     }
     getProd();
   }, [])
-  let colSize = size == "large" ? 'md:col-span-6 col-span-12' : 'sm:col-span-2 col-span-6';
+  const colSize = size == "large" ? 'md:col-span-6 col-span-12' : 'sm:col-span-2 col-span-6';
   return (
     <div className='grid grid-cols-12 gap-2'>
         {items && items.map((item, i) => 

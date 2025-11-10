@@ -1,12 +1,12 @@
 import * as React from "react";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import type { pos } from "@/types/types";
 
 interface ILocationPageProps {
   position: pos | null;
   setPosition: React.Dispatch<React.SetStateAction<pos | null>>;
-  styles: Object;
+  styles: object;
 }
 
 const AdressPicker: React.FunctionComponent<ILocationPageProps> = ({

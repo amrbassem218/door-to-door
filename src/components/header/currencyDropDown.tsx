@@ -16,11 +16,9 @@ import {
 } from "@/components/ui/popover"
 import Flag from 'react-world-flags'
 import { FaAngleRight } from 'react-icons/fa';
-import { useState, useEffect, useRef } from 'react';
-import { useUser } from "@/utilities";
+import { useState } from 'react';
 import { countries } from '../countries';
-import { getProfile } from "@/userContext";
-import { Check, ChevronsUpDown } from "lucide-react"
+import { Check } from "lucide-react"
 import { cn } from "@/lib/utils";
 interface ICurrencyDropDownProps {}
 

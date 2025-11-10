@@ -1,42 +1,27 @@
-import Header from "@/components/header/Header";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import * as React from "react";
-import { useFetcher, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Rating } from "react-simple-star-rating";
-import { FaAngleDown, FaCaretDown, FaMinus, FaStar } from "react-icons/fa";
 import { useState, useEffect, useRef } from "react";
 import { FaAngleRight } from "react-icons/fa6";
-import { CiLocationOn } from "react-icons/ci";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { FaChevronDown } from "react-icons/fa";
-import { FiMinus, FiPlus } from "react-icons/fi";
-import { Input } from "@/components/ui/input";
-import { FaHeart } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
-import {
-  camel,
-  measurements,
-  newPrice,
-  unitChange,
-} from "@/utilities";
+import { camel, measurements, newPrice, unitChange } from "@/utilities";
 import type { ReviewType, Product } from "@/types/types";
 import Error from "../error/Error";
-import { toast } from "sonner";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
 import ProductSideBar from "@/components/ui/productSideBar";
-import MeasurementChange from "@/components/ui/measurementChange";
-import QuantityChange from "@/components/ui/quantityChange";
 import { LuShoppingCart } from "react-icons/lu";
 import CartSheet from "@/components/ui/cartSheet";
 import ProductHighLight from "@/components/ui/productHighlightSection";
@@ -47,6 +32,7 @@ import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/supabase/supabaseClient";
 import Review from "@/components/ui/review";
 import { getProduct } from "@/utils/products-utils";
+import Link from "next/link";
 
 interface IProductProps {}
 
@@ -57,7 +43,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
   const [product, setProduct] = useState<Product>();
   const [measurement, setMeasurement] = useState(measurements[0]);
   const [quantity, setQuantity] = useState<number>(1);
-  const navigate = useNavigate();
+
   const [isCrop, setIsCrop] = useState(false);
   const { rates, loading } = useCurrencyRates();
   const userProfile = getProfile();
@@ -125,8 +111,8 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
     "High to low",
   ];
   const handleMeasurementChange = (mes: string) => {
-    let converted = unitChange(quantity, measurement, mes);
-    let minOrderOfNewUnit = unitChange(product?.minOrder ?? 0, "kg", mes);
+    const converted = unitChange(quantity, measurement, mes);
+    const minOrderOfNewUnit = unitChange(product?.minOrder ?? 0, "kg", mes);
     // if(converted < minOrderOfNewUnit){
     //     converted = minOrderOfNewUnit;
     // }
@@ -349,10 +335,9 @@ const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
         {/* Bottom bar for mobile */}
         <div className="sm:hidden fixed bottom-0 left-0 h-12 border-t-1 w-full bg-background flex items-center gap-4 px-2 z-10 ">
           <div className="flex  gap-2">
-            <LuShoppingCart
-              className="text-muted text-2xl"
-              onClick={() => navigate("/cart")}
-            />
+            <Link href={"/cart"}>
+              <LuShoppingCart className="text-muted text-2xl" />
+            </Link>
 
             {/* <QuantityChange handleQuantityChange={handleQuantityChange} value={quantity} mobile={true} styles='w-25'/> */}
 

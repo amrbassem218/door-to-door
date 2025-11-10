@@ -1,6 +1,6 @@
 'use client';
 import * as React from "react";
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 interface ILanguageDropdownProps {}
 
 const LanguageDropdown: React.FunctionComponent<ILanguageDropdownProps> = (

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSearch } from '@/app/contexts/searchContext';
 import type { Product, ProductFilters } from '@/types/types';
 

@@ -2,12 +2,11 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react'
 import {camel } from '../utilities'
-import type { dbData, SearchContextType, Product, ProductFilters, LangContextType, UserProfile } from '../types/types'
+import type { dbData, SearchContextType, Product, ProductFilters, UserProfile } from '../types/types'
 import type { Index } from 'flexsearch'
 import { SearchContext } from '../contexts/searchContext'
 import { UserContext } from '../userContext'
 import { supabase } from '../supabase/supabaseClient'
-import { RouterProvider } from 'react-router-dom';
 import { getProducts, indexProducts } from '@/utils/products-utils';
 import { getSuggestion } from '@/utils/search-utils';
 import { useUser } from '@/utils/getUser';

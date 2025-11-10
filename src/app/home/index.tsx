@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import type { Product } from "@/types/types";
-import { useNavigate } from "react-router-dom";
+
 import Hero from "../../components/home/hero";
 import {
   Card,
@@ -17,12 +17,12 @@ interface IHomeProps {}
 const Home: React.FunctionComponent<IHomeProps> = (props) => {
   const [topSellingSeeMore, setTopSellingSeeMore] = useState(false);
   const [items, setItems] = useState<Product[]>();
-  const navigate = useNavigate();
+
   const limit = 6;
 
   useEffect(() => {
     const getProd = async () => {
-      let prod = await getProducts();
+      const prod = await getProducts();
       if (prod) {
         setItems(prod);
       }

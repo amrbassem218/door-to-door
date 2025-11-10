@@ -1,11 +1,9 @@
-import type { User } from '@supabase/supabase-js';
 import * as React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { getDisplayName, viewDate } from '@/utilities';
+import { viewDate } from '@/utilities';
 import { Rating } from 'react-simple-star-rating';
 import type { ReviewType } from '@/types/types';
 import { Button } from './button';
-import { Separator } from './separator';
 interface IReviewProps {
   review: ReviewType
 }

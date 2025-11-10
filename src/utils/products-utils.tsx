@@ -30,7 +30,7 @@ export const indexProducts = async(products: dbData) => {
 }
 
 export const getProduct = async(id: number) => {
-  let {data, error} = await supabase
+  const {data, error} = await supabase
   .from('products')
   .select('*')
   .eq('id', id)

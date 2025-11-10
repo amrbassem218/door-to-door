@@ -1,7 +1,6 @@
 import * as React from "react";
 import TopicBar from "./topic bar/topicBar";
-import { useLocation } from "react-router-dom";
-import Sign from "../sign";
+import Sign from "../sign/sign";
 import SearchBar from "../ui/searchBar";
 import Menu from "../home/menu";
 import GoBackButton from "./goBackButton";
@@ -58,9 +57,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
           </div>
         </div>
         {/* <Separator className='w-full'/> */}
-        <div
-          className={`hidden sm:block `}
-        >
+        <div className={`hidden sm:block `}>
           <TopicBar />
         </div>
 

@@ -1,14 +1,7 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
+
 import {
   Form,
   FormControl,
@@ -18,15 +11,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import Header from "@/components/header/Header";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaCaretDown } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import { file, z } from "zod";
+
+import { z } from "zod";
 import {
   Card,
   CardContent,
@@ -129,7 +119,7 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
         console.log("Thumbnail URL:", thumbnailUrl);
       }
 
-      let imageUrls: string[] = [];
+      const imageUrls: string[] = [];
       if (images && images.length > 0) {
         console.log("Uploading images...");
         for (const file of images) {

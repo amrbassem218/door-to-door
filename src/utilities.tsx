@@ -1,7 +1,5 @@
 import { supabase } from "./supabase/supabaseClient";
 import type {
-  CartItem,
-  dbData,
   FullLocation,
   pos,
   Product,
@@ -9,7 +7,6 @@ import type {
 import { create, all } from "mathjs";
 import type { User } from "@supabase/supabase-js";
 import camelcaseKeys from "camelcase-keys";
-import { getProfile } from "./userContext";
 import { loadGoogle } from "./googleLoader";
 
 export const unitChange = (
@@ -290,10 +287,10 @@ export const viewDate = (date: Date, separator?: string) => {
   const part = (p: string) => {
     return dateParts.find((e) => e.type == p)?.value;
   };
-  let formattedDate =
+  const formattedDate =
     part("month") + dateSeparator + part("day") + dateSeparator + part("year");
-  let fullDate = part("weekday")?.slice(0, 3) + " " + formattedDate;
-  let time = part("hour") + ":" + part("minute");
+  const fullDate = part("weekday")?.slice(0, 3) + " " + formattedDate;
+  const time = part("hour") + ":" + part("minute");
   // console.log(datePart);
   return {
     full: fullDate + " " + time,
@@ -320,10 +317,10 @@ export const reverseGeo = async ({ lat, lng }: pos): Promise<FullLocation> => {
         console.log("h2");
         if (status === "OK" && results && results[0]) {
           const comp = results[0].address_components;
-          let country = comp.find((c: any) =>
+          const country = comp.find((c: any) =>
             c.types.includes("country")
           )?.long_name;
-          let city = comp.find(
+          const city = comp.find(
             (c: any) =>
               c.types.includes("locality") ||
               c.types.includes("administrative_area_level_1")

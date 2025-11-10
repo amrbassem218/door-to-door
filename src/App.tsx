@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
-import Header from "./components/header/Header";
-import TopBar from "./components/ui/topbar";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
 import {
@@ -23,7 +19,6 @@ import type {
 } from "./types/types";
 import type { Index } from "flexsearch";
 import { SearchContext } from "./app/contexts/searchContext";
-import { LangContext } from "./app/contexts/langContext";
 import { UserContext } from "./userContext";
 import { supabase } from "./supabase/supabaseClient";
 function App() {
