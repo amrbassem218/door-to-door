@@ -1,17 +1,16 @@
-'use client'
+"use client";
 import AdressPicker from "@/components/ui/adressPicker";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/supabase/supabaseClient";
 import type { pos } from "@/types/types";
+import { useUser } from "@/utils/getUser";
+import { Autocomplete, useLoadScript } from "@react-google-maps/api";
+import { useRouter } from "next/navigation";
 import * as React from "react";
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
+import { IoSearchOutline } from "react-icons/io5";
 import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
-import { Autocomplete, useLoadScript } from "@react-google-maps/api";
-import { IoSearchOutline } from "react-icons/io5";
-import { useUser } from "@/utils/getUser";
-import { useRouter } from "next/router";
-
 // Define libraries array outside component to prevent re-renders
 const libraries: "places"[] = ["places"];
 
@@ -127,7 +126,7 @@ const LocationPage: React.FunctionComponent = () => {
         <Button
           variant="outline"
           className="flex-1 h-10 border"
-          onClick={() =>router.push(from)}
+          onClick={() => router.push(from)}
         >
           Cancel
         </Button>

@@ -6,7 +6,7 @@ import { IoFilter, IoSearchOutline } from "react-icons/io5";
 import { Input } from "./input";
 import { Button } from "./button";
 import { useSearch } from "@/contexts/searchContext";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 interface ISearchBarProps {
   styles?: string;
 }
