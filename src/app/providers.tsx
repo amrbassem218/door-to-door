@@ -8,14 +8,14 @@ import { SearchContext } from '../contexts/searchContext'
 import { UserContext } from '../userContext'
 import { supabase } from '../supabase/supabaseClient'
 import { RouterProvider } from 'react-router-dom';
-import { router } from '@/router';
 import { getProducts, indexProducts } from '@/utils/products-utils';
 import { getSuggestion } from '@/utils/search-utils';
 import { useUser } from '@/utils/getUser';
 interface IProvidersProps {
+  children: React.ReactNode
 }
 
-const Providers: React.FunctionComponent<IProvidersProps> = (props) => {
+const Providers: React.FunctionComponent<IProvidersProps> = ({children}) => {
   const [indexes, setIndexes] = useState<Index<string>[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
@@ -143,7 +143,7 @@ const Providers: React.FunctionComponent<IProvidersProps> = (props) => {
     <UserContext.Provider value={{ userProfile, setUserProfile }}>
       <SearchContext.Provider value={searchContextValue}>
         <div className='w-screen'>
-          <RouterProvider router={router}/>
+          {children}
         </div>
       </SearchContext.Provider>
     </UserContext.Provider>

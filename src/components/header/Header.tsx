@@ -14,7 +14,7 @@ interface IHeaderProps {
 }
 
 const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
-  const location = useLocation();
+  // const location = useLocation();
   // ${
   //         location.pathname == "/" && "sm:absolute"
   //       }
@@ -59,9 +59,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
         </div>
         {/* <Separator className='w-full'/> */}
         <div
-          className={`hidden sm:block ${
-            location.pathname != "/" && "sm:hidden"
-          }`}
+          className={`hidden sm:block `}
         >
           <TopicBar />
         </div>
