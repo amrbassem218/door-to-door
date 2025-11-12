@@ -20,9 +20,9 @@ const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
   );
   if (loading) return <p>Loading prices...</p>;
   return (
-    <Link href={`/product/${item.id}`}>
+    <Link href={`/product/${item.id}`} className={`${col}`}>
       <div
-        className={`${col} border-1 rounded-lg transition-transform duration-200 ease-in-out hover:scale-105 cursor-pointer bg-background ${style} px-2 w-40`}
+        className={` border-1 rounded-lg transition-transform duration-200 ease-in-out hover:scale-105 cursor-pointer bg-background ${style} px-2 w-40`}
       >
         {/* Item Image */}
         <div className="h-24 rounded-t-lg flex items-center justify-center overflow-hidden ">

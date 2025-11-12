@@ -25,8 +25,8 @@ const ListProd: React.FunctionComponent<IListProdProps> = ({limit, size}) => {
     <div className='grid grid-cols-12 gap-2'>
         {items && items.map((item, i) => 
             {
-                return !limit || (limit && i < limit) && ( 
-                    <Item item={item} col={colSize} style='bg-card'/>
+                return (!limit || (limit && i < limit)) && ( 
+                    <Item key={`${item.name}-${i}`} item={item} col={colSize} style='bg-card'/>
                 ) 
             }
         )}

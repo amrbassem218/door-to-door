@@ -41,9 +41,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-12 gap-2">
                   <ListProd limit={2} size="large" />
-                </div>
               </CardContent>
             </Card>
 
@@ -60,9 +58,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-12 gap-2">
                   <ListProd limit={2} size="large" />
-                </div>
               </CardContent>
             </Card>
 
@@ -79,9 +75,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-12 gap-2">
                   <ListProd limit={2} size="large" />
-                </div>
               </CardContent>
             </Card>
           </div>
@@ -90,9 +84,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
         {/* More to love */}
         <section className="space-y-7">
           <h1 className="text-center text-3xl font-bold ">More to love</h1>
-          <div className="grid grid-cols-12 gap-5">
             <ListProd size="small" />
-          </div>
         </section>
       </div>
     </div>

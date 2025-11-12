@@ -18,7 +18,7 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({ styles }) => {
   const [query, setQuery] = useState("");
   const router = useRouter();
   const handleFilter = () => {};
-  useEffect(() => {
+  useEffect(() => {54e8560
     if (query && search) {
       search.searchProducts(query).then((results) => {
         setSuggestions(results);
