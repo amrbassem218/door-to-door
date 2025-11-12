@@ -45,7 +45,7 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({ styles }) => {
   }, []);
 
   const handleSearchSubmit = (suggestionQuery?: string) => {
-    router.push(`/search/${suggestionQuery ? suggestionQuery : query}`);
+    router.push(`/search?query=${suggestionQuery ? suggestionQuery : query}`);
   };
   return (
     <div

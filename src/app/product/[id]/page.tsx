@@ -1,8 +1,8 @@
+'use client'
 import { ScrollArea } from "@/components/ui/scroll-area";
 import * as React from "react";
-import { useParams } from "react-router-dom";
 import { Rating } from "react-simple-star-rating";
-import { useState, useEffect, useRef } from "react";
+import { use, useState, useEffect, useRef } from "react";
 import { FaAngleRight } from "react-icons/fa6";
 import {
   DropdownMenu,
@@ -15,7 +15,7 @@ import { FaChevronDown } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { camel, measurements, newPrice, unitChange } from "@/utilities";
 import type { ReviewType, Product } from "@/types/types";
-import Error from "../error/Error";
+import Error from "../../error/page";
 import {
   Carousel,
   CarouselContent,
@@ -34,10 +34,14 @@ import Review from "@/components/ui/review";
 import { getProduct } from "@/utils/products-utils";
 import Link from "next/link";
 
-interface IProductProps {}
+interface IProductProps {
+  params: Promise<{
+    id: string;
+  }>
+}
 
-const ProductListing: React.FunctionComponent<IProductProps> = (props) => {
-  const { id } = useParams();
+const ProductListing: React.FunctionComponent<IProductProps> = ({params}) => {
+  const {id} = use(params);
   const [activeTab, setActiveTab] = useState("Customer Reviews");
   const [reviewSort, setReviewSort] = useState("Most relevant");
   const [product, setProduct] = useState<Product>();

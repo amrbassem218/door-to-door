@@ -34,7 +34,7 @@ const Hero: React.FunctionComponent<IHeroProps> = (props) => {
                   <Link
                     key={word}
                     className="p-3 h-5 border-1 border-white flex items-center justify-center rounded-md text-white hover:bg-background hover:text-black cursor-pointer transition-all"
-                    href={`/search/${word}`}
+                    href={`/search?query=${word}`}
                   >
                     <p className="">{word}</p>
                   </Link>

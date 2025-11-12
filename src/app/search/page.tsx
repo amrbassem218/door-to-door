@@ -1,27 +1,28 @@
+'use client'
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import type { ProductFilters, Product } from "@/types/types";
-
-
 import { Checkbox } from "@/components/ui/checkbox";
 import { newPrice, price } from "@/utilities";
 import { getProfile } from "@/userContext";
 import { useCurrencyRates } from "@/getRates";
 import { useSearch } from "@/contexts/searchContext";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
-const ProductsList: React.FC = () => {
-  const { query } = useParams<{ query: string }>();
+interface ISearchPageProps {
+}
+
+const SearchPage: React.FunctionComponent<ISearchPageProps> = (props) => {
+  const searchParams = useSearchParams();
+  const query = searchParams.get('query');
   // const [searchQuery, setSearchQuery]
   const search = useSearch();
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [filters, setFilters] = useState<ProductFilters>({});
   const [searchQuery, setSearchQuery] = useState(query || "");
-  const [ratingFilter, setRatingFilter] = useState<string | null>(null);
 
   // Option Arrays
   const ratingOptions = ["5.0", "4.5 & above", "4.0 & above", "3 & above"];
-
   useEffect(() => {
     if (searchQuery) {
       search.searchProducts(searchQuery).then((results) => {
@@ -164,17 +165,6 @@ const ProductsList: React.FC = () => {
                 />
               </div>
             </div>
-
-            {/* Category */}
-            {/* <div>
-              <label className="block text-sm font-medium mb-2">Category</label>
-              <input
-                type="text"
-                placeholder="Search category"
-                className="w-full px-3 py-2 border rounded"
-                onChange={(e) => handleFilterChange({ category: e.target.value })}
-              />
-            </div> */}
           </div>
         </div>
 
@@ -246,6 +236,7 @@ const ProductsList: React.FC = () => {
       </div>
     </div>
   );
+
 };
 
-export default ProductsList;
+export default SearchPage;

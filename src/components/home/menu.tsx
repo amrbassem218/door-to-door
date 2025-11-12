@@ -78,7 +78,7 @@ const Menu: React.FunctionComponent<IMenuProps> = (props) => {
             </Link>
             <div className="space-y-2">
               {popularCategories.map((cat) => (
-                <Link href={`/search/${cat.name}`}>
+                <Link href={`/search?query=${cat.name}`}>
                   <button
                     className="flex gap-4 items-center"
                     onClick={() => setOpen(false)}
