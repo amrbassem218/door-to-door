@@ -14,7 +14,7 @@ const CartHeader: React.FunctionComponent<ICartHeaderProps> = (props) => {
       <div className="flex-col  justify-center items-center hidden md:flex">
         <div className="w-10 h-3 bg-secondary flex items-center justify-center p-2 rounded-md">
           <p className="text-sm font-bold text-secondary-foreground">
-            {userProfile?.userProfile?.cart.cartLength ?? 0}
+            {userProfile?.userProfile?.cart?.cartLength ?? 0}
           </p>
         </div>
         <button className="text-sm font-semibold ">Cart</button>
