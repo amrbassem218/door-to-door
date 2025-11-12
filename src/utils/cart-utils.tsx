@@ -263,6 +263,6 @@ export const manualCleanupAllDuplicateCarts = async() => {
 }
 
 // Make it available globally for browser console access
-if(typeof window !== 'undefined') {
-  (window as any).cleanupDuplicateCarts = manualCleanupAllDuplicateCarts;
-}
+// if(typeof window !== 'undefined') {
+//   (window as any).cleanupDuplicateCarts = manualCleanupAllDuplicateCarts;
+// }

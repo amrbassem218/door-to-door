@@ -1,6 +1,6 @@
-import * as React from "react";
 import SearchBar from "@/components/ui/searchBar";
 import Link from "next/link";
+import * as React from "react";
 interface IHeroProps {}
 
 const Hero: React.FunctionComponent<IHeroProps> = (props) => {
@@ -36,7 +36,7 @@ const Hero: React.FunctionComponent<IHeroProps> = (props) => {
                     className="p-3 h-5 border-1 border-white flex items-center justify-center rounded-md text-white hover:bg-background hover:text-black cursor-pointer transition-all"
                     href={`/search?query=${word}`}
                   >
-                    <p className="">{word}</p>
+                    {word}
                   </Link>
                 ))}
               </div>

@@ -1,5 +1,5 @@
-'use client'
-import * as React from "react";
+"use client";
+import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetContent,
@@ -7,15 +7,16 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { IoIosMenu } from "react-icons/io";
-import { FaAngleRight } from "react-icons/fa";
-import { Separator } from "@/components/ui/separator";
-import { CiLocationOn } from "react-icons/ci";
-import { HiOutlineCurrencyDollar } from "react-icons/hi2";
-import { GrLanguage } from "react-icons/gr";
-import { BiSupport } from "react-icons/bi";
-import { useState} from "react";
 import Link from "next/link";
+import * as React from "react";
+import { useState } from "react";
+import { BiSupport } from "react-icons/bi";
+import { CiLocationOn } from "react-icons/ci";
+import { FaAngleRight } from "react-icons/fa";
+import { GrLanguage } from "react-icons/gr";
+import { HiOutlineCurrencyDollar } from "react-icons/hi2";
+import { IoIosMenu } from "react-icons/io";
+import NavigationButton from "../navigationButton";
 interface IMenuProps {}
 
 const Menu: React.FunctionComponent<IMenuProps> = (props) => {
@@ -55,10 +56,11 @@ const Menu: React.FunctionComponent<IMenuProps> = (props) => {
       <SheetContent side="left" className="gap-0">
         <SheetHeader>
           <SheetTitle className="flex gap-2 items-center">
-            <Link href={"/"}>
-              <h1 className="cursor-pointer text-primary font-semibold lg:text-3xl text-xl">
-                EGEEX
-              </h1>
+            <Link
+              href={"/"}
+              className="cursor-pointer text-primary font-semibold lg:text-3xl text-xl"
+            >
+              EGEEX
             </Link>
           </SheetTitle>
           <Separator className="" />
@@ -78,22 +80,21 @@ const Menu: React.FunctionComponent<IMenuProps> = (props) => {
             </Link>
             <div className="space-y-2">
               {popularCategories.map((cat) => (
-                <Link href={`/search?query=${cat.name}`}>
-                  <button
-                    className="flex gap-4 items-center"
-                    onClick={() => setOpen(false)}
-                  >
-                    <div className="w-10 h-10">
-                      <img
-                        loading="lazy"
-                        src={cat.image}
-                        alt=""
-                        className="object-contain w-full max-h-full"
-                      />
-                    </div>
-                    <p>{cat.name}</p>
-                  </button>
-                </Link>
+                <NavigationButton
+                  className="flex gap-4 items-center"
+                  onClick={() => setOpen(false)}
+                  href={`/search?query=${cat.name}`}
+                >
+                  <div className="w-10 h-10">
+                    <img
+                      loading="lazy"
+                      src={cat.image}
+                      alt=""
+                      className="object-contain w-full max-h-full"
+                    />
+                  </div>
+                  <p>{cat.name}</p>
+                </NavigationButton>
               ))}
             </div>
           </div>

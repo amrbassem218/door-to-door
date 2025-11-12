@@ -1,8 +1,8 @@
-'use client'
-import Link from "next/link";
+"use client";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import NavigationButton from "../navigationButton";
 interface MobileTopicBarProps {}
 
 const MobileTopicBar: React.FunctionComponent<MobileTopicBarProps> = (
@@ -23,17 +23,16 @@ const MobileTopicBar: React.FunctionComponent<MobileTopicBarProps> = (
   return (
     <div className="flex justify-around text-lg ">
       {tabs.map((tab, i) => (
-        <Link href={`/category/${tabs[i].toLowerCase()}`}>
-          <button
-            key={tab}
-            className={`${
-              activeTab == i ? "font-bold underline underline-offset-3" : ""
-            } text-heading`}
-            onClick={() => setActiveTab(i)}
-          >
-            {tab}
-          </button>
-        </Link>
+        <NavigationButton
+          key={tab}
+          href={`/category/${tabs[i].toLowerCase()}`}
+          className={`${
+            activeTab == i ? "font-bold underline underline-offset-3" : ""
+          } text-heading`}
+          onClick={() => setActiveTab(i)}
+        >
+          {tab}
+        </NavigationButton>
       ))}
     </div>
   );

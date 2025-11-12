@@ -25,7 +25,7 @@ import { Button } from "./button";
 import { supabase } from "@/supabase/supabaseClient";
 import { addProductToCart } from "@/utils/cart-utils";
 import { useUser } from "@/utils/getUser";
-import Link from "next/link";
+import NavigationButton from "../navigationButton";
 interface IProductSideBarProps {
   product: Product;
   measurement: string;
@@ -240,11 +240,14 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
         </div>
         {/* Buy now & Heart */}
         <div className="flex gap-2 w-full">
-          <Link href={"/cart"}>
-            <Button className="m-auto flex-1" onClick={() => handleBuyNow()}>
-              Buy Now
-            </Button>
-          </Link>
+          <NavigationButton
+            href={"/cart"}
+            shadcn={true}
+            className="m-auto flex-1"
+            onClick={() => handleBuyNow()}
+          >
+            Buy Now
+          </NavigationButton>
           <Button
             variant={"outline"}
             className="text-muted w-10 hover:text-red-500"

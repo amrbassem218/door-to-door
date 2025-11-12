@@ -1,3 +1,4 @@
+'use client'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { CartItem, Product } from "@/types/types";
 import { newPrice, unitChange, price, save } from "@/utilities";
@@ -151,7 +152,6 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
         .delete()
         .eq("product_id", product.id);
       if (error) {
-        console.log("can't delete product");
         console.error(error);
       }
     }

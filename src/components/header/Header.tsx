@@ -6,7 +6,7 @@ import Menu from "../home/menu";
 import GoBackButton from "./goBackButton";
 import ChangeInfo from "./changeInfo";
 import Link from "next/link";
-import CartHeader from "./cart";
+import CartHeader from "./cartHeader";
 
 interface IHeaderProps {
   showSearch?: boolean;

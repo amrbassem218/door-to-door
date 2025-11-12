@@ -32,6 +32,7 @@ import { useUser } from "@/utils/getUser";
 import Link from "next/link";
 import { FaChevronDown } from "react-icons/fa";
 import { FiMinus, FiPlus } from "react-icons/fi";
+import NavigationButton from "../navigationButton";
 
 interface ICardSheetProps {
   product: Product;
@@ -176,11 +177,14 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                     {subtotal} {userCurrency}
                   </h3>
                 </div>
-                <Link href={"/cart"}>
-                  <Button variant={"outline"} className="w-full h-7">
-                    Go to Cart
-                  </Button>
-                </Link>
+                <NavigationButton
+                  href={"/cart"}
+                  shadcn={true}
+                  variant={"outline"}
+                  className="w-full h-7"
+                >
+                  Go to Cart
+                </NavigationButton>
               </div>
             </div>
           </SheetHeader>
