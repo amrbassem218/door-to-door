@@ -1,6 +1,7 @@
 'use client'
 import { getProfile } from "@/userContext";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { LuShoppingCart } from "react-icons/lu";
 
@@ -8,8 +9,9 @@ interface ICartHeaderProps {}
 
 const CartHeader: React.FunctionComponent<ICartHeaderProps> = (props) => {
   const userProfile = getProfile();
+  const router = useRouter();
   return (
-    <Link className="flex gap-1 items-center cursor-pointer" href={"/cart"}>
+    <div className="flex gap-1 items-center cursor-pointer" onClick={() => router.push("/cart")}>
       <LuShoppingCart className="text-2xl lg:text-3xl" />
       <div className="flex-col  justify-center items-center hidden md:flex">
         <div className="w-10 h-3 bg-secondary flex items-center justify-center p-2 rounded-md">
@@ -19,7 +21,7 @@ const CartHeader: React.FunctionComponent<ICartHeaderProps> = (props) => {
         </div>
         <button className="text-sm font-semibold ">Cart</button>
       </div>
-    </Link>
+    </div>
   );
 };
 

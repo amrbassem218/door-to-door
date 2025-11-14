@@ -1,3 +1,4 @@
+"use client";
 import type { Currencies } from "@/types/types";
 import * as React from "react";
 
@@ -7,10 +8,10 @@ import { getProfile } from "@/userContext";
 import { camel } from "@/utilities";
 import { useUser } from "@/utils/getUser";
 import { Check } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Flag from "react-world-flags";
 import { toast } from "sonner";
-import Link from "next/link";
 interface ICurrencyProps {}
 
 const Currency: React.FunctionComponent<ICurrencyProps> = () => {
@@ -20,7 +21,7 @@ const Currency: React.FunctionComponent<ICurrencyProps> = () => {
   const [userCurrency, setUserCurrency] = useState<Currencies | undefined>(
     userProfile?.userProfile?.currencies
   );
-
+  const router = useRouter();
   useEffect(() => {
     const getCurrencies = async () => {
       let { data: currencies, error } = await supabase
@@ -42,28 +43,8 @@ const Currency: React.FunctionComponent<ICurrencyProps> = () => {
       }
     };
     getCurrencies();
-
-    // const seenCodes: string[] = [];
-    // const currencies: currenciesDataType[] = [];
-    // for(let country of countries){
-    //   for(let currency of Object.keys(country.currencies)){
-    //     if(!seenCodes.includes(currency)){
-    //       let countryCode = Object.keys(currencyToPrimaryCountry).includes(currency) ? currencyToPrimaryCountry[currency] : country.cca2;
-    //       let currencyData: currenciesDataType = {
-    //         countryCode: countryCode,
-    //         currencyName: country.currencies[currency].name,
-    //         currencyCode: currency
-    //       }
-    //       currencies.push(currencyData);
-    //       seenCodes.push(currency);
-    //     }
-    //   }
-    // }
-    // currencies.sort((a,b) => {
-    //   return a.currencyName.localeCompare(b.currencyName);
-    // })
-    // setCurrenciesData(currencies);
   }, []);
+
   const handleNewCurrencyClick = async (currency: Currencies) => {
     if (userProfile?.userProfile?.id) {
       setUserCurrency(currency);
@@ -84,6 +65,7 @@ const Currency: React.FunctionComponent<ICurrencyProps> = () => {
           description: `changed language to ${currency.currencyName}`,
         });
       }
+      router.push("/account/settings");
     }
   };
   return (
@@ -116,28 +98,26 @@ const Currency: React.FunctionComponent<ICurrencyProps> = () => {
         </div>
         {/* More currencies */}
         {currenciesData.map((currency, i) => (
-          <Link href={"/account/settings"}>
-            <div
-              className="space-y-1"
-              onClick={() => handleNewCurrencyClick(currency)}
-            >
-              {(i === 0 ||
-                (currency.currencyName &&
-                  currenciesData[i - 1]?.currencyName &&
-                  currency.currencyName[0] >
-                    currenciesData[i - 1].currencyName[0])) && (
-                <div className="px-2">
-                  <p className="text-xs text-muted">
-                    {currency.currencyName?.[0] ?? ""}
-                  </p>
-                </div>
-              )}
-              <button className="w-full bg-background px-5 py-2 flex items-center gap-2">
-                <Flag code={currency.countryCode ?? "US"} className="w-7 h-7" />
-                <p>{currency.currencyName}</p>
-              </button>
-            </div>
-          </Link>
+          <div
+            className="space-y-1"
+            onClick={() => handleNewCurrencyClick(currency)}
+          >
+            {(i === 0 ||
+              (currency.currencyName &&
+                currenciesData[i - 1]?.currencyName &&
+                currency.currencyName[0] >
+                  currenciesData[i - 1].currencyName[0])) && (
+              <div className="px-2">
+                <p className="text-xs text-muted">
+                  {currency.currencyName?.[0] ?? ""}
+                </p>
+              </div>
+            )}
+            <button className="w-full bg-background px-5 py-2 flex items-center gap-2">
+              <Flag code={currency.countryCode ?? "US"} className="w-7 h-7" />
+              <p>{currency.currencyName}</p>
+            </button>
+          </div>
         ))}
       </div>
     </div>

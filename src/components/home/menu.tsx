@@ -8,6 +8,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useState } from "react";
 import { BiSupport } from "react-icons/bi";
@@ -48,6 +49,11 @@ const Menu: React.FunctionComponent<IMenuProps> = (props) => {
     },
   ];
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const handleCatClick = (topic: string) => {
+    setOpen(false);
+    router.push(topic);
+  };
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger>
@@ -69,15 +75,13 @@ const Menu: React.FunctionComponent<IMenuProps> = (props) => {
         {/* Popular Categories */}
         <div className="mx-2 space-y-10">
           <div className="space-y-4">
-            <Link href={"/categories"}>
-              <div
-                className="flex justify-between items-center "
-                onClick={() => setOpen(false)}
-              >
-                <h1 className="font-semibold text-xl ">Popular Categories</h1>
-                <FaAngleRight className="text-xl" />
-              </div>
-            </Link>
+            <div
+              className="flex justify-between items-center "
+              onClick={() => handleCatClick("/categories")}
+            >
+              <h1 className="font-semibold text-xl ">Popular Categories</h1>
+              <FaAngleRight className="text-xl" />
+            </div>
             <div className="space-y-2">
               {popularCategories.map((cat) => (
                 <NavigationButton
@@ -98,53 +102,47 @@ const Menu: React.FunctionComponent<IMenuProps> = (props) => {
               ))}
             </div>
           </div>
+        </div>
 
+        {/* Settings */}
+        <div className="mx-2 space-y-4">
+          {/* Settings Menu Header */}
+          <div
+            className="flex justify-between items-center "
+            onClick={() => handleCatClick("/account/settings")}
+          >
+            <h1 className="font-semibold text-xl ">Settings</h1>
+            <FaAngleRight className="text-xl" />
+          </div>
+
+          {/* Settings Menu items */}
           <div className="space-y-4">
-            <Link href={"/account/settings"}>
-              <div
-                className="flex justify-between items-center "
-                onClick={() => setOpen(false)}
-              >
-                <h1 className="font-semibold text-xl ">Settings</h1>
-                <FaAngleRight className="text-xl" />
-              </div>
-            </Link>
-            <div className="space-y-4">
-              <Link href={"/location"}>
-                <div onClick={() => setOpen(false)}>
-                  <button className="flex gap-4 items-center">
-                    <CiLocationOn className="text-2xl " />
-                    <p>Ship to</p>
-                  </button>
-                </div>
-              </Link>
+            <div onClick={() => handleCatClick("/location")}>
+              <button className="flex gap-4 items-center">
+                <CiLocationOn className="text-2xl " />
+                <p>Ship to</p>
+              </button>
+            </div>
 
-              <Link href={"/account/settings/currency"}>
-                <div onClick={() => setOpen(false)}>
-                  <button className="flex gap-4 items-center">
-                    <HiOutlineCurrencyDollar className="text-2xl " />
-                    <p>Currency</p>
-                  </button>
-                </div>
-              </Link>
+            <div onClick={() => handleCatClick("/account/settings/currency")}>
+              <button className="flex gap-4 items-center">
+                <HiOutlineCurrencyDollar className="text-2xl " />
+                <p>Currency</p>
+              </button>
+            </div>
 
-              <Link href={"/account/settings/language"}>
-                <div onClick={() => setOpen(false)}>
-                  <button className="flex gap-4 items-center">
-                    <GrLanguage className="text-xl " />
-                    <p>Language</p>
-                  </button>
-                </div>
-              </Link>
+            <div onClick={() => handleCatClick("/account/settings/language")}>
+              <button className="flex gap-4 items-center">
+                <GrLanguage className="text-xl " />
+                <p>Language</p>
+              </button>
+            </div>
 
-              <Link href={"/support"}>
-                <div onClick={() => setOpen(false)}>
-                  <button className="flex gap-4 items-center">
-                    <BiSupport className="text-xl " />
-                    <p>Contact Support</p>
-                  </button>
-                </div>
-              </Link>
+            <div onClick={() => handleCatClick("/support")}>
+              <button className="flex gap-4 items-center">
+                <BiSupport className="text-xl " />
+                <p>Contact Support</p>
+              </button>
             </div>
           </div>
         </div>

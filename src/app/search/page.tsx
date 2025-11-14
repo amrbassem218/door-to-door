@@ -1,20 +1,18 @@
-'use client'
-import React, { useState, useEffect } from "react";
-import type { ProductFilters, Product } from "@/types/types";
+"use client";
 import { Checkbox } from "@/components/ui/checkbox";
-import { newPrice, price } from "@/utilities";
-import { getProfile } from "@/userContext";
-import { useCurrencyRates } from "@/getRates";
 import { useSearch } from "@/contexts/searchContext";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useCurrencyRates } from "@/getRates";
+import type { Product, ProductFilters } from "@/types/types";
+import { getProfile } from "@/userContext";
+import { newPrice, price } from "@/utilities";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
-interface ISearchPageProps {
-}
+interface ISearchPageProps {}
 
 const SearchPage: React.FunctionComponent<ISearchPageProps> = (props) => {
   const searchParams = useSearchParams();
-  const query = searchParams.get('query');
+  const query = searchParams.get("query");
   // const [searchQuery, setSearchQuery]
   const search = useSearch();
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -54,6 +52,7 @@ const SearchPage: React.FunctionComponent<ISearchPageProps> = (props) => {
     userProfile?.userProfile?.currencies.currencyCode ?? "USD"
   );
   const { rates, loading } = useCurrencyRates();
+  const router = useRouter();
   if (loading) return <p>Loading prices...</p>;
 
   return (
@@ -171,58 +170,57 @@ const SearchPage: React.FunctionComponent<ISearchPageProps> = (props) => {
         {/* Products Grid */}
         <div className="grid grid-cols-12 gap-6 md:col-span-13 col-span-16 max-w-screen">
           {filteredProducts.map((product) => (
-            <Link href={`/product/${product.id}`}>
-              <div
-                key={product.id}
-                className="flex items-center gap-2 md:gap-0 w-full px-2 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer col-span-12"
-              >
-                <div className="w-30 h-30  ">
-                  <img
-                    loading="lazy"
-                    src={product.thumbnail}
-                    alt={product.name}
-                    className="object-contain h-full max-w-full mx-auto"
-                  />
-                </div>
-                <div className="mid:p-4 flex-1">
-                  <h3 className="md:font-semibold md:text-lg text-sm mb-2 line-clamp-2">
-                    {product.name}
-                  </h3>
+            <div
+              key={product.id}
+              onClick={() => router.push("/cart")}
+              className="flex items-center gap-2 md:gap-0 w-full px-2 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer col-span-12"
+            >
+              <div className="w-30 h-30  ">
+                <img
+                  loading="lazy"
+                  src={product.thumbnail}
+                  alt={product.name}
+                  className="object-contain h-full max-w-full mx-auto"
+                />
+              </div>
+              <div className="mid:p-4 flex-1">
+                <h3 className="md:font-semibold md:text-lg text-sm mb-2 line-clamp-2">
+                  {product.name}
+                </h3>
 
-                  <div className="flex items-center gap-2 md:justify-between mb-2">
-                    <span className="md:text-xl text-lg font-bold text-green-600">
-                      {newPrice(product, userCurrency, rates)} {userCurrency}
+                <div className="flex items-center gap-2 md:justify-between mb-2">
+                  <span className="md:text-xl text-lg font-bold text-green-600">
+                    {newPrice(product, userCurrency, rates)} {userCurrency}
+                  </span>
+                  {product.discount && (
+                    <span className="text-sm text-gray-500 line-through">
+                      {price(product, userCurrency, rates)}
                     </span>
-                    {product.discount && (
-                      <span className="text-sm text-gray-500 line-through">
-                        {price(product, userCurrency, rates)}
+                  )}
+                </div>
+                {product.rating && (
+                  <div className="flex items-center mb-2">
+                    <span className="text-yellow-500">★</span>
+                    <span className="ml-1 text-sm">{product.rating}</span>
+                    {product.reviewCount && (
+                      <span className="ml-1 text-sm text-gray-500">
+                        ({product.reviewCount} reviews)
                       </span>
                     )}
                   </div>
-                  {product.rating && (
-                    <div className="flex items-center mb-2">
-                      <span className="text-yellow-500">★</span>
-                      <span className="ml-1 text-sm">{product.rating}</span>
-                      {product.reviewCount && (
-                        <span className="ml-1 text-sm text-gray-500">
-                          ({product.reviewCount} reviews)
-                        </span>
-                      )}
-                    </div>
-                  )}
-                  {product.stockCount !== undefined && (
-                    <p className="text-sm text-red-500 font-medium mb-2">
-                      {product.stockCount <= 0 && "Out of stock"}
-                    </p>
-                  )}
-                  {product.seller && (
-                    <p className="text-sm text-gray-500 hidden md:block">
-                      by {product.seller}
-                    </p>
-                  )}
-                </div>
+                )}
+                {product.stockCount !== undefined && (
+                  <p className="text-sm text-red-500 font-medium mb-2">
+                    {product.stockCount <= 0 && "Out of stock"}
+                  </p>
+                )}
+                {product.seller && (
+                  <p className="text-sm text-gray-500 hidden md:block">
+                    by {product.seller}
+                  </p>
+                )}
               </div>
-            </Link>
+            </div>
           ))}
         </div>
 
@@ -236,7 +234,6 @@ const SearchPage: React.FunctionComponent<ISearchPageProps> = (props) => {
       </div>
     </div>
   );
-
 };
 
 export default SearchPage;

@@ -1,5 +1,4 @@
 "use client";
-import * as React from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,31 +7,31 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { Separator } from "../ui/separator";
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook } from "react-icons/fa";
-import { FaApple } from "react-icons/fa";
-import { FaSquareXTwitter } from "react-icons/fa6";
 import { handleGoogleAuth } from "@/utilities";
+import * as React from "react";
+import { FaAngleRight, FaApple, FaFacebook } from "react-icons/fa";
+import { FaSquareXTwitter } from "react-icons/fa6";
+import { FcGoogle } from "react-icons/fc";
+import { LuUser } from "react-icons/lu";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { FaAngleRight } from "react-icons/fa";
-import { LuUser } from "react-icons/lu";
+import { Input } from "../ui/input";
+import { Separator } from "../ui/separator";
 
 import { useUser } from "@/utils/getUser";
 import { getDisplayName, handleLogout } from "@/utils/user-utils";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface ISignProps {}
 
 const Sign: React.FunctionComponent<ISignProps> = (props) => {
   const user = useUser();
+  const router = useRouter();
   return (
     <div>
       {user ? (
@@ -55,9 +54,7 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
             <DropdownMenuContent>
               <DropdownMenuItem>Profile</DropdownMenuItem>
               <DropdownMenuItem>
-                <Link href={"/add_product"}>
-                  <button className="">Add a product</button>
-                </Link>
+                <button className="" onClick={() => router.push("/add_product")}>Add a product</button>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <button className="text-red-500" onClick={() => handleLogout()}>

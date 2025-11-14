@@ -1,3 +1,4 @@
+"use client";
 import {
   Sheet,
   SheetContent,
@@ -29,7 +30,7 @@ import { useCurrencyRates } from "@/getRates";
 import { getProfile } from "@/userContext";
 import { addProductToCart, getCart } from "@/utils/cart-utils";
 import { useUser } from "@/utils/getUser";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FaChevronDown } from "react-icons/fa";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import NavigationButton from "../navigationButton";
@@ -48,7 +49,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
   const [cartMeasurement, setCartMeasurement] = useState<
     Record<number, string>
   >({});
-
+  const router = useRouter();
   const { rates, loading } = useCurrencyRates();
   const userProfile = getProfile();
   const [userCurrency, setUserCurrency] = useState<string>("USD");
@@ -191,13 +192,13 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
           <ScrollArea className="flex-1 overflow-auto">
             <div className="flex flex-col gap-10 mr-4">
               {cart?.map(({ products: product }, index) => (
-                <Link href={`/product/${product.id}`}>
-                  <div
-                    key={product.id || index}
-                    className="flex hover:bg-background-secondary cursor-pointer items-center h-40 gap-5"
-                  >
-                    {/* Product image */}
-                    <div className="w-20 h-35 flex flex-col justify-center gap-2 items-center py-4">
+                <div
+                  key={product.id || index}
+                  className="flex hover:bg-background-secondary cursor-pointer items-center h-40 gap-5"
+                  onClick={() => router.push(`/product/${product.id}`)}
+                >
+                  {/* Product image */}
+                  <div className="w-20 h-35 flex flex-col justify-center gap-2 items-center py-4">
                       <img
                         loading="lazy"
                         src={product.thumbnail}
@@ -312,7 +313,6 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                       </div>
                     </div>
                   </div>
-                </Link>
               ))}
             </div>
           </ScrollArea>

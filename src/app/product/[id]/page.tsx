@@ -24,7 +24,6 @@ import type { Product, ReviewType } from "@/types/types";
 import { getProfile } from "@/userContext";
 import { camel, measurements, newPrice, unitChange } from "@/utilities";
 import { getProduct } from "@/utils/products-utils";
-import Link from "next/link";
 import * as React from "react";
 import { use, useEffect, useRef, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
@@ -32,6 +31,7 @@ import { FaAngleRight, FaLocationDot } from "react-icons/fa6";
 import { LuShoppingCart } from "react-icons/lu";
 import { Rating } from "react-simple-star-rating";
 import Error from "../../error/page";
+import { useRouter } from "next/navigation";
 
 interface IProductProps {
   params: Promise<{
@@ -227,7 +227,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   if (!product) {
     return <Error />;
   }
-
+  const router = useRouter();
   if (loading) return <p>loading...</p>;
   return (
     <div className="grid grid-cols-32 w-full sm:px-5 sm:py-5">
@@ -341,9 +341,8 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
         {/* Bottom bar for mobile */}
         <div className="sm:hidden fixed bottom-0 left-0 h-12 border-t-1 w-full bg-background flex items-center gap-4 px-2 z-10 ">
           <div className="flex  gap-2">
-            <Link href={"/cart"}>
-              <LuShoppingCart className="text-muted text-2xl" />
-            </Link>
+            <button onClick={() => router.push("/cart")}></button>
+            <LuShoppingCart className="text-muted text-2xl" />
           </div>
           <div className="flex gap-2 w-full">
             <CartSheet product={product} quantity={quantity} styles="w-30" />

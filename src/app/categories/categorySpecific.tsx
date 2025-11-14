@@ -1,3 +1,4 @@
+'use client'
 import * as React from "react";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -11,6 +12,7 @@ import {
 } from "@/components/ui/carousel";
 import { capetalize } from "@/utilities";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 interface ICategoryProps {}
 
 const Category: React.FunctionComponent<ICategoryProps> = (props) => {
@@ -56,7 +58,7 @@ const Category: React.FunctionComponent<ICategoryProps> = (props) => {
         });
     }
   }, [paramCat]);
-
+  const router = useRouter();
   return (
     <div className="mx-5 py-5 space-y-5">
       {category &&
@@ -67,8 +69,7 @@ const Category: React.FunctionComponent<ICategoryProps> = (props) => {
               <Carousel className="w-full max-w-4xl">
                 <CarouselContent className="flex gap-2 ">
                   {sub.products.map((prod, index) => (
-                    <Link href={`/product/${prod.id}`}>
-                      <CarouselItem key={index} className="basis-1/3">
+                      <CarouselItem key={index} className="basis-1/3" onClick={() => router.push(`/product/${prod.id}`)}>
                         <div className="w-30  flex items-center justify-center flex-col text-center">
                           <div className="w-25 h-25 border-2 rounded-full flex items-center justify-center">
                             <img
@@ -83,7 +84,6 @@ const Category: React.FunctionComponent<ICategoryProps> = (props) => {
                           </span>
                         </div>
                       </CarouselItem>
-                    </Link>
                   ))}
                 </CarouselContent>
                 <CarouselPrevious />

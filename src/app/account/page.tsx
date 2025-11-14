@@ -1,8 +1,7 @@
-'use client'
+"use client";
 import MenuItem from "@/components/ui/menuItem";
 import { useUser } from "@/utils/getUser";
 import { getDisplayName } from "@/utils/user-utils";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { FaRegHeart } from "react-icons/fa";
@@ -55,9 +54,9 @@ const Account: React.FunctionComponent<IAccountProps> = (props) => {
       <section className="py-4 px-3 space-y-3 bg-background">
         <ul>
           <li>
-            <Link href={"/account/settings"}>
+            <div onClick={() => router.push("/account/settings")}>
               <MenuItem name="Settings" />
-            </Link>
+            </div>
           </li>
         </ul>
       </section>

@@ -1,10 +1,12 @@
-import * as React from "react";
-import { IoIosArrowBack } from "react-icons/io";
-import { useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+"use client";
 import type { Currencies } from "@/types/types";
 import { getProfile } from "@/userContext";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import * as React from "react";
+import { useEffect, useState } from "react";
+import { IoIosArrowBack } from "react-icons/io";
+import { useLocation } from "react-router-dom";
 
 interface ISettingsProps {}
 
@@ -14,6 +16,7 @@ const Settings: React.FunctionComponent<ISettingsProps> = (props) => {
   const [userCountry, setUserCountry] = useState(egypt);
   const userProfile = getProfile();
   const [userCurrency, setUserCurrency] = useState<Currencies>();
+  const router = useRouter();
   useEffect(() => {
     if (userProfile) {
       console.log("user_profile: ", userProfile);
@@ -33,31 +36,26 @@ const Settings: React.FunctionComponent<ISettingsProps> = (props) => {
       {/* content */}
       <div>
         {/* Profile */}
-        <Link href={"/account/settings/profile"}>
-          <div className="border-b-1 px-5 py-3">
-            <p className="font-medium">Profile</p>
-          </div>
-        </Link>
+        <div
+          className="border-b-1 px-5 py-3"
+          onClick={() => router.push("/account/settings/profile")}
+        >
+          <p className="font-medium">Profile</p>
+        </div>
 
         {/* Currency */}
-        <Link href={"/account/settings/currency"}>
-          <div className="border-b-1 px-5 py-3 flex justify-between">
-            <p className="font-medium">Currency</p>
-            <p className="text-muted">{userCurrency?.currencyCode}</p>
-          </div>
-        </Link>
+        <div
+          className="border-b-1 px-5 py-3 flex justify-between"
+          onClick={() => router.push("/account/settings/currency")}
+        >
+          <p className="font-medium">Currency</p>
+          <p className="text-muted">{userCurrency?.currencyCode}</p>
+        </div>
 
         {/* Ship to */}
-        <Link href={"/location"}>
-          <div className="border-b-1 px-5 py-3">
-            <p className="font-medium">Ship to</p>
+        <div className="border-b-1 px-5 py-3" onClick={() => router.push("/location")}>
+          <p className="font-medium">Ship to</p>
           </div>
-        </Link>
-
-        {/* Profile */}
-        {/* <div className='border-b-1 px-5 py-3' onClick={() => navigate('/account/settings/profile')}>
-          <p className='font-medium'>Profile</p>
-        </div> */}
       </div>
     </div>
   );

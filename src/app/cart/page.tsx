@@ -1,22 +1,22 @@
-'use client'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { CartItem, Product } from "@/types/types";
-import { newPrice, unitChange, price, save } from "@/utilities";
-import * as React from "react";
-import { useState, useEffect } from "react";
-import { MdDeleteOutline } from "react-icons/md";
+"use client";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/supabase/supabaseClient";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { supabase } from "@/supabase/supabaseClient";
+import type { CartItem, Product } from "@/types/types";
+import { newPrice, price, save, unitChange } from "@/utilities";
+import * as React from "react";
+import { useEffect, useState } from "react";
+import { MdDeleteOutline } from "react-icons/md";
 
 import MeasurementChange from "@/components/ui/measurementChange";
 import QuantityChange from "@/components/ui/quantityChange";
-import { getProfile } from "@/userContext";
 import { useCurrencyRates } from "@/getRates";
-import { useUser } from "@/utils/getUser";
+import { getProfile } from "@/userContext";
 import { cleanupDuplicateCarts, getCart } from "@/utils/cart-utils";
-import Link from "next/link";
+import { useUser } from "@/utils/getUser";
+import { useRouter } from "next/navigation";
 
 interface ICartProps {}
 
@@ -30,7 +30,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
   const [cartMeasurement, setCartMeasurement] = useState<
     Record<number, string>
   >({});
-
+  const router = useRouter();
   const { rates, loading } = useCurrencyRates();
   const userProfile = getProfile();
   const [userCurrency, setUserCurrency] = useState(
@@ -188,28 +188,27 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                           <div
                             key={index}
                             className="flex gap-3 w-full p-3 border border-gray-200 rounded-lg transition-all"
+                            onClick={() =>
+                              router.push(`/product/${product.id}`)
+                            }
                           >
-                            <Link href={`/product/${product.id}`}>
-                              <div className="w-15 h-20 flex-shrink-0 flex items-center justify-center">
-                                <img
-                                  loading="lazy"
-                                  src={product.thumbnail}
-                                  alt=""
-                                  className="object-contain max-w-full h-full"
-                                />
-                              </div>
-                            </Link>
+                            <div className=" w-15 h-20 flex-shrink-0 flex items-center justify-center">
+                              <img
+                                loading="lazy"
+                                src={product.thumbnail}
+                                alt=""
+                                className="object-contain max-w-full h-full"
+                              />
+                            </div>
 
-                            <div className="flex flex-col flex-1 min-w-0">
+                            <div className="flex flex-col flex-1 relative min-w-0">
                               <div className="flex justify-between items-center w-full">
-                                <Link href={`/product/${product.id}`}>
-                                  <div className="flex-1 min-w-0">
-                                    <h1 className="truncate text-sm">
-                                      {product.name}
-                                    </h1>
-                                  </div>
-                                </Link>
-                                <div className="flex gap-2 items-center flex-shrink-0">
+                                <div className="flex-1 min-w-0 ">
+                                  <h1 className="truncate text-sm">
+                                    {product.name}
+                                  </h1>
+                                </div>
+                                <div className="absolute right-0 flex gap-2 items-center flex-shrink-0" onClick={(e) => e.stopPropagation()}>
                                   {/* Measurement change */}
                                   <div>
                                     <MeasurementChange
@@ -245,33 +244,11 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                                   />
                                 </div>
                               </div>
-                              <Link href={`/product/${product.id}`}>
-                                <div>
-                                  {/* Price */}
-                                  <div className="flex gap-1 items-center">
-                                    <h1 className="text-md font-semibold ">
-                                      {newPrice(
-                                        product,
-                                        userCurrency,
-                                        rates,
-                                        cartQuantity[id(product)],
-                                        cartMeasurement[id(product)]
-                                      )}{" "}
-                                      {userCurrency}
-                                    </h1>
-                                    <p className="line-through text-sm text-muted">
-                                      {price(
-                                        product,
-                                        userCurrency,
-                                        rates,
-                                        cartQuantity[id(product)],
-                                        cartMeasurement[id(product)]
-                                      )}
-                                    </p>
-                                  </div>
-                                  <p className="text-xs text-red-600 font-medium">
-                                    Save{" "}
-                                    {save(
+                              <div className=" ">
+                                {/* Price */}
+                                <div className="flex gap-1 items-center">
+                                  <h1 className="text-md font-semibold ">
+                                    {newPrice(
                                       product,
                                       userCurrency,
                                       rates,
@@ -279,12 +256,32 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                                       cartMeasurement[id(product)]
                                     )}{" "}
                                     {userCurrency}
-                                  </p>
-                                  <p className="text-muted text-xs">
-                                    Shipping: 543 {userCurrency}
+                                  </h1>
+                                  <p className="line-through text-sm text-muted">
+                                    {price(
+                                      product,
+                                      userCurrency,
+                                      rates,
+                                      cartQuantity[id(product)],
+                                      cartMeasurement[id(product)]
+                                    )}
                                   </p>
                                 </div>
-                              </Link>
+                                <p className="text-xs text-red-600 font-medium">
+                                  Save{" "}
+                                  {save(
+                                    product,
+                                    userCurrency,
+                                    rates,
+                                    cartQuantity[id(product)],
+                                    cartMeasurement[id(product)]
+                                  )}{" "}
+                                  {userCurrency}
+                                </p>
+                                <p className="text-muted text-xs">
+                                  Shipping: 543 {userCurrency}
+                                </p>
+                              </div>
                             </div>
                           </div>
                         )
