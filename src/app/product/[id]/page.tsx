@@ -1,47 +1,46 @@
-'use client'
-import { ScrollArea } from "@/components/ui/scroll-area";
-import * as React from "react";
-import { Rating } from "react-simple-star-rating";
-import { use, useState, useEffect, useRef } from "react";
-import { FaAngleRight } from "react-icons/fa6";
+"use client";
+import { Button } from "@/components/ui/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import CartSheet from "@/components/ui/cartSheet";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { FaChevronDown } from "react-icons/fa";
-import { FaLocationDot } from "react-icons/fa6";
-import { camel, measurements, newPrice, unitChange } from "@/utilities";
-import type { ReviewType, Product } from "@/types/types";
-import Error from "../../error/page";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-import ProductSideBar from "@/components/ui/productSideBar";
-import { LuShoppingCart } from "react-icons/lu";
-import CartSheet from "@/components/ui/cartSheet";
 import ProductHighLight from "@/components/ui/productHighlightSection";
-import SimialrProducts from "@/components/ui/similarProducts";
-import { getProfile } from "@/userContext";
-import { useCurrencyRates } from "@/getRates";
-import { Separator } from "@/components/ui/separator";
-import { supabase } from "@/supabase/supabaseClient";
+import ProductSideBar from "@/components/ui/productSideBar";
 import Review from "@/components/ui/review";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import SimialrProducts from "@/components/ui/similarProducts";
+import { useCurrencyRates } from "@/getRates";
+import { supabase } from "@/supabase/supabaseClient";
+import type { Product, ReviewType } from "@/types/types";
+import { getProfile } from "@/userContext";
+import { camel, measurements, newPrice, unitChange } from "@/utilities";
 import { getProduct } from "@/utils/products-utils";
 import Link from "next/link";
+import * as React from "react";
+import { use, useEffect, useRef, useState } from "react";
+import { FaChevronDown } from "react-icons/fa";
+import { FaAngleRight, FaLocationDot } from "react-icons/fa6";
+import { LuShoppingCart } from "react-icons/lu";
+import { Rating } from "react-simple-star-rating";
+import Error from "../../error/page";
 
 interface IProductProps {
   params: Promise<{
     id: string;
-  }>
+  }>;
 }
 
-const ProductListing: React.FunctionComponent<IProductProps> = ({params}) => {
-  const {id} = use(params);
+const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
+  const { id } = use(params);
   const [activeTab, setActiveTab] = useState("Customer Reviews");
   const [reviewSort, setReviewSort] = useState("Most relevant");
   const [product, setProduct] = useState<Product>();
@@ -275,8 +274,11 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({params}) => {
             <div className="">
               <Carousel className="w-full h-70 border-1 sm:hidden overflow-visible">
                 <CarouselContent className="flex gap-2">
-                  {product.images.map((image) => (
-                    <CarouselItem className="basis-[80%] h-70 shrink-0 flex items-center justify-center">
+                  {product.images.map((image, i) => (
+                    <CarouselItem
+                      key={i}
+                      className="basis-[80%] h-70 shrink-0 flex items-center justify-center"
+                    >
                       <img
                         loading="lazy"
                         src={image}
@@ -342,11 +344,6 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({params}) => {
             <Link href={"/cart"}>
               <LuShoppingCart className="text-muted text-2xl" />
             </Link>
-
-            {/* <QuantityChange handleQuantityChange={handleQuantityChange} value={quantity} mobile={true} styles='w-25'/> */}
-
-            {/* Measurement */}
-            {/* <MeasurementChange product={product} label={measurement} handleMeasurementChange={handleMeasurementChange} styles='h-7 w-17' /> */}
           </div>
           <div className="flex gap-2 w-full">
             <CartSheet product={product} quantity={quantity} styles="w-30" />
@@ -370,14 +367,15 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({params}) => {
               "Specifications",
               "Full Description",
               "About Store",
-            ].map((e) => {
+            ].map((e, i) => {
               return e == activeTab ? (
-                <li className="flex items-center text-black font-bold ">
+                <li key={i} className="flex items-center text-black font-bold ">
                   <FaLocationDot size={15} />
                   {e}
                 </li>
               ) : (
                 <li
+                  key={i}
                   onClick={() => handleTabClick(e)}
                   className="hover:text-secondary transition-colors"
                 >

@@ -1,7 +1,9 @@
+'use client'
 import MenuItem from "@/components/ui/menuItem";
 import { useUser } from "@/utils/getUser";
 import { getDisplayName } from "@/utils/user-utils";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { FaRegHeart } from "react-icons/fa";
 import { LuShoppingCart } from "react-icons/lu";
@@ -11,7 +13,7 @@ interface IAccountProps {}
 
 const Account: React.FunctionComponent<IAccountProps> = (props) => {
   const user = useUser();
-
+  const router = useRouter();
   return (
     <div className="space-y-5 bg-gray-100">
       {/* Account info */}

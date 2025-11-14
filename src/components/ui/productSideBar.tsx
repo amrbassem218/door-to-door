@@ -132,9 +132,9 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
         </p>
         <Popover>
           <PopoverTrigger>
-            <button className="text-primary text-left hover:underline decoration-1 cursor-pointer">
+            <div className="text-primary text-left hover:underline decoration-1 cursor-pointer">
               International Returns
-            </button>
+            </div>
           </PopoverTrigger>
           <PopoverContent>
             <h1 className="font-medium">Return this item </h1>
@@ -185,14 +185,13 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
           <div>
             {/* <MeasurementChange handleMeasurementChange={handleMeasurementChange} label={measurement} product={product} styles='w-20 h-10'/> */}
             <DropdownMenu>
-              <DropdownMenuTrigger className="m-auto">
-                <Button
-                  variant={"link"}
-                  className="text-heading decoration-0 bg-background p-1 px-2 rounded-lg border-gray-300 border-1 flex items-center gap-4 hover:bg-gray-100"
+              <DropdownMenuTrigger  className="m-auto">
+                <div
+                  className="text-sm text-heading decoration-0 bg-background p-1 px-2 rounded-lg border-gray-300 border-1 flex items-center gap-4 hover:bg-gray-100"
                 >
                   Size: {measurement}
                   <FaChevronDown className="text-muted text-sm" />
-                </Button>
+                </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="hover:bg-gray-100">
                 {measurements.map((mes) => (

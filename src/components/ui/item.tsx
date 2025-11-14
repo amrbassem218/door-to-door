@@ -1,8 +1,10 @@
+'use client'
 import { useCurrencyRates } from "@/getRates";
 import type { Product } from "@/types/types";
 import { getProfile } from "@/userContext";
 import { newPrice, price, save } from "@/utilities";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 
 import { useState } from "react";
@@ -18,10 +20,11 @@ const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
   const [userCurrency, setUserCurrency] = useState(
     userProfile?.userProfile?.currencies.currencyCode ?? "USD"
   );
+  const router = useRouter();
   if (loading) return <p>Loading prices...</p>;
   return (
-    <Link href={`/product/${item.id}`} className={`${col}`}>
       <div
+        onClick={() => router.push(`/product/${item.id}`)}
         className={` border-1 rounded-lg transition-transform duration-200 ease-in-out hover:scale-105 cursor-pointer bg-background ${style} px-2 w-40`}
       >
         {/* Item Image */}
@@ -54,7 +57,6 @@ const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
           </p>
         </div>
       </div>
-    </Link>
   );
 };
 

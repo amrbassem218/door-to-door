@@ -1,6 +1,7 @@
+"use client";
 import { supabase } from "@/supabase/supabaseClient";
 import type { Product } from "@/types/types";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import Item from "./item";
@@ -11,7 +12,7 @@ interface IAppProps {
 
 const SimialrProducts: React.FunctionComponent<IAppProps> = ({ product }) => {
   const [similarProducts, setSimilarProducts] = useState<Product[]>();
-
+  const router = useRouter();
   useEffect(() => {
     if (product) {
       const getSimilarProds = async () => {
@@ -45,11 +46,9 @@ const SimialrProducts: React.FunctionComponent<IAppProps> = ({ product }) => {
         <div className="grid grid-cols-12 gap-5">
           {similarProducts &&
             similarProducts.map((item, i) => (
-              <Link href={`/product/${item.id}`}>
-                <div className="lg:col-span-2 col-span-6">
-                  <Item item={item} />
-                </div>
-              </Link>
+              <div key={`${item.name}-${i}`} className="lg:col-span-2 col-span-6" onClick={() => router.push(`/product/${item.id}`)}>
+                <Item item={item} />
+              </div>
             ))}
         </div>
       </section>
