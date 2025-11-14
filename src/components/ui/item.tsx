@@ -25,7 +25,7 @@ const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
   return (
       <div
         onClick={() => router.push(`/product/${item.id}`)}
-        className={` border-1 rounded-lg transition-transform duration-200 ease-in-out hover:scale-105 cursor-pointer bg-background ${style} px-2 w-40`}
+        className={`${col} border-1 rounded-lg transition-transform duration-200 ease-in-out hover:scale-105 cursor-pointer bg-background ${style} px-2 w-40`}
       >
         {/* Item Image */}
         <div className="h-24 rounded-t-lg flex items-center justify-center overflow-hidden ">

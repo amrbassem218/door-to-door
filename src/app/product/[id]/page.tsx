@@ -58,7 +58,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   const specificationsRef = useRef<HTMLElement>(null);
   const descriptionRef = useRef<HTMLElement>(null);
   const storeRef = useRef<HTMLElement>(null);
-
+  const router = useRouter();
   useEffect(() => {
     setUserCurrency(userProfile?.userProfile?.currencies.currencyCode ?? "USD");
   }, [userProfile?.userProfile?.currencies.currencyCode]);
@@ -227,7 +227,6 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   if (!product) {
     return <Error />;
   }
-  const router = useRouter();
   if (loading) return <p>loading...</p>;
   return (
     <div className="grid grid-cols-32 w-full sm:px-5 sm:py-5">

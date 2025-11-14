@@ -298,8 +298,8 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                   <ScrollArea className="w-full mt-2 overflow-auto">
                     <div className="flex gap-3 ">
                       {cartItems &&
-                        cartItems.map(({ products: product }) => (
-                          <div className="w-10 h-15  overflow-auto flex items-center justify-center">
+                        cartItems.map(({ products: product }, i) => (
+                          <div key={`${product.name}-${i}`} className="w-10 h-15  overflow-auto flex items-center justify-center">
                             <img
                               loading="lazy"
                               src={product.thumbnail}
@@ -352,8 +352,8 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                 </CardHeader>
                 <CardContent>
                   <div className="flex gap-2">
-                    {paymentOptions.map((pay) => (
-                      <div className="p-1 w-7 h-7 border-1 flex items-center justify-center">
+                    {paymentOptions.map((pay,i) => (
+                      <div key={i} className="p-1 w-7 h-7 border-1 flex items-center justify-center">
                         <img
                           loading="lazy"
                           src={pay}
