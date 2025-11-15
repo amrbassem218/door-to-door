@@ -6,12 +6,10 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
-import { useLocation } from "react-router-dom";
 
 interface ISettingsProps {}
 
 const Settings: React.FunctionComponent<ISettingsProps> = (props) => {
-  const location = useLocation();
   const egypt = { code: "EG", name: "Egypt" };
   const [userCountry, setUserCountry] = useState(egypt);
   const userProfile = getProfile();

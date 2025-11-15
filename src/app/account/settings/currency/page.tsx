@@ -65,7 +65,7 @@ const Currency: React.FunctionComponent<ICurrencyProps> = () => {
           description: `changed language to ${currency.currencyName}`,
         });
       }
-      router.push("/account/settings");
+      router.back();
     }
   };
   return (
@@ -101,6 +101,7 @@ const Currency: React.FunctionComponent<ICurrencyProps> = () => {
           <div
             className="space-y-1"
             onClick={() => handleNewCurrencyClick(currency)}
+            key={i}
           >
             {(i === 0 ||
               (currency.currencyName &&

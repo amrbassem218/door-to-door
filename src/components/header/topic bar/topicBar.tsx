@@ -1,5 +1,6 @@
 import * as React from "react";
 import CategoriesListTopicBar from "./categoriesList";
+import NavigationButton from "@/components/navigationButton";
 interface ITopicBarProps {}
 
 const TopicBar: React.FunctionComponent<ITopicBarProps> = (props) => {
@@ -16,12 +17,13 @@ const TopicBar: React.FunctionComponent<ITopicBarProps> = (props) => {
       <CategoriesListTopicBar/>      
       <div className="flex gap-5 items-center">
         {popularCategories.map((cat) => (
-          <button
+          <NavigationButton
             key={cat}
             className=" flex items-center justify-center p-2 rounded-sm hover:text-primary-foreground/90"
+            href={`/search?query=${cat}`}
           >
             <p>{cat}</p>
-          </button>
+          </NavigationButton>
         ))}
       </div>
     </div>

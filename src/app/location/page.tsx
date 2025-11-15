@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useRef, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
-import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
 // Define libraries array outside component to prevent re-renders
 const libraries: "places"[] = ["places"];
@@ -17,11 +16,9 @@ const libraries: "places"[] = ["places"];
 const LocationPage: React.FunctionComponent = () => {
   const [position, setPosition] = useState<pos | null>(null); // Changed from undefined to null
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
-
-  const location = useLocation();
-  const from = (location.state as { from?: string } | null)?.from || "/";
-  const user = useUser();
   const router = useRouter();
+
+  const user = useUser();
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "",
     libraries, // Use the constant defined outside
@@ -39,7 +36,7 @@ const LocationPage: React.FunctionComponent = () => {
         console.error("can't update user location", error);
         toast.error("Failed to update location");
       } else {
-        router.push(from);
+        router.back();
         toast("Location updated successfully");
       }
     } else if (!position) {
@@ -126,7 +123,7 @@ const LocationPage: React.FunctionComponent = () => {
         <Button
           variant="outline"
           className="flex-1 h-10 border"
-          onClick={() => router.push(from)}
+          onClick={() => router.back()}
         >
           Cancel
         </Button>

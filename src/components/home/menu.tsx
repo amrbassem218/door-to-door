@@ -83,11 +83,12 @@ const Menu: React.FunctionComponent<IMenuProps> = (props) => {
               <FaAngleRight className="text-xl" />
             </div>
             <div className="space-y-2">
-              {popularCategories.map((cat) => (
+              {popularCategories.map((cat,i) => (
                 <NavigationButton
                   className="flex gap-4 items-center"
                   onClick={() => setOpen(false)}
                   href={`/search?query=${cat.name}`}
+                  key={i}
                 >
                   <div className="w-10 h-10">
                     <img

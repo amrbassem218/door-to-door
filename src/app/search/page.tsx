@@ -172,7 +172,7 @@ const SearchPage: React.FunctionComponent<ISearchPageProps> = (props) => {
           {filteredProducts.map((product) => (
             <div
               key={product.id}
-              onClick={() => router.push("/cart")}
+              onClick={() => router.push(`/product/${product.id}`)}
               className="flex items-center gap-2 md:gap-0 w-full px-2 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer col-span-12"
             >
               <div className="w-30 h-30  ">
