@@ -37,13 +37,25 @@ import { z } from "zod";
 // TODO: Add minimum order Field
 interface IAddProductProps {}
 export const schema = z.object({
-  name: z.string().min(20).max(200),
-  description: z.string().min(1),
+  name: z
+    .string()
+    .min(
+      20,
+      "Too short! It should have at least 20 chars. A detailed title helps product's SEO"
+    )
+    .max(200, "Too Long! Limit is 200 characters"),
+  description: z.string().min(20, "Too short! It should have at least 20 chars. A detailed description helps product's SEO"),
   specifications: z
     .array(
       z.object({
-        name: z.string().min(1).max(50),
-        description: z.string().min(1).max(400),
+        name: z
+          .string()
+          .min(1, "Too short! It should have at least 1 character")
+          .max(50, "Too long! Limit is 50 chars"),
+        description: z
+          .string()
+          .min(1, "Too short! It should have at least 1 character")
+          .max(400, "Too long! Limit is 400 chars"),
       })
     )
     .min(1)
