@@ -1,5 +1,5 @@
-import * as React from "react";
 import Hero from "@/components/home/hero";
+import ListProd from "@/components/home/ListProds";
 import {
   Card,
   CardContent,
@@ -7,8 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import ListProd from "@/components/home/ListProds";
-import "../App.css"
+import * as React from "react";
+import "../App.css";
 export function generateStaticParams() {
   return [{ slug: [""] }];
 }
@@ -41,7 +41,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                  <ListProd limit={2} size="large" />
+                <ListProd limit={2} size="large" />
               </CardContent>
             </Card>
 
@@ -58,7 +58,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                  <ListProd limit={2} size="large" />
+                <ListProd limit={2} size="large" />
               </CardContent>
             </Card>
 
@@ -75,7 +75,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                  <ListProd limit={2} size="large" />
+                <ListProd limit={2} size="large" />
               </CardContent>
             </Card>
           </div>
@@ -84,7 +84,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
         {/* More to love */}
         <section className="space-y-7">
           <h1 className="text-center text-3xl font-bold ">More to love</h1>
-            <ListProd size="small" />
+          <ListProd size="small" />
         </section>
       </div>
     </div>

@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
-import Providers from "./providers";
-import TopBar from "@/components/ui/topbar";
 import Header from "@/components/header/Header";
-import "../index.css";
+import type { Metadata } from "next";
 import "../App.css";
+import "../index.css";
+import Providers from "./providers";
+import { Toaster } from "sonner";
 export const metadata: Metadata = {
   title: "EGEEX",
   description: "The first global egyptian market",
@@ -19,10 +19,11 @@ export default function RootLayout({
       <body>
         <Providers>
           <div>
-            <TopBar />
+            {/* <TopBar /> */}
             <Header />
             {children}
           </div>
+          <Toaster/>
         </Providers>
       </body>
     </html>

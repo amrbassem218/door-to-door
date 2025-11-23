@@ -1,23 +1,5 @@
-'use client'
-import * as React from "react";
+"use client";
 import { Button } from "@/components/ui/button";
-
-
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-
-import { z } from "zod";
 import {
   Card,
   CardContent,
@@ -25,55 +7,72 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
 import { DragDropUploader } from "@/components/ui/dragDroupUpLoader";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/supabase/supabaseClient";
-
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as React from "react";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { FaPlus } from "react-icons/fa";
+import { toast } from "sonner";
+import { z } from "zod";
+// TODO: Add minimum order Field
 interface IAddProductProps {}
 export const schema = z.object({
-  createdAt: z.string(),
-  description: z.string().nullable(),
-  specifications: z.string().nullable(),
-  discount: z.number(),
-  displayName: z.string().nullable(),
-  id: z.number(),
-  minOrder: z.number().nullable(),
-  name: z.string(),
-  price: z.number().nullable(),
-  priceAfter: z.number().nullable(),
-  rating: z.number().nullable(),
-  reviewCount: z.number().nullable(),
-  seller: z.string().nullable(),
-  sellerId: z.number().nullable(),
-  stockCount: z.number().nullable(),
-  subCategory: z.number().nullable(),
-  tags: z.array(z.string()).nullable(),
+  name: z.string().min(20).max(200),
+  description: z.string().min(1),
+  specifications: z.string().min(1).nullable(),
+  minOrder: z.number().min(1).nullable(),
+  priceBefore: z.number().min(0),
+  priceAfter: z.number().min(0).nullable(),
+  stockCount: z.number().min(1),
+  tags: z.array(z.string().min(1).max(100)).min(2, "Product must contain at least 2 tags"),
+  thumbnail: z.instanceof(File).nullable(),
+  gallery: z.array(z.instanceof(File).nullable()).nullable(),
 });
 type zodSchema = z.infer<typeof schema>;
 // const R2_ACCOUNT_ID = process.env.
 const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [images, setImages] = useState<File[]>([]);
+  const FamousTags = [
+    "Vegetables",
+    "Fruits",
+    "T-shirts",
+    "Sweaters",
+    "Pots",
+    "Carpet",
+    "Pottery",
+    "Jewelry",
+    "antique",
+    "Fresh",
+    "Frozen",
+    "Furniture",
+    "Chair",
+  ];
   const form = useForm<zodSchema>({
     resolver: zodResolver(schema),
     defaultValues: {
-      createdAt: "",
-      description: "",
-      discount: 20,
-      displayName: "",
-      id: 0,
-      minOrder: 20,
       name: "",
-      price: 400,
-      rating: 1,
-      reviewCount: 0,
-      seller: "Lorem ipsum dolor sit.",
-      sellerId: 2,
+      description: "",
       specifications: "",
-      stockCount: 200,
-      subCategory: null,
+      minOrder: 1,
+      priceBefore: 0,
+      priceAfter: 0,
+      stockCount: 1,
       tags: [],
-      priceAfter: null,
+      thumbnail: null,
+      gallery: null,
     },
   });
 
@@ -137,24 +136,19 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
         created_at: new Date().toISOString(),
         description: values.description,
         discount:
-          (((values.price ?? 0) - (values.priceAfter ?? 0)) /
-            (values.price == 0 ? 1 : values.price ?? 1)) *
+          (((values.priceBefore ?? 0) - (values.priceAfter ?? 0)) /
+            (values.priceBefore == 0 ? 1 : values.priceBefore ?? 1)) *
           100,
-        display_name: values.displayName,
-        images: imageUrls.length > 0 ? imageUrls : null,
+        // display_name: values.displayName,
         min_order: values.minOrder,
         name: values.name,
-        price: values.price,
-        price_after: values.priceAfter,
-        rating: values.rating,
-        review_count: values.reviewCount,
-        seller: values.seller,
-        seller_id: values.sellerId,
+        price_before: values.priceBefore,
+        price_after: values.priceAfter ? values.priceAfter : values.priceBefore,
         specifications: values.specifications,
         stock_count: values.stockCount,
-        sub_category: values.subCategory,
-        tags: values.tags && values.tags.length > 0 ? values.tags : null,
+        tags: values.tags,
         thumbnail: thumbnailUrl,
+        gallery: imageUrls.length > 0 ? imageUrls : null,
       };
 
       console.log("Product data to insert:", productData);
@@ -163,15 +157,65 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
 
       if (error) throw error;
 
-      alert("✅ Product created successfully!");
+      // alert("✅ Product created successfully!");
+      toast.success("Product created successfully!");
       form.reset();
       setImages([]);
       setThumbnail(null);
     } catch (err: any) {
-      console.error("❌ Error creating product:", err.message);
-      alert("❌ Failed to create product: " + err.message);
+      console.error("Error creating product:", err.message);
+      toast.error(`Failed to create product: ${err.message}`);
     }
   };
+
+  const handleTagClick = (tag: string) => {
+    let tags = form.getValues("tags");
+    if (tags.includes(tag)) {
+      toast.error("Tag already included", {
+        description:
+          "The tag you tried to add is already included for this product",
+      });
+    } else {
+      tags.push(tag);
+      form.setValue("tags", tags);
+    }
+  };
+
+  const handleNumberFieldMin = (
+    name: string,
+    onChange: (num: number) => void,
+    inp: string,
+    minNumber?: number
+  ) => {
+    let num = parseInt(inp);
+    let isLessThanMin = false
+    if (minNumber) {
+      if (num < minNumber) {
+        num = minNumber;
+        form.setError(name as any, {
+          type: "manual",
+          message: `${name} must be at least ${minNumber ?? 0}`,
+        });
+        isLessThanMin = true;
+      }
+    } else {
+      if (num < 0) {
+        num = 0;
+        form.setError(name as any, {
+          type: "manual",
+          message: `${name} must be positive`,
+        });
+        isLessThanMin = true;
+      }
+    }
+    if(!isLessThanMin){
+      form.clearErrors(name as any);
+    }
+    if (typeof onChange == "function") {
+      onChange(num);
+    }
+  };
+
   return (
     <div className="w-full h-full">
       <div className="w-full flex justify-center items-center">
@@ -183,286 +227,248 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(handleCreateProductSubmit)}
-                className="space-y-3"
-              >
-                <FormField
+            <form
+              onSubmit={form.handleSubmit(handleCreateProductSubmit)}
+              className="space-y-3"
+            >
+              <FieldGroup>
+                <Controller
                   control={form.control}
                   name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Product Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder="Enter product name"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldContent>
+                        <FieldLabel>Product Name</FieldLabel>
+                        <FieldDescription>
+                          Enter the name in full details. This will help appear
+                          more on search results
+                        </FieldDescription>
+                      </FieldContent>
+                      <Input
+                        type="text"
+                        placeholder="Enter product name"
+                        className="border border-border"
+                        {...field}
+                        aria-invalid={fieldState.invalid}
+                      />
+                      <FieldError
+                        errors={[{ message: fieldState.error?.message }]}
+                      />
+                    </Field>
                   )}
                 />
-
-                <FormField
+                <Controller
                   control={form.control}
                   name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Enter product description"
-                          {...field}
-                          className="resize-none overflow-auto h-20"
-                          value={field.value ?? ""}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldContent>
+                        <FieldLabel>Description</FieldLabel>
+                      </FieldContent>
+                      <Textarea
+                        placeholder="Enter product description"
+                        {...field}
+                        className="resize-none overflow-auto h-20 border border-border"
+                        value={field.value ?? ""}
+                        aria-invalid={fieldState.invalid}
+                      />
+                      <FieldError
+                        errors={[{ message: fieldState.error?.message }]}
+                      />
+                    </Field>
                   )}
                 />
-
-                <FormField
+                <Controller
                   control={form.control}
                   name="specifications"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Specification</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Enter product specifcations"
-                          {...field}
-                          className="resize-none overflow-auto h-20"
-                          value={field.value ?? ""}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel>Specification</FieldLabel>
+                      <Textarea
+                        placeholder="Enter product specifcations"
+                        {...field}
+                        className="resize-none overflow-auto h-20 border border-border"
+                        value={field.value ?? ""}
+                        aria-invalid={fieldState.invalid}
+                      />
+                      <FieldError
+                        errors={[{ message: fieldState.error?.message }]}
+                      />
+                    </Field>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="price"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Price</FormLabel>
-                      <FormControl>
+                <FieldGroup className="grid grid-cols-12">
+                  <Controller
+                    control={form.control}
+                    name="priceBefore"
+                    render={({ field, fieldState }) => (
+                      <Field className="col-span-6">
+                        <FieldLabel>Price Before Discount</FieldLabel>
                         <Input
                           type="number"
-                          placeholder="Enter product price"
+                          placeholder="Enter product price before the discount"
                           {...field}
+                          className="border border-border"
                           onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value))
+                            handleNumberFieldMin(
+                              field.name,
+                              field.onChange,
+                              e.target.value
+                            )
                           }
                           value={field.value ?? ""}
+                          aria-invalid={fieldState.invalid}
                         />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        <FieldError
+                          errors={[{ message: fieldState.error?.message }]}
+                        />
+                      </Field>
+                    )}
+                  />
 
-                <FormField
-                  control={form.control}
-                  name="priceAfter"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Price After Discount</FormLabel>
-                      <FormControl>
+                  <Controller
+                    control={form.control}
+                    name="priceAfter"
+                    render={({ field, fieldState }) => (
+                      <Field className="col-span-6">
+                        <FieldLabel>
+                          Price After Discount{" "}
+                          <span className="text-sm text-text/60">
+                            (optional)
+                          </span>
+                        </FieldLabel>
                         <Input
                           type="number"
                           placeholder="Enter product price After discount"
                           {...field}
+                          className="border border-border"
                           onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value))
+                            handleNumberFieldMin(
+                              field.name,
+                              field.onChange,
+                              e.target.value
+                            )
                           }
                           value={field.value ?? ""}
+                          aria-invalid={fieldState.invalid}
                         />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* 
-          <FormField
-            control={form.control}
-            name="discount"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Discount (%)</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Enter discount"
-                    {...field}
-                    onChange={(e) => field.onChange(parseInt(e.target.value))}
+                        <FieldError
+                          errors={[{ message: fieldState.error?.message }]}
+                        />
+                      </Field>
+                    )}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
-
-                <FormField
-                  control={form.control}
-                  name="stockCount"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Stock Count</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          placeholder="Enter stock count"
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(parseInt(e.target.value))
-                          }
-                          value={field.value ?? ""}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
+                </FieldGroup>
+              </FieldGroup>
+              <Controller
+                control={form.control}
+                name="stockCount"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel>Stock Count</FieldLabel>
+                    <Input
+                      type="number"
+                      placeholder="Enter stock count"
+                      {...field}
+                      className="border border-border"
+                      onChange={(e) =>
+                        handleNumberFieldMin(
+                          field.name,
+                          field.onChange,
+                          e.target.value
+                        )
+                      }
+                      value={field.value ?? ""}
+                      aria-invalid={fieldState.invalid}
+                    />
+                    <FieldError
+                      errors={[{ message: fieldState.error?.message }]}
+                    />
+                  </Field>
+                )}
+              />
+              <FieldGroup>
+                <Controller
                   control={form.control}
                   name="tags"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Tags</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder='["weaving manufacturing", "cloth", "towels"]'
-                          value={
-                            Array.isArray(field.value)
-                              ? JSON.stringify(field.value)
-                              : field.value || ""
-                          }
-                          onChange={(e) => {
-                            const inputValue = e.target.value.trim();
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel>Tags</FieldLabel>
+                      {/* Suggestions */}
+                      <div className="space-x-1 space-y-1 ">
+                        {FamousTags.map((tag, i) => (
+                          <Button
+                            variant={"outline"}
+                            className="text-sm"
+                            key={i}
+                            type="button"
+                            onClick={() => handleTagClick(tag)}
+                          >
+                            {tag}
+                            <FaPlus className="scale-50" />
+                          </Button>
+                        ))}
+                      </div>
+                      <FieldDescription>
+                        Enter all tags related to the product. This will improve
+                        the chances of exposure.
+                      </FieldDescription>
 
-                            if (inputValue === "") {
-                              field.onChange([]);
-                              return;
-                            }
-
-                            try {
-                              // Try to parse as JSON array
-                              const parsed = JSON.parse(inputValue);
-                              if (Array.isArray(parsed)) {
-                                field.onChange(parsed);
-                              } else {
-                                // If it's not an array, wrap it in an array
-                                field.onChange([parsed]);
-                              }
-                            } catch (error) {
-                              // If JSON parsing fails, treat as comma-separated values
-                              const tagsArray = inputValue
-                                .split(",")
-                                .map((tag) =>
-                                  tag.trim().replace(/^["']|["']$/g, "")
-                                ) // Remove quotes
-                                .filter((tag) => tag.length > 0);
-                              field.onChange(tagsArray);
-                            }
-                          }}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Enter as JSON array: ["tag1", "tag2"] or
-                        comma-separated: tag1, tag2
-                        <br />
-                        Current: {JSON.stringify(field.value || [])}
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
+                      <Input
+                        type="text"
+                        placeholder='"weaving manufacturing", "cloth", "towels"'
+                        className="border border-border"
+                        {...field}
+                        value={field.value.join(", ")}
+                        onChange={(e) =>
+                          form.setValue("tags", e.target.value.split(", "))
+                        }
+                        aria-invalid={fieldState.invalid}
+                      />
+                      <FieldError
+                        errors={[{ message: fieldState.error?.message }]}
+                      />
+                    </Field>
                   )}
                 />
+              </FieldGroup>
 
-                {/* <FormField
-              control={form.control}
-              name="tags"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tags</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      placeholder="weaving manufacturing, cloth, towels"
-                      value={
-                        Array.isArray(field.value) 
-                          ? field.value.join(", ") 
-                          : field.value || ""
-                      }
-                      onChange={(e) => {
-                        const inputValue = e.target.value;
-                        
-                        if (inputValue.trim() === "") {
-                          field.onChange([]);
-                        } else {
-                          // Simple comma split and trim
-                          const tagsArray = inputValue
-                            .split(",")
-                            .map(tag => tag.trim())
-                            .filter(tag => tag.length > 0);
-                          field.onChange(tagsArray);
-                        }
-                      }}
+              <div className="space-y-6">
+                <DragDropUploader
+                  label="Upload Thumbnail"
+                  multiple={false}
+                  onFiles={(files) => setThumbnail(files[0])}
+                />
+
+                <DragDropUploader
+                  label="Upload Gallery Images"
+                  multiple={true}
+                  onFiles={(files) => setImages((prev) => [...prev, ...files])}
+                />
+
+                <div className="grid grid-cols-4 gap-4">
+                  {thumbnail && (
+                    <img
+                      src={URL.createObjectURL(thumbnail)}
+                      alt="Thumbnail preview"
+                      className="rounded-md w-full h-32 object-cover"
                     />
-                  </FormControl>
-                  <FormDescription>
-                    Enter tags separated by commas (no quotes needed)
-                    <br />
-                    Result: {JSON.stringify(field.value || [])}
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
-                <div className="space-y-6">
-                  <DragDropUploader
-                    label="Upload Thumbnail"
-                    multiple={false}
-                    onFiles={(files) => setThumbnail(files[0])}
-                  />
-
-                  <DragDropUploader
-                    label="Upload Gallery Images"
-                    multiple={true}
-                    onFiles={(files) =>
-                      setImages((prev) => [...prev, ...files])
-                    }
-                  />
-
-                  <div className="grid grid-cols-4 gap-4">
-                    {thumbnail && (
-                      <img
-                        src={URL.createObjectURL(thumbnail)}
-                        alt="Thumbnail preview"
-                        className="rounded-md w-full h-32 object-cover"
-                      />
-                    )}
-                    {images.map((file, i) => (
-                      <img
-                        key={i}
-                        src={URL.createObjectURL(file)}
-                        alt={`Preview ${i}`}
-                        className="rounded-md w-full h-32 object-cover"
-                      />
-                    ))}
-                  </div>
+                  )}
+                  {images.map((file, i) => (
+                    <img
+                      key={i}
+                      src={URL.createObjectURL(file)}
+                      alt={`Preview ${i}`}
+                      className="rounded-md w-full h-32 object-cover"
+                    />
+                  ))}
                 </div>
+              </div>
 
-                <Button type="submit" className="w-full">
-                  Add Product
-                </Button>
-              </form>
-            </Form>
+              <Button type="submit" className="w-full">
+                Add Product
+              </Button>
+            </form>
           </CardContent>
         </Card>
       </div>

@@ -1,13 +1,10 @@
-import { supabase } from "./supabase/supabaseClient";
-import type {
-  FullLocation,
-  pos,
-  Product,
-} from "./types/types";
-import { create, all } from "mathjs";
 import type { User } from "@supabase/supabase-js";
 import camelcaseKeys from "camelcase-keys";
+import { all, create } from "mathjs";
 import { loadGoogle } from "./googleLoader";
+import { supabase } from "./supabase/supabaseClient";
+import type { FullLocation, pos, Product } from "./types/types";
+import { toast } from "sonner";
 
 export const unitChange = (
   value: number,

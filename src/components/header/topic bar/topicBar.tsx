@@ -1,6 +1,6 @@
+import NavigationButton from "@/components/navigationButton";
 import * as React from "react";
 import CategoriesListTopicBar from "./categoriesList";
-import NavigationButton from "@/components/navigationButton";
 interface ITopicBarProps {}
 
 const TopicBar: React.FunctionComponent<ITopicBarProps> = (props) => {
@@ -13,8 +13,8 @@ const TopicBar: React.FunctionComponent<ITopicBarProps> = (props) => {
     "Jewelry & Accessories",
   ];
   return (
-    <div className="h-15 flex gap-5 items-center px-20 mb-1">
-      <CategoriesListTopicBar/>      
+    <div className="h-15 flex gap-5 items-center px-20 ">
+      <CategoriesListTopicBar />
       <div className="flex gap-5 items-center">
         {popularCategories.map((cat) => (
           <NavigationButton

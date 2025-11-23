@@ -1,12 +1,12 @@
+import Link from "next/link";
 import * as React from "react";
-import TopicBar from "./topic bar/topicBar";
+import Menu from "../home/menu";
 import Sign from "../sign/sign";
 import SearchBar from "../ui/searchBar";
-import Menu from "../home/menu";
-import GoBackButton from "./goBackButton";
-import ChangeInfo from "./changeInfo";
-import Link from "next/link";
 import CartHeader from "./cartHeader";
+import ChangeInfo from "./changeInfo";
+import GoBackButton from "./goBackButton";
+import TopicBar from "./topic bar/topicBar";
 
 interface IHeaderProps {
   showSearch?: boolean;
@@ -19,7 +19,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
   //       }
   return (
     <div
-      className={`fixed top-0 left-0 w-full bg-primary text-primary-foreground z-50 `}
+      className={`top-0 left-0 w-full bg-primary text-primary-foreground z-50 `}
     >
       {/* <TopBar/> */}
       <div className=" w-full ">
