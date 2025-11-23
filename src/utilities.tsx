@@ -4,7 +4,6 @@ import { all, create } from "mathjs";
 import { loadGoogle } from "./googleLoader";
 import { supabase } from "./supabase/supabaseClient";
 import type { FullLocation, pos, Product } from "./types/types";
-import { toast } from "sonner";
 
 export const unitChange = (
   value: number,
@@ -70,14 +69,16 @@ export const newPrice = (
   quantity?: number,
   measurement?: string
 ) => {
-  let newPriceInOriginalCurrency = product.price;
+  let newPriceInOriginalCurrency = product.priceBefore;
+  // console.log(newPriceInOriginalCurrency);
   if (product.discount > 0) {
-    newPriceInOriginalCurrency -= product.price * (product.discount / 100);
+    newPriceInOriginalCurrency -=
+      product.priceBefore * (product.discount / 100);
   }
   let finalPrice = Number(
     convertPrice(newPriceInOriginalCurrency, userCurrency, rates)
   );
-  if (quantity) {
+  if (typeof quantity == "number") {
     let commonGround = 1;
     if (measurement) {
       switch (measurement) {
@@ -107,7 +108,7 @@ export const price = (
   quantity?: number,
   measurement?: string
 ) => {
-  let productPrice = product.price ?? 0;
+  let productPrice = product.priceBefore ?? 0;
   if (quantity) {
     let commonGround = 1;
     if (measurement) {

@@ -1,26 +1,26 @@
+import type { Index } from "flexsearch";
 import { useEffect, useState } from "react";
-import "./App.css";
 import { RouterProvider } from "react-router-dom";
+import "./App.css";
+import { SearchContext } from "./app/contexts/searchContext";
 import { router } from "./router";
-import {
-  getProducts,
-  indexProducts,
-  getSuggestion,
-  useUser,
-  camel,
-} from "./utilities";
+import { supabase } from "./supabase/supabaseClient";
 import type {
   dbData,
-  SearchContextType,
+  LangContextType,
   Product,
   ProductFilters,
-  LangContextType,
+  SearchContextType,
   UserProfile,
 } from "./types/types";
-import type { Index } from "flexsearch";
-import { SearchContext } from "./app/contexts/searchContext";
 import { UserContext } from "./userContext";
-import { supabase } from "./supabase/supabaseClient";
+import {
+  camel,
+  getProducts,
+  getSuggestion,
+  indexProducts,
+  useUser,
+} from "./utilities";
 function App() {
   const [indexes, setIndexes] = useState<Index<string>[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -68,8 +68,8 @@ function App() {
     if (filters.priceRange) {
       filtered = filtered.filter(
         (product) =>
-          Math.round(product.price) >= filters.priceRange!.min &&
-          Math.round(product.price) <= filters.priceRange!.max
+          Math.round(product.priceBefore) >= filters.priceRange!.min &&
+          Math.round(product.priceBefore) <= filters.priceRange!.max
       );
     }
 

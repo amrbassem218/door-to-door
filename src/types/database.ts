@@ -128,12 +128,12 @@ export type Database = {
           description: string | null
           discount: number
           display_name: string | null
+          gallery: string[] | null
           id: number
-          images: string[] | null
           min_order: number | null
           name: string
-          price: number | null
           price_after: number | null
+          price_before: number | null
           rating: number | null
           review_count: number | null
           seller: string | null
@@ -149,12 +149,12 @@ export type Database = {
           description?: string | null
           discount?: number
           display_name?: string | null
+          gallery?: string[] | null
           id?: number
-          images?: string[] | null
           min_order?: number | null
           name: string
-          price?: number | null
           price_after?: number | null
+          price_before?: number | null
           rating?: number | null
           review_count?: number | null
           seller?: string | null
@@ -170,12 +170,12 @@ export type Database = {
           description?: string | null
           discount?: number
           display_name?: string | null
+          gallery?: string[] | null
           id?: number
-          images?: string[] | null
           min_order?: number | null
           name?: string
-          price?: number | null
           price_after?: number | null
+          price_before?: number | null
           rating?: number | null
           review_count?: number | null
           seller?: string | null
@@ -388,10 +388,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_category_data: {
-        Args: { category_name: string }
-        Returns: Json
-      }
+      get_category_data: { Args: { category_name: string }; Returns: Json }
     }
     Enums: {
       [_ in never]: never

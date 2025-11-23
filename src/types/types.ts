@@ -5,10 +5,9 @@ import type { Camelize } from "@/utilities";
 
 export interface Product{
     name: string;
-    price: number;
     priceBefore: number;
     id: string;
-    images: string[]
+    gallery: string[]
     thumbnail: string;
     rating?: number;
     reviewCount?: number;

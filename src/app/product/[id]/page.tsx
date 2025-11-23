@@ -24,6 +24,7 @@ import type { Product, ReviewType } from "@/types/types";
 import { getProfile } from "@/userContext";
 import { camel, measurements, newPrice, unitChange } from "@/utilities";
 import { getProduct } from "@/utils/products-utils";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { use, useEffect, useRef, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
@@ -31,7 +32,6 @@ import { FaAngleRight, FaLocationDot } from "react-icons/fa6";
 import { LuShoppingCart } from "react-icons/lu";
 import { Rating } from "react-simple-star-rating";
 import Error from "../../error/page";
-import { useRouter } from "next/navigation";
 
 interface IProductProps {
   params: Promise<{
@@ -240,7 +240,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
               {/* Images sideBar */}
               <ScrollArea className="w-20 h-90 ">
                 <div className="flex flex-col gap-1">
-                  {product.images.map((image, i) => (
+                  {product.gallery.map((image, i) => (
                     <div
                       key={i}
                       className={`w-20 h-20 border-1 flex justify-center items-center ${
@@ -262,7 +262,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
               <div className="w-90 h-90 border-1 flex justify-center items-center ">
                 <img
                   loading="lazy"
-                  src={`${product.images[currentImage]}`}
+                  src={`${product.gallery[currentImage]}`}
                   alt=""
                   className="object-contain h-full max-w-full "
                 />
@@ -273,7 +273,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
             <div className="">
               <Carousel className="w-full h-70 border-1 sm:hidden overflow-visible">
                 <CarouselContent className="flex gap-2">
-                  {product.images.map((image, i) => (
+                  {product.gallery.map((image, i) => (
                     <CarouselItem
                       key={i}
                       className="basis-[80%] h-70 shrink-0 flex items-center justify-center"

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import Item from "./item";
+import { camel } from "@/utilities";
 
 interface IAppProps {
   product: Product;
@@ -33,7 +34,7 @@ const SimialrProducts: React.FunctionComponent<IAppProps> = ({ product }) => {
           }
         }
         const prods = Array.from(productsMap.values());
-        setSimilarProducts(prods);
+        setSimilarProducts(camel(prods));
       };
       getSimilarProds();
     }

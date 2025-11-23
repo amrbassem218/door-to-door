@@ -95,7 +95,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
         const currentCartQuantity = cartQuantity;
         const currentCartMeasurement = cartMeasurement;
         data.forEach(({ products: product, quantity, measurement }) => {
-          total += Math.round(product.price);
+          total += Math.round(product.priceBefore);
           currentCartQuantity[id(product)] = quantity;
           currentCartMeasurement[id(product)] = measurement;
         });
@@ -199,120 +199,118 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                 >
                   {/* Product image */}
                   <div className="w-20 h-35 flex flex-col justify-center gap-2 items-center py-4">
-                      <img
-                        loading="lazy"
-                        src={product.thumbnail}
-                        alt=""
-                        className="object-contain h-full max-w-full"
-                      />
-                      <span className="text-xs text-muted">
-                        ({" "}
+                    <img
+                      loading="lazy"
+                      src={product.thumbnail}
+                      alt=""
+                      className="object-contain h-full max-w-full"
+                    />
+                    <span className="text-xs text-muted">
+                      ({" "}
+                      {newPrice(
+                        product,
+                        userCurrency,
+                        rates,
+                        1,
+                        cartMeasurement[id(product)]
+                      )}{" "}
+                      {userCurrency} / {cartMeasurement[id(product)]})
+                    </span>
+                  </div>
+                  <div className="space-y-3 text-sm ">
+                    {/* Name */}
+                    <div className="max-w-35 break-words whitespace-normal">
+                      <h2 className="line-clamp-2 font-medium text-center">
+                        {product.name}
+                      </h2>
+                    </div>
+                    {/* Total & Qty */}
+                    <div className="space-y-1">
+                      {/* Quantity Change*/}
+                      <div>
+                        {cartQuantity && cartMeasurement && (
+                          <div className="flex gap-1 w-full">
+                            <span className="text-muted font-normal">
+                              Qty:{" "}
+                            </span>
+                            <div className="flex items-center">
+                              <button
+                                className="border-1 p-1 cursor-pointer"
+                                onClick={() =>
+                                  handleQuantityChange(product, "minus")
+                                }
+                              >
+                                <FiMinus size={10} />
+                              </button>
+                              <input
+                                type="number"
+                                value={cartQuantity[id(product)]}
+                                className="border-1 min-w-10 max-w-5 h-5 text-center"
+                                // style={{ width: `${Math.max(3, Math.min(8, cartQuantity[id(product)].toString().length + 1))}rem` }}
+                                onChange={(e) =>
+                                  handleQuantityChange(
+                                    product,
+                                    "other",
+                                    e.target.value
+                                  )
+                                }
+                              />
+                              <button
+                                className="border-1 p-1 cursor-pointer bg-primary text-white"
+                                onClick={() =>
+                                  handleQuantityChange(product, "plus")
+                                }
+                              >
+                                <FiPlus size={10} />
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* total */}
+                      <p className="font-semibold">
+                        <span className="text-muted font-normal">total: </span>{" "}
                         {newPrice(
                           product,
                           userCurrency,
                           rates,
-                          1,
+                          cartQuantity[id(product)],
                           cartMeasurement[id(product)]
                         )}{" "}
-                        {userCurrency} / {cartMeasurement[id(product)]})
-                      </span>
+                        {userCurrency}
+                      </p>
                     </div>
-                    <div className="space-y-3 text-sm ">
-                      {/* Name */}
-                      <div className="max-w-35 break-words whitespace-normal">
-                        <h2 className="line-clamp-2 font-medium text-center">
-                          {product.name}
-                        </h2>
-                      </div>
-                      {/* Total & Qty */}
-                      <div className="space-y-1">
-                        {/* Quantity Change*/}
-                        <div>
-                          {cartQuantity && cartMeasurement && (
-                            <div className="flex gap-1 w-full">
-                              <span className="text-muted font-normal">
-                                Qty:{" "}
-                              </span>
-                              <div className="flex items-center">
-                                <button
-                                  className="border-1 p-1 cursor-pointer"
-                                  onClick={() =>
-                                    handleQuantityChange(product, "minus")
-                                  }
-                                >
-                                  <FiMinus size={10} />
-                                </button>
-                                <input
-                                  type="number"
-                                  value={cartQuantity[id(product)]}
-                                  className="border-1 min-w-10 max-w-5 h-5 text-center"
-                                  // style={{ width: `${Math.max(3, Math.min(8, cartQuantity[id(product)].toString().length + 1))}rem` }}
-                                  onChange={(e) =>
-                                    handleQuantityChange(
-                                      product,
-                                      "other",
-                                      e.target.value
-                                    )
-                                  }
-                                />
-                                <button
-                                  className="border-1 p-1 cursor-pointer bg-primary text-white"
-                                  onClick={() =>
-                                    handleQuantityChange(product, "plus")
-                                  }
-                                >
-                                  <FiPlus size={10} />
-                                </button>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* total */}
-                        <p className="font-semibold">
-                          <span className="text-muted font-normal">
-                            total:{" "}
-                          </span>{" "}
-                          {newPrice(
-                            product,
-                            userCurrency,
-                            rates,
-                            cartQuantity[id(product)],
-                            cartMeasurement[id(product)]
-                          )}{" "}
-                          {userCurrency}
-                        </p>
-                      </div>
-                      {/* Measurement change */}
-                      <div>
-                        <span className="text-muted font-normal">mes: </span>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger className="m-auto">
-                            <Button
-                              variant={"link"}
-                              className="h-4 px-0 text-muted text-sm decoration-0 bg-background-secondary rounded-lg border-gray-300 border-1 gap-4"
+                    {/* Measurement change */}
+                    <div>
+                      <span className="text-muted font-normal">mes: </span>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger className="m-auto">
+                          <Button
+                            variant={"link"}
+                            className="h-4 px-0 text-muted text-sm decoration-0 bg-background-secondary rounded-lg border-gray-300 border-1 gap-4"
+                          >
+                            {cartMeasurement[id(product)]}
+                            <FaChevronDown size={5} className="text-muted" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuLabel>Measurement</DropdownMenuLabel>
+                          {measurements.map((mes) => (
+                            <DropdownMenuItem
+                              key={mes}
+                              onClick={() =>
+                                handleMeasurementChange(product, mes)
+                              }
                             >
-                              {cartMeasurement[id(product)]}
-                              <FaChevronDown size={5} className="text-muted" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent>
-                            <DropdownMenuLabel>Measurement</DropdownMenuLabel>
-                            {measurements.map((mes) => (
-                              <DropdownMenuItem
-                                key={mes}
-                                onClick={() =>
-                                  handleMeasurementChange(product, mes)
-                                }
-                              >
-                                {mes}
-                              </DropdownMenuItem>
-                            ))}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
+                              {mes}
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </div>
+                </div>
               ))}
             </div>
           </ScrollArea>
