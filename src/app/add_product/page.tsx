@@ -17,12 +17,20 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/supabase/supabaseClient";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as React from "react";
 import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { FaPlus } from "react-icons/fa";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -31,20 +39,51 @@ interface IAddProductProps {}
 export const schema = z.object({
   name: z.string().min(20).max(200),
   description: z.string().min(1),
-  specifications: z.string().min(1).nullable(),
-  minOrder: z.number().min(1).nullable(),
+  specifications: z
+    .array(
+      z.object({
+        name: z.string().min(1).max(50),
+        description: z.string().min(1).max(400),
+      })
+    )
+    .min(1)
+    .max(50)
+    .nullable(),
+  minOrder: z.number().min(0),
   priceBefore: z.number().min(0),
   priceAfter: z.number().min(0).nullable(),
   stockCount: z.number().min(1),
-  tags: z.array(z.string().min(1).max(100)).min(2, "Product must contain at least 2 tags"),
+  tags: z
+    .array(z.string().min(1).max(100))
+    .min(2, "Product must contain at least 2 tags"),
   thumbnail: z.instanceof(File).nullable(),
   gallery: z.array(z.instanceof(File).nullable()).nullable(),
 });
 type zodSchema = z.infer<typeof schema>;
 // const R2_ACCOUNT_ID = process.env.
+type Specification = { name: string; description: string };
 const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [images, setImages] = useState<File[]>([]);
+  const specificationNames = [
+    "Brand",
+    "Manufacturer",
+    "Model Number",
+    "Size",
+    "Dimensions",
+    "Weight",
+    "Material",
+    "Color",
+    "City of origin",
+    "Warranty",
+    "SKU",
+    "Compatibility",
+    "Power Requirements",
+    "Capacity",
+    "Features",
+    "Instructions / Care",
+    "Wood type",
+  ];
   const FamousTags = [
     "Vegetables",
     "Fruits",
@@ -65,7 +104,7 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
     defaultValues: {
       name: "",
       description: "",
-      specifications: "",
+      specifications: [{ name: "", description: "" }],
       minOrder: 1,
       priceBefore: 0,
       priceAfter: 0,
@@ -105,7 +144,15 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
     // 3. Construct public URL (using the same filename)
     return `https://pub-8af98dd80060441abb806f8778b58c40.r2.dev/${filename}`;
   }
-
+  const handleSpecConversion = (
+    spec: { name: string; description: string }[]
+  ) => {
+    let newSpec: Record<string, string> = {};
+    spec.forEach((e, i) => {
+      newSpec[e.name] = e.description;
+    });
+    return newSpec;
+  };
   const handleCreateProductSubmit = async (values: zodSchema) => {
     try {
       console.log("Form submitted with values:", values);
@@ -129,9 +176,7 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
         }
       }
 
-      console.log("Final thumbnail URL:", thumbnailUrl);
-      console.log("Final image URLs:", imageUrls);
-
+      let newSpec = handleSpecConversion(values.specifications ?? []);
       const productData = {
         created_at: new Date().toISOString(),
         description: values.description,
@@ -144,7 +189,7 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
         name: values.name,
         price_before: values.priceBefore,
         price_after: values.priceAfter ? values.priceAfter : values.priceBefore,
-        specifications: values.specifications,
+        specifications: newSpec,
         stock_count: values.stockCount,
         tags: values.tags,
         thumbnail: thumbnailUrl,
@@ -188,7 +233,7 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
     minNumber?: number
   ) => {
     let num = parseInt(inp);
-    let isLessThanMin = false
+    let isLessThanMin = false;
     if (minNumber) {
       if (num < minNumber) {
         num = minNumber;
@@ -208,14 +253,21 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
         isLessThanMin = true;
       }
     }
-    if(!isLessThanMin){
+    if (!isLessThanMin) {
       form.clearErrors(name as any);
     }
     if (typeof onChange == "function") {
       onChange(num);
     }
   };
-
+  const {
+    fields: specifications,
+    append: addSpec,
+    remove: removeSpec,
+  } = useFieldArray({
+    control: form.control,
+    name: "specifications",
+  });
   return (
     <div className="w-full h-full">
       <div className="w-full flex justify-center items-center">
@@ -278,25 +330,77 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
                     </Field>
                   )}
                 />
-                <Controller
-                  control={form.control}
-                  name="specifications"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel>Specification</FieldLabel>
-                      <Textarea
-                        placeholder="Enter product specifcations"
-                        {...field}
-                        className="resize-none overflow-auto h-20 border border-border"
-                        value={field.value ?? ""}
-                        aria-invalid={fieldState.invalid}
-                      />
-                      <FieldError
-                        errors={[{ message: fieldState.error?.message }]}
-                      />
-                    </Field>
-                  )}
-                />
+                <FieldGroup>
+                  <Controller
+                    control={form.control}
+                    name="specifications"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldContent className="flex flex-row justify-between">
+                          <FieldLabel className="">Specification</FieldLabel>
+                          <Button
+                            variant={"outline"}
+                            className="text-sm"
+                            type="button"
+                            onClick={() =>
+                              addSpec({ name: "", description: "" })
+                            }
+                          >
+                            Add specification
+                          </Button>
+                        </FieldContent>
+                        <div className="flex flex-col gap-4">
+                          {specifications.map((spec, i) => (
+                            <div className="flex" key={i}>
+                              <Controller
+                                control={form.control}
+                                name={`specifications.${i}.name`}
+                                render={({ field, fieldState }) => (
+                                  <Field data-invalid={fieldState.invalid}>
+                                    <Select
+                                      {...field}
+                                      defaultValue={field.value}
+                                      onValueChange={field.onChange}
+                                    >
+                                      <SelectTrigger className="w-[180px]">
+                                        <SelectValue placeholder="choose a specification" />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        <SelectGroup>
+                                          {specificationNames.map((name, j) => (
+                                            <SelectItem key={j} value={name}>
+                                              {name}
+                                            </SelectItem>
+                                          ))}
+                                        </SelectGroup>
+                                      </SelectContent>
+                                    </Select>
+                                    <FieldError
+                                      errors={[
+                                        { message: fieldState.error?.message },
+                                      ]}
+                                    />
+                                  </Field>
+                                )}
+                              />
+
+                              <Input
+                                {...form.register(
+                                  `specifications.${i}.description`
+                                )}
+                                placeholder="Enter the value"
+                              />
+                            </div>
+                          ))}
+                        </div>
+
+                        <FieldError
+                          errors={[{ message: fieldState.error?.message }]}
+                        />
+                      </Field>
+                    )}
+                  />
+                </FieldGroup>
                 <FieldGroup className="grid grid-cols-12">
                   <Controller
                     control={form.control}
@@ -325,7 +429,6 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
                       </Field>
                     )}
                   />
-
                   <Controller
                     control={form.control}
                     name="priceAfter"
