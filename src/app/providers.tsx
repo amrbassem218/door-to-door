@@ -118,6 +118,9 @@ const Providers: React.FunctionComponent<IProvidersProps> = ({ children }) => {
     searchProducts,
     filterProducts,
   };
+
+
+
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const user = useUser();
   useEffect(() => {
@@ -139,7 +142,6 @@ const Providers: React.FunctionComponent<IProvidersProps> = ({ children }) => {
           }
         } catch (error) {
           console.error("Network error fetching user profile:", error);
-          // Don't crash the app, just log the error
         }
       };
       getUserData();

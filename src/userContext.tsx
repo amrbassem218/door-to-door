@@ -1,7 +1,7 @@
 'use client'
 import { createContext, useContext, type Dispatch, type SetStateAction } from "react";
 import type { UserProfile } from "./types/types";
-interface UserProfileState {
+export interface UserProfileState {
   userProfile: UserProfile | null;
   setUserProfile: Dispatch<SetStateAction<UserProfile | null>>;
 }

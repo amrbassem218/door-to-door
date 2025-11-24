@@ -2,72 +2,40 @@
 import type { Currencies } from "@/types/types";
 import * as React from "react";
 
+import {
+  defaultCurrency,
+  getCurrencies,
+  handleNewCurrencyClick,
+} from "@/components/currency/utils";
 import GoBackButton from "@/components/header/goBackButton";
-import { supabase } from "@/supabase/supabaseClient";
 import { getProfile } from "@/userContext";
-import { camel } from "@/utilities";
 import { useUser } from "@/utils/getUser";
 import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Flag from "react-world-flags";
-import { toast } from "sonner";
 interface ICurrencyProps {}
 
 const Currency: React.FunctionComponent<ICurrencyProps> = () => {
-  const [currenciesData, setCurrenciesData] = useState<Currencies[]>([]);
+  const [allCurrencies, setAllCurrencies] = useState<Currencies[]>([]);
   const userProfile = getProfile();
   const user = useUser();
-  const [userCurrency, setUserCurrency] = useState<Currencies | undefined>(
-    userProfile?.userProfile?.currencies
-  );
+  const [userCurrency, setUserCurrency] = useState<Currencies>(defaultCurrency);
   const router = useRouter();
   useEffect(() => {
-    const getCurrencies = async () => {
-      let { data: currencies, error } = await supabase
-        .from("currencies")
-        .select("*");
-      if (error) {
-        console.log("couldn't get all currencies");
-        console.error(error);
-      } else {
-        console.log("got em");
-        console.log();
-        currencies = camel(currencies);
-        if (currencies) {
-          currencies.sort((a, b) => {
-            return a.currencyName.localeCompare(b.currencyName);
-          });
-          setCurrenciesData(currencies);
-        }
-      }
-    };
-    getCurrencies();
+    getCurrencies(setAllCurrencies);
   }, []);
-
-  const handleNewCurrencyClick = async (currency: Currencies) => {
-    if (userProfile?.userProfile?.id) {
-      setUserCurrency(currency);
-      const { error } = await supabase
-        .from("profiles")
-        .update({ currency: currency.id })
-        .eq("id", userProfile.userProfile.id);
-      if (error) {
-        console.log("couldn't update currency in db");
-      } else {
-        const profileTemp = userProfile.userProfile;
-        profileTemp.currencies = currency;
-        userProfile.setUserProfile(profileTemp);
-        console.log("hey I got the currency here man");
-        console.log("done y m3lama");
+  useEffect(() => {
+    if (userProfile) {
+      let currency = userProfile.userProfile?.currencies;
+      if (currency) {
         setUserCurrency(currency);
-        toast("Currency changed succssfully", {
-          description: `changed language to ${currency.currencyName}`,
-        });
       }
-      router.back();
     }
-  };
+  }, [userProfile]);
+  if (!userProfile) {
+    return <p>loading...</p>;
+  }
   return (
     <div className="">
       {/* Header */}
@@ -97,17 +65,20 @@ const Currency: React.FunctionComponent<ICurrencyProps> = () => {
           </div>
         </div>
         {/* More currencies */}
-        {currenciesData.map((currency, i) => (
+        {allCurrencies.map((currency, i) => (
           <div
             className="space-y-1"
-            onClick={() => handleNewCurrencyClick(currency)}
+            onClick={() => {
+              handleNewCurrencyClick(userProfile, setUserCurrency, currency);
+              router.back();
+            }}
             key={i}
           >
             {(i === 0 ||
               (currency.currencyName &&
-                currenciesData[i - 1]?.currencyName &&
+                allCurrencies[i - 1]?.currencyName &&
                 currency.currencyName[0] >
-                  currenciesData[i - 1].currencyName[0])) && (
+                  allCurrencies[i - 1].currencyName[0])) && (
               <div className="px-2">
                 <p className="text-xs text-muted">
                   {currency.currencyName?.[0] ?? ""}
