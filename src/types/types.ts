@@ -51,6 +51,7 @@ export interface ProductFilters {
 
 export interface CartItems{
   quantity: number;
+    measurement: string;
   products: Product[];
 };
 
@@ -94,3 +95,5 @@ export interface FullLocation {
     lat: number;
     lng: number;
 }
+
+export type Cart = CartItem[] & {length: number}

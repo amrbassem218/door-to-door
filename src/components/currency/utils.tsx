@@ -26,7 +26,7 @@ export const getAllCurrencies = async (
 };
 
 export const handleNewCurrencyClick = async (
-  userId: number | null,
+  userId: string | null,
   setUserCurrency: React.Dispatch<React.SetStateAction<Currencies>>,
   newCurrency: Currencies
 ) => {

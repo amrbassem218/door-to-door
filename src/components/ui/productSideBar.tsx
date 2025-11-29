@@ -115,7 +115,7 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
         <div className="flex flex-1 items-center w-10 justify-end cursor-pointer">
           <CiLocationOn />
           <p className="truncate text-ellipsis overflow-hidden hover:underline">
-            {userLocation.adress}
+            {userLocation?.adress}
           </p>
           <FaAngleRight size={15} />
         </div>

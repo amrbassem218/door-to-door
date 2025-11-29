@@ -13,17 +13,18 @@ import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Flag from "react-world-flags";
+import { useUser } from "@/utils/getUser";
 interface ICurrencyProps {}
 
 const Currency: React.FunctionComponent<ICurrencyProps> = () => {
   const [allCurrencies, setAllCurrencies] = useState<Currencies[]>([]);
   const [userCurrency, setUserCurrency] = useUserCurrency();
-  const [userAuthProfile, setUserAuthProfile] = useUserAuthProfile();
+  const user = useUser();
   const router = useRouter();
   useEffect(() => {
     getAllCurrencies(setAllCurrencies);
   }, []);
-  if (!userAuthProfile) {
+  if (!user?.id) {
     router.push("/login");
     return <p>loading...</p>;
   }
@@ -61,7 +62,7 @@ const Currency: React.FunctionComponent<ICurrencyProps> = () => {
             className="space-y-1"
             onClick={() => {
               handleNewCurrencyClick(
-                userAuthProfile.id,
+                user?.id,
                 setUserCurrency,
                 currency
               );

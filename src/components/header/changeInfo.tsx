@@ -14,6 +14,7 @@ interface IChangeInfoProps {}
 
 const ChangeInfo: React.FunctionComponent<IChangeInfoProps> = (props) => {
   const [userCurrency] = useUserCurrency();
+  const [userLang] = useUserLang();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="hidden sm:block">
@@ -23,7 +24,7 @@ const ChangeInfo: React.FunctionComponent<IChangeInfoProps> = (props) => {
             <Flag code={userCurrency.countryCode} className="w-7 h-7" />
           </div>
           <div className="text-xs">
-            <p className="text-muted-foreground">{userLang.langCode}/</p>
+            <p className="text-muted-foreground">{userLang?.langCode ?? "En"}/</p>
             <p className="">{userCurrency.currencyCode}</p>
           </div>
         </div>

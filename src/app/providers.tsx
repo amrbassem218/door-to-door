@@ -1,8 +1,14 @@
 "use client";
-import { type UserAuthProfile } from "@/contexts/authContext";
+import { defaultCurrency } from "@/components/currency/utils";
+import {
+  UserAuthProfileContext,
+  type UserAuthProfile,
+} from "@/contexts/authContext";
+import { UserCartContext } from "@/contexts/cartContext";
 import { UserCurrencyContext } from "@/contexts/currencyContext";
+import { UserLangContext, type UserLanguage } from "@/contexts/langContext";
 import { UserLocationContext } from "@/contexts/locationContext";
-import { UserAuthProfileContext } from "@/contexts/authContext";
+import { getCart } from "@/utils/cart-utils";
 import { useUser } from "@/utils/getUser";
 import { getProducts, indexProducts } from "@/utils/products-utils";
 import { getSuggestion } from "@/utils/search-utils";
@@ -12,6 +18,7 @@ import { useEffect, useState } from "react";
 import { SearchContext } from "../contexts/searchContext";
 import { supabase } from "../supabase/supabaseClient";
 import {
+  type Cart,
   type Currencies,
   type dbData,
   type FullLocation,
@@ -32,11 +39,11 @@ const Providers: React.FunctionComponent<IProvidersProps> = ({ children }) => {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
 
   const [userlocation, setUserLocation] = useState<FullLocation | null>(null);
-  const [userCurrency, setUserCurrency] = useState<Currencies | null>(null);
+  const [userCurrency, setUserCurrency] = useState<Currencies>(defaultCurrency);
   const [userAuthProfile, setUserAuthProfile] =
     useState<UserAuthProfile | null>(null);
-  const [userLang, setUserLang] = useState<string>("en");
-
+  const [userLang, setUserLang] = useState<UserLanguage | null>(null);
+  const [userCart, setUserCart] = useState<Cart | null>(null);
   const user = useUser();
   const handleGetUserData = async () => {
     if (user) {
@@ -47,22 +54,24 @@ const Providers: React.FunctionComponent<IProvidersProps> = ({ children }) => {
           .eq("id", user.id)
           .single();
         if (error) {
-          console.log("couldn't get location");
+          console.log("couldn't get userData");
           console.error(error);
         } else {
           // Defining userData
           const userProfile = camel(data) as UserProfile;
 
           // User location
-          const geoLocation = userProfile.location as pos;
-          const textualLocation = await reverseGeo(geoLocation);
-          if (textualLocation) {
-            const fullLocation: FullLocation = {
-              ...geoLocation,
-              ...textualLocation,
-            };
-            setUserLocation(fullLocation);
-          }
+          // TODO: FIX THE LOCATION
+          //
+          // const geoLocation = userProfile.location as pos;
+          // const textualLocation = await reverseGeo(geoLocation);
+          // if (textualLocation) {
+          //   const fullLocation: FullLocation = {
+          //     ...geoLocation,
+          //     ...textualLocation,
+          //   };
+          //   setUserLocation(fullLocation);
+          // }
 
           // Currencies
           const currency = userProfile.currencies;
@@ -76,15 +85,26 @@ const Providers: React.FunctionComponent<IProvidersProps> = ({ children }) => {
           };
           setUserAuthProfile(authProfile);
         }
+
+        // Cart
+        const userCart = await getCart(user);
+        if (userCart) {
+          setUserCart({ ...userCart, length: userCart.length });
+        } else {
+          console.log("couldn't get usercart");
+        }
       } catch (error) {
         console.log("couldn't find userdata");
         console.error(error);
       }
     }
   };
-
   useEffect(() => {
-    handleGetUserData();
+    if (user) {
+      handleGetUserData();
+    }
+  }, [user]);
+  useEffect(() => {
     getProducts()
       .then((data: dbData) => {
         if (data) {
@@ -183,9 +203,13 @@ const Providers: React.FunctionComponent<IProvidersProps> = ({ children }) => {
         <UserAuthProfileContext.Provider
           value={[userAuthProfile, setUserAuthProfile]}
         >
-          <SearchContext.Provider value={searchContextValue}>
-            <div className="w-screen">{children}</div>
-          </SearchContext.Provider>
+          <UserLangContext value={[userLang, setUserLang]}>
+            <UserCartContext value={[userCart, setUserCart]}>
+              <SearchContext.Provider value={searchContextValue}>
+                <div className="w-screen">{children}</div>
+              </SearchContext.Provider>
+            </UserCartContext>
+          </UserLangContext>
         </UserAuthProfileContext.Provider>
       </UserLocationContext.Provider>
     </UserCurrencyContext.Provider>

@@ -11,8 +11,8 @@ export interface UserLanguage {
   countryCode: string;
 }
 export type UserLangState = [
-  UserLanguage,
-  Dispatch<SetStateAction<UserLanguage>>
+  UserLanguage | null,
+  Dispatch<SetStateAction<UserLanguage | null>>
 ];
 export const UserLangContext = createContext<UserLangState | null>(null);
 

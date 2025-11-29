@@ -9,8 +9,8 @@ import {
 } from "react";
 import type { Currencies } from "../types/types";
 export type UserCurrenciesState = [
-  Currencies | null,
-  Dispatch<SetStateAction<Currencies | null>>
+  Currencies,
+  Dispatch<SetStateAction<Currencies>>
 ];
 export const UserCurrencyContext = createContext<UserCurrenciesState | null>(
  null 

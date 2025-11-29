@@ -185,7 +185,7 @@ export const getCart = async(user: User) => {
   
   const {data, error} = await supabase
   .from('cart_items')
-  .select('measurement, quantity, products(*)')
+  .select('*, products(*)')
   .eq('cart_id', cartId)
 
   if(error){
