@@ -23,5 +23,4 @@ dist-ssr
 *.sln
 *.sw?
 # ...
-next-env.d.ts
 dist

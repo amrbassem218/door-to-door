@@ -23,16 +23,6 @@ export const unitChange = (
   const converted = current.to(targetUnit);
   return converted.toNumber().toFixed(6);
 };
-
-export const handleGoogleAuth = () => {
-  supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo: `${window.location.origin}/auth/callback`,
-    },
-  });
-};
-
 export const camel = (element: any) => {
   if (Array.isArray(element)) {
     const result = element.map((e: any, index: number) => {
