@@ -1,10 +1,11 @@
 import { supabase } from "@/supabase/supabaseClient";
 import type { Currencies } from "@/types/types";
-import type { UserProfileState } from "@/userContext";
 import { camel } from "@/utilities";
 import { toast } from "sonner";
 
-export const getCurrencies = async (setAllCurrencies: React.Dispatch<React.SetStateAction<Currencies[]>>) => {
+export const getAllCurrencies = async (
+  setAllCurrencies: React.Dispatch<React.SetStateAction<Currencies[]>>
+) => {
   let { data: currencies, error } = await supabase
     .from("currencies")
     .select("*");
@@ -25,24 +26,21 @@ export const getCurrencies = async (setAllCurrencies: React.Dispatch<React.SetSt
 };
 
 export const handleNewCurrencyClick = async (
-  userProfile: UserProfileState,
+  userId: number | null,
   setUserCurrency: React.Dispatch<React.SetStateAction<Currencies>>,
-  currency: Currencies
+  newCurrency: Currencies
 ) => {
-  if (userProfile?.userProfile?.id) {
+  if (userId) {
     const { error } = await supabase
       .from("profiles")
-      .update({ currency: currency.id })
-      .eq("id", userProfile.userProfile.id);
+      .update({ currency: newCurrency.id })
+      .eq("id", userId);
     if (error) {
       console.log("couldn't update currency in db");
     } else {
-      const profileTemp = userProfile.userProfile;
-      profileTemp.currencies = currency;
-      userProfile.setUserProfile(profileTemp);
-      setUserCurrency(currency);
+      setUserCurrency(newCurrency);
       toast("Currency changed succssfully", {
-        description: `changed language to ${currency.currencyName}`,
+        description: `changed language to ${newCurrency.currencyName}`,
       });
     }
   }

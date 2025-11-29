@@ -1,9 +1,9 @@
 "use client";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useUserCurrencyCode } from "@/contexts/currencyContext";
 import { useSearch } from "@/contexts/searchContext";
 import { useCurrencyRates } from "@/getRates";
 import type { Product, ProductFilters } from "@/types/types";
-import { getProfile } from "@/userContext";
 import { newPrice, price } from "@/utilities";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -47,10 +47,7 @@ const SearchPage: React.FunctionComponent<ISearchPageProps> = (props) => {
   const handleFilterChange = (newFilters: Partial<ProductFilters>) => {
     setFilters((prev) => ({ ...prev, ...newFilters }));
   };
-  const userProfile = getProfile();
-  const [userCurrency, setUserCurrency] = useState(
-    userProfile?.userProfile?.currencies.currencyCode ?? "USD"
-  );
+  const [userCurrencyCode, setUserCurrencyCode] = useUserCurrencyCode();
   const { rates, loading } = useCurrencyRates();
   const router = useRouter();
   if (loading) return <p>Loading prices...</p>;
@@ -190,11 +187,11 @@ const SearchPage: React.FunctionComponent<ISearchPageProps> = (props) => {
 
                 <div className="flex items-center gap-2 md:justify-between mb-2">
                   <span className="md:text-xl text-lg font-bold text-green-600">
-                    {newPrice(product, userCurrency, rates)} {userCurrency}
+                    {newPrice(product, userCurrencyCode, rates)} {userCurrencyCode}
                   </span>
                   {product.discount && (
                     <span className="text-sm text-gray-500 line-through">
-                      {price(product, userCurrency, rates)}
+                      {price(product, userCurrencyCode, rates)}
                     </span>
                   )}
                 </div>

@@ -10,13 +10,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { getProfile } from "@/contexts/userContext";
 import { useCurrencyRates } from "@/getRates";
 import type { pos, Product } from "@/types/types";
-import { getProfile } from "@/userContext";
 import { measurements, newPrice, reverseGeo } from "@/utilities";
 import type { Dispatch, SetStateAction } from "react";
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { CiLocationOn } from "react-icons/ci";
 import { FaAngleRight, FaChevronDown, FaHeart } from "react-icons/fa";
 import { FiMinus, FiPlus } from "react-icons/fi";
@@ -26,6 +26,8 @@ import { supabase } from "@/supabase/supabaseClient";
 import { addProductToCart } from "@/utils/cart-utils";
 import { useUser } from "@/utils/getUser";
 import NavigationButton from "../navigationButton";
+import { useUserCurrencyCode } from "@/contexts/currencyContext";
+import { useUserLocation } from "@/contexts/locationContext";
 interface IProductSideBarProps {
   product: Product;
   measurement: string;
@@ -48,12 +50,9 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
   headerHeight,
 }) => {
   const { rates, loading } = useCurrencyRates();
-  const userProfile = getProfile();
-  const [userCurrency, setUserCurrency] = useState(
-    userProfile?.userProfile?.currencies.currencyCode ?? "USD"
-  );
+  const [userCurrencyCode] = useUserCurrencyCode();
+  const [userLocation, setUserLocation] = useUserLocation();
   const user = useUser();
-  const profile = getProfile();
 
   const handleBuyNow = async () => {
     if (user) {
@@ -66,54 +65,6 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
       });
     }
   };
-  const handleGetAdress = () => {
-    if (profile?.userProfile?.adress) return profile?.userProfile?.adress;
-    else if (
-      profile?.userProfile?.location &&
-      typeof profile?.userProfile?.location != "string"
-    ) {
-      console.log("location provided: ", profile.userProfile.location);
-      reverseGeo(profile.userProfile.location as unknown as pos)
-        .then(({ adress }) => {
-          if (!adress) {
-            console.log("couldn't get the adress but full should be fine");
-            return;
-          }
-          console.log("I can see adress: ", adress);
-          const setUserAdress = async () => {
-            const { error } = await supabase
-              .from("profiles")
-              .update({ adress: adress })
-              .eq("id", user?.id);
-            if (error) {
-              console.log(
-                "couldn't set user adress from location upon checking in productSideBar"
-              );
-              console.error(error);
-            }
-          };
-          setUserAdress();
-          const tempUserProfile = userProfile?.userProfile;
-          if (tempUserProfile) {
-            tempUserProfile.adress = adress;
-            userProfile?.setUserProfile(tempUserProfile);
-          }
-
-          return adress;
-        })
-        .catch((error) => {
-          console.log("error while retreving adress");
-          console.error(error);
-          return;
-        });
-    }
-  };
-  useEffect(() => {
-    if (!userProfile?.userProfile?.adress) {
-      console.log("so you were saying?");
-      handleGetAdress();
-    }
-  }, [userProfile?.userProfile?.adress]);
   if (loading) return <p>loading...</p>;
   return (
     <div
@@ -123,11 +74,11 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
       {/* Price */}
       <div className="flex flex-col items-start border-b-1 pb-3">
         <p className="text-2xl">
-          {newPrice(product, userCurrency, rates, quantity, measurement)}{" "}
-          {userCurrency}{" "}
+          {newPrice(product, userCurrencyCode, rates, quantity, measurement)}{" "}
+          {userCurrencyCode}{" "}
           <span className="text-sm text-muted">
-            ({newPrice(product, userCurrency, rates, 1, measurement)}{" "}
-            {userCurrency} / {measurement})
+            ({newPrice(product, userCurrencyCode, rates, 1, measurement)}{" "}
+            {userCurrencyCode} / {measurement})
           </span>
         </p>
         <Popover>
@@ -164,7 +115,7 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
         <div className="flex flex-1 items-center w-10 justify-end cursor-pointer">
           <CiLocationOn />
           <p className="truncate text-ellipsis overflow-hidden hover:underline">
-            {userProfile?.userProfile?.adress}
+            {userLocation.adress}
           </p>
           <FaAngleRight size={15} />
         </div>
@@ -185,10 +136,8 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
           <div>
             {/* <MeasurementChange handleMeasurementChange={handleMeasurementChange} label={measurement} product={product} styles='w-20 h-10'/> */}
             <DropdownMenu>
-              <DropdownMenuTrigger  className="m-auto">
-                <div
-                  className="text-sm text-heading decoration-0 bg-background p-1 px-2 rounded-lg border-gray-300 border-1 flex items-center gap-4 hover:bg-gray-100"
-                >
+              <DropdownMenuTrigger className="m-auto">
+                <div className="text-sm text-heading decoration-0 bg-background p-1 px-2 rounded-lg border-gray-300 border-1 flex items-center gap-4 hover:bg-gray-100">
                   Size: {measurement}
                   <FaChevronDown className="text-muted text-sm" />
                 </div>

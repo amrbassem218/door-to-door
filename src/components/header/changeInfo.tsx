@@ -1,26 +1,30 @@
-"use client"
+"use client";
+import { getProfile } from "@/contexts/userContext";
 import * as React from "react";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from "../ui/dropdown-menu";
-import Flag from 'react-world-flags'
-import { getProfile } from "@/userContext";
+import Flag from "react-world-flags";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 import CurrencyDropDown from "./currencyDropDown";
+import { useUserCurrency } from "@/contexts/currencyContext";
+import { useUserLang } from "@/contexts/langContext";
 interface IChangeInfoProps {}
 
 const ChangeInfo: React.FunctionComponent<IChangeInfoProps> = (props) => {
-  const rawUserProfile = getProfile();
-  const userProfile = rawUserProfile?.userProfile;
-  const setUserProfile = rawUserProfile?.setUserProfile;
+  const [userCurrency] = useUserCurrency();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="hidden sm:block">
         <div className="flex items-center gap-2 cursor-pointer">
           {/* flag */}
           <div>
-            <Flag code={userProfile?.countryCode ?? "EG"} className="w-7 h-7" />
+            <Flag code={userCurrency.countryCode} className="w-7 h-7" />
           </div>
           <div className="text-xs">
-            <p className="text-muted-foreground">{userProfile?.language}/</p>
-            <p className="">{userProfile?.currency}</p>
+            <p className="text-muted-foreground">{userLang.langCode}/</p>
+            <p className="">{userCurrency.currencyCode}</p>
           </div>
         </div>
       </DropdownMenuTrigger>

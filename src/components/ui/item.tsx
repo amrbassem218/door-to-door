@@ -1,13 +1,14 @@
 "use client";
+import { getProfile } from "@/contexts/userContext";
 import { useCurrencyRates } from "@/getRates";
 import type { Product } from "@/types/types";
-import { getProfile } from "@/userContext";
 import { newPrice, price, save } from "@/utilities";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 
 import { useEffect, useState } from "react";
 import { defaultCurrency } from "../currency/utils";
+import { useUserCurrencyCode } from "@/contexts/currencyContext";
 interface IItemProps {
   item: Product;
   col?: string;
@@ -16,23 +17,14 @@ interface IItemProps {
 
 const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
   const { rates, loading } = useCurrencyRates();
-  const userProfile = getProfile();
-  const [userCurrency, setUserCurrency] = useState(defaultCurrency);
+  const [userCurrencyCode] = useUserCurrencyCode();
   const router = useRouter();
-  useEffect(() => {
-    if (userProfile) {
-      let currency = userProfile.userProfile?.currencies;
-      if (currency) {
-        setUserCurrency(currency);
-      }
-    }
-  }, [userProfile]);
   const { computedPrice, computedNewPrice } = React.useMemo(() => {
     return {
-      computedNewPrice: newPrice(item, userCurrency.currencyCode, rates),
-      computedPrice: price(item, userCurrency.currencyCode, rates),
+      computedNewPrice: newPrice(item, userCurrencyCode, rates),
+      computedPrice: price(item, userCurrencyCode, rates),
     };
-  }, [item, userCurrency, rates]);
+  }, [item, userCurrencyCode, rates]);
   if (loading) return <p>Loading prices...</p>;
   return (
     <div
@@ -61,7 +53,8 @@ const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
       {/* Footer */}
       <div className="mx-2 py-2">
         <p className="font-semibold text-green-600">
-          Save {save(item, userCurrency.currencyCode, rates)} {userCurrency.currencyCode}
+          Save {save(item, userCurrencyCode, rates)}{" "}
+          {userCurrencyCode}
         </p>
       </div>
     </div>

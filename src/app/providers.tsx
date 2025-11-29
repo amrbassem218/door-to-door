@@ -1,4 +1,8 @@
 "use client";
+import { type UserAuthProfile } from "@/contexts/authContext";
+import { UserCurrencyContext } from "@/contexts/currencyContext";
+import { UserLocationContext } from "@/contexts/locationContext";
+import { UserAuthProfileContext } from "@/contexts/authContext";
 import { useUser } from "@/utils/getUser";
 import { getProducts, indexProducts } from "@/utils/products-utils";
 import { getSuggestion } from "@/utils/search-utils";
@@ -7,15 +11,17 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { SearchContext } from "../contexts/searchContext";
 import { supabase } from "../supabase/supabaseClient";
-import type {
-  dbData,
-  Product,
-  ProductFilters,
-  SearchContextType,
-  UserProfile,
+import {
+  type Currencies,
+  type dbData,
+  type FullLocation,
+  type pos,
+  type Product,
+  type ProductFilters,
+  type SearchContextType,
+  type UserProfile,
 } from "../types/types";
-import { UserContext } from "../userContext";
-import { camel } from "../utilities";
+import { camel, reverseGeo } from "../utilities";
 interface IProvidersProps {
   children: React.ReactNode;
 }
@@ -24,8 +30,61 @@ const Providers: React.FunctionComponent<IProvidersProps> = ({ children }) => {
   const [indexes, setIndexes] = useState<Index<string>[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
-  const [lang, setLang] = useState<string>("en");
+
+  const [userlocation, setUserLocation] = useState<FullLocation | null>(null);
+  const [userCurrency, setUserCurrency] = useState<Currencies | null>(null);
+  const [userAuthProfile, setUserAuthProfile] =
+    useState<UserAuthProfile | null>(null);
+  const [userLang, setUserLang] = useState<string>("en");
+
+  const user = useUser();
+  const handleGetUserData = async () => {
+    if (user) {
+      try {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("*, currencies(*)")
+          .eq("id", user.id)
+          .single();
+        if (error) {
+          console.log("couldn't get location");
+          console.error(error);
+        } else {
+          // Defining userData
+          const userProfile = camel(data) as UserProfile;
+
+          // User location
+          const geoLocation = userProfile.location as pos;
+          const textualLocation = await reverseGeo(geoLocation);
+          if (textualLocation) {
+            const fullLocation: FullLocation = {
+              ...geoLocation,
+              ...textualLocation,
+            };
+            setUserLocation(fullLocation);
+          }
+
+          // Currencies
+          const currency = userProfile.currencies;
+          setUserCurrency(currency);
+
+          // UserAuth
+          const authProfile = {
+            username: userProfile.username,
+            fullName: userProfile.fullName,
+            id: userProfile.id,
+          };
+          setUserAuthProfile(authProfile);
+        }
+      } catch (error) {
+        console.log("couldn't find userdata");
+        console.error(error);
+      }
+    }
+  };
+
   useEffect(() => {
+    handleGetUserData();
     getProducts()
       .then((data: dbData) => {
         if (data) {
@@ -41,7 +100,6 @@ const Providers: React.FunctionComponent<IProvidersProps> = ({ children }) => {
         console.error(error);
       });
   }, []);
-
   const searchProducts = async (query: string): Promise<Product[]> => {
     if (!query || !indexes.length || !products.length) return [];
 
@@ -119,41 +177,18 @@ const Providers: React.FunctionComponent<IProvidersProps> = ({ children }) => {
     filterProducts,
   };
 
-
-
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const user = useUser();
-  useEffect(() => {
-    if (user) {
-      const getUserData = async () => {
-        try {
-          const { data: userData, error } = await supabase
-            .from("profiles")
-            .select("*, currencies(*)")
-            .eq("id", user.id)
-            .single();
-          if (error) {
-            console.log("couldn't get user profile");
-            console.error(error);
-          }
-          if (userData) {
-            const camelUser = camel(userData) as UserProfile;
-            setUserProfile(camelUser);
-          }
-        } catch (error) {
-          console.error("Network error fetching user profile:", error);
-        }
-      };
-      getUserData();
-    }
-  }, [user]);
-
   return (
-    <UserContext.Provider value={{ userProfile, setUserProfile }}>
-      <SearchContext.Provider value={searchContextValue}>
-        <div className="w-screen">{children}</div>
-      </SearchContext.Provider>
-    </UserContext.Provider>
+    <UserCurrencyContext.Provider value={[userCurrency, setUserCurrency]}>
+      <UserLocationContext.Provider value={[userlocation, setUserLocation]}>
+        <UserAuthProfileContext.Provider
+          value={[userAuthProfile, setUserAuthProfile]}
+        >
+          <SearchContext.Provider value={searchContextValue}>
+            <div className="w-screen">{children}</div>
+          </SearchContext.Provider>
+        </UserAuthProfileContext.Provider>
+      </UserLocationContext.Provider>
+    </UserCurrencyContext.Provider>
   );
 };
 

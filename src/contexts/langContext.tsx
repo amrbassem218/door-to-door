@@ -1,12 +1,25 @@
-import { createContext, useContext } from "react";
-import type { LangContextType } from "../../types/types";
+"use client";
+import {
+  createContext,
+  useContext,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
+export interface UserLanguage {
+  name: string;
+  langCode: string;
+  countryCode: string;
+}
+export type UserLangState = [
+  UserLanguage,
+  Dispatch<SetStateAction<UserLanguage>>
+];
+export const UserLangContext = createContext<UserLangState | null>(null);
 
-export const LangContext = createContext<LangContextType | null>(null);
-
-export const useSearch = () => {
-    const context = useContext(LangContext);
-    if (!context) {
-        throw new Error('useSearch must be used within a SearchProvider');
-    }
-    return context;
+export const useUserLang = () => {
+  const userLangState = useContext(UserLangContext);
+  if (!userLangState) {
+    throw new Error("Lang was not found");
+  }
+  return userLangState;
 };

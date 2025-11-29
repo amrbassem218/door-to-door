@@ -1,26 +1,16 @@
 "use client";
-import type { Currencies } from "@/types/types";
-import { getProfile } from "@/userContext";
+import { useUserCurrency } from "@/contexts/currencyContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
-import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 
 interface ISettingsProps {}
 
 const Settings: React.FunctionComponent<ISettingsProps> = (props) => {
   const egypt = { code: "EG", name: "Egypt" };
-  const [userCountry, setUserCountry] = useState(egypt);
-  const userProfile = getProfile();
-  const [userCurrency, setUserCurrency] = useState<Currencies>();
+  const [userCurrency, setUserCurrency] = useUserCurrency();
   const router = useRouter();
-  useEffect(() => {
-    if (userProfile) {
-      console.log("user_profile: ", userProfile);
-      setUserCurrency(userProfile?.userProfile?.currencies);
-    }
-  }, [userProfile]);
   return (
     <div>
       {/* Header */}
@@ -51,9 +41,12 @@ const Settings: React.FunctionComponent<ISettingsProps> = (props) => {
         </div>
 
         {/* Ship to */}
-        <div className="border-b-1 px-5 py-3" onClick={() => router.push("/location")}>
+        <div
+          className="border-b-1 px-5 py-3"
+          onClick={() => router.push("/location")}
+        >
           <p className="font-medium">Ship to</p>
-          </div>
+        </div>
       </div>
     </div>
   );

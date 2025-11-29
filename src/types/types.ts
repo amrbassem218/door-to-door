@@ -1,7 +1,7 @@
+import type { Camelize } from "@/utilities";
 import { Index } from "flexsearch";
 import type { Dispatch, SetStateAction } from "react";
 import type { Database } from "./database";
-import type { Camelize } from "@/utilities";
 
 export interface Product{
     name: string;
@@ -74,10 +74,23 @@ export type Currencies = Camelize<localCurrencies>
 type localReview = Database['public']['Tables']['reviews']['Row'];
 export type ReviewType = Camelize<localReview> & {profiles: profilesRow};
 
-export type UserProfile = profilesRow & {currencies: Currencies} & {currency: string; country: string; language: string;} & {cart: {cartLength: number; products: Product[];}};
+export type UserProfile = profilesRow & {location: pos} & {currencies: Currencies} & {currency: string; country: string; language: string;} & {cart: {cartLength: number; products: Product[];}};
+
+export interface Location {
+    lat: number;
+    lng: number;
+}
+
+export interface ReverseGeo {
+    country: string | undefined;
+    city: string | undefined;
+    adress: string | undefined;
+}
 
 export interface FullLocation {
     country: string | undefined;
     city: string | undefined;
     adress: string | undefined;
+    lat: number;
+    lng: number;
 }

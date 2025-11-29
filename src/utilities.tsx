@@ -3,7 +3,7 @@ import camelcaseKeys from "camelcase-keys";
 import { all, create } from "mathjs";
 import { loadGoogle } from "./googleLoader";
 import { supabase } from "./supabase/supabaseClient";
-import type { FullLocation, pos, Product } from "./types/types";
+import type { pos, Product, ReverseGeo } from "./types/types";
 
 export const unitChange = (
   value: number,
@@ -259,7 +259,7 @@ export const convertPrice = (
   return Number((priceInEGP * rates[targetCurrency]).toFixed(2));
 };
 
-export const getUserCurrency = async (userId: string) => {
+export const getCurrency = async (userId: string) => {
   const { data: userCurrency, error } = await supabase
     .from("profiles")
     .select("currency, currencies(*)")
@@ -301,7 +301,7 @@ export const viewDate = (date: Date, separator?: string) => {
   };
 };
 
-export const reverseGeo = async ({ lat, lng }: pos): Promise<FullLocation> => {
+export const reverseGeo = async ({ lat, lng }: pos): Promise<ReverseGeo> => {
   try {
     await loadGoogle();
     return new Promise((resolve, reject) => {

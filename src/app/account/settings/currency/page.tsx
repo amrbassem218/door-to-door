@@ -3,13 +3,12 @@ import type { Currencies } from "@/types/types";
 import * as React from "react";
 
 import {
-  defaultCurrency,
-  getCurrencies,
+  getAllCurrencies,
   handleNewCurrencyClick,
 } from "@/components/currency/utils";
 import GoBackButton from "@/components/header/goBackButton";
-import { getProfile } from "@/userContext";
-import { useUser } from "@/utils/getUser";
+import { useUserAuthProfile } from "@/contexts/authContext";
+import { useUserCurrency } from "@/contexts/currencyContext";
 import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -18,22 +17,14 @@ interface ICurrencyProps {}
 
 const Currency: React.FunctionComponent<ICurrencyProps> = () => {
   const [allCurrencies, setAllCurrencies] = useState<Currencies[]>([]);
-  const userProfile = getProfile();
-  const user = useUser();
-  const [userCurrency, setUserCurrency] = useState<Currencies>(defaultCurrency);
+  const [userCurrency, setUserCurrency] = useUserCurrency();
+  const [userAuthProfile, setUserAuthProfile] = useUserAuthProfile();
   const router = useRouter();
   useEffect(() => {
-    getCurrencies(setAllCurrencies);
+    getAllCurrencies(setAllCurrencies);
   }, []);
-  useEffect(() => {
-    if (userProfile) {
-      let currency = userProfile.userProfile?.currencies;
-      if (currency) {
-        setUserCurrency(currency);
-      }
-    }
-  }, [userProfile]);
-  if (!userProfile) {
+  if (!userAuthProfile) {
+    router.push("/login");
     return <p>loading...</p>;
   }
   return (
@@ -69,7 +60,11 @@ const Currency: React.FunctionComponent<ICurrencyProps> = () => {
           <div
             className="space-y-1"
             onClick={() => {
-              handleNewCurrencyClick(userProfile, setUserCurrency, currency);
+              handleNewCurrencyClick(
+                userAuthProfile.id,
+                setUserCurrency,
+                currency
+              );
               router.back();
             }}
             key={i}

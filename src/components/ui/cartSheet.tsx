@@ -26,14 +26,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getProfile } from "@/contexts/userContext";
 import { useCurrencyRates } from "@/getRates";
-import { getProfile } from "@/userContext";
 import { addProductToCart, getCart } from "@/utils/cart-utils";
 import { useUser } from "@/utils/getUser";
 import { useRouter } from "next/navigation";
 import { FaChevronDown } from "react-icons/fa";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import NavigationButton from "../navigationButton";
+import { useUserCurrencyCode } from "@/contexts/currencyContext";
 
 interface ICardSheetProps {
   product: Product;
@@ -51,11 +52,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
   >({});
   const router = useRouter();
   const { rates, loading } = useCurrencyRates();
-  const userProfile = getProfile();
-  const [userCurrency, setUserCurrency] = useState<string>("USD");
-  useEffect(() => {
-    setUserCurrency(userProfile?.userProfile?.currencies.currencyCode ?? "USD");
-  }, [userProfile?.userProfile?.currencies.currencyCode]);
+  const [userCurrencyCode] = useUserCurrencyCode();
   const id = (product: Product) => {
     return Number(product.id);
   };
@@ -175,7 +172,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                 <div className="mb-2 ">
                   <h2 className="text-center text-heading">Subtotal</h2>
                   <h3 className="text-center font-bold text-md text-orange-700 ">
-                    {subtotal} {userCurrency}
+                    {subtotal} {userCurrencyCode}
                   </h3>
                 </div>
                 <NavigationButton
@@ -209,12 +206,12 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                       ({" "}
                       {newPrice(
                         product,
-                        userCurrency,
+                        userCurrencyCode,
                         rates,
                         1,
                         cartMeasurement[id(product)]
                       )}{" "}
-                      {userCurrency} / {cartMeasurement[id(product)]})
+                      {userCurrencyCode} / {cartMeasurement[id(product)]})
                     </span>
                   </div>
                   <div className="space-y-3 text-sm ">
@@ -273,12 +270,12 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                         <span className="text-muted font-normal">total: </span>{" "}
                         {newPrice(
                           product,
-                          userCurrency,
+                          userCurrencyCode,
                           rates,
                           cartQuantity[id(product)],
                           cartMeasurement[id(product)]
                         )}{" "}
-                        {userCurrency}
+                        {userCurrencyCode}
                       </p>
                     </div>
                     {/* Measurement change */}

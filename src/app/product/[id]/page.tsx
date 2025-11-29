@@ -18,10 +18,10 @@ import Review from "@/components/ui/review";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import SimialrProducts from "@/components/ui/similarProducts";
+import { useUserCurrencyCode } from "@/contexts/currencyContext";
 import { useCurrencyRates } from "@/getRates";
 import { supabase } from "@/supabase/supabaseClient";
 import type { Product, ReviewType } from "@/types/types";
-import { getProfile } from "@/userContext";
 import { camel, measurements, newPrice, unitChange } from "@/utilities";
 import { getProduct } from "@/utils/products-utils";
 import { useRouter } from "next/navigation";
@@ -49,8 +49,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
 
   const [isCrop, setIsCrop] = useState(false);
   const { rates, loading } = useCurrencyRates();
-  const userProfile = getProfile();
-  const [userCurrency, setUserCurrency] = useState<string>("USD");
+  const [userCurrencyCode, setUserCurrencyCode] = useUserCurrencyCode();
   const [headerHeight, setHeaderHeight] = useState<number>(0);
   const [reviews, setReviews] = useState<ReviewType[]>();
 
@@ -59,9 +58,6 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   const descriptionRef = useRef<HTMLElement>(null);
   const storeRef = useRef<HTMLElement>(null);
   const router = useRouter();
-  useEffect(() => {
-    setUserCurrency(userProfile?.userProfile?.currencies.currencyCode ?? "USD");
-  }, [userProfile?.userProfile?.currencies.currencyCode]);
   useEffect(() => {
     if (product) {
       setMeasurement(
@@ -323,8 +319,8 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
               <div className="space-y-2">
                 {!isCrop && (
                   <h1 className="text-2xl">
-                    {newPrice(product, userCurrency, rates, 1, measurement)}{" "}
-                    {userCurrency}{" "}
+                    {newPrice(product, userCurrencyCode, rates, 1, measurement)}{" "}
+                    {userCurrencyCode}{" "}
                     <span className="text-muted text-sm">
                       (per {measurement})
                     </span>

@@ -13,37 +13,30 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useUserCurrency } from "@/contexts/currencyContext";
 import type { Currencies } from "@/types/types";
-import { getProfile } from "@/userContext";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
 import Flag from "react-world-flags";
-import { defaultCurrency, getCurrencies, handleNewCurrencyClick } from "../currency/utils";
-import { useRouter } from "next/navigation";
+import { getAllCurrencies, handleNewCurrencyClick } from "../currency/utils";
+import { useUserAuthProfile } from "@/contexts/authContext";
 interface ICurrencyDropDownProps {}
 
 const CurrencyDropDown: React.FunctionComponent<ICurrencyDropDownProps> = (
   props
 ) => {
   const [open, setOpen] = React.useState(false);
-  const userProfile = getProfile();
-  const [userCurrency, setUserCurrency] = useState<Currencies>(defaultCurrency);
+  const [userCurrency, setUserCurrency] = useUserCurrency();
+  const [userAuthProfile, setUserAuthProfile] = useUserAuthProfile();
   const [allCurrencies, setAllCurrencies] = useState<Currencies[]>([]);
   const router = useRouter();
   useEffect(() => {
-    if (userProfile) {
-      let currency = userProfile.userProfile?.currencies;
-      if (currency) {
-        setUserCurrency(currency);
-      }
-    }
-  }, [userProfile]);
-  useEffect(() => {
-      getCurrencies(setAllCurrencies);
+    getAllCurrencies(setAllCurrencies);
   }, []);
-  if(!userProfile){
-    router.push('/login');
+  if (!userAuthProfile) {
+    router.push("/login");
     return <p>loading...</p>;
   }
   return (
@@ -76,7 +69,13 @@ const CurrencyDropDown: React.FunctionComponent<ICurrencyDropDownProps> = (
                     <CommandItem
                       key={`${currency.countryCode}-${currency.currencyCode}`}
                       value={currency.currencyCode}
-                      onSelect={() => handleNewCurrencyClick(userProfile, setUserCurrency, currency)}
+                      onSelect={() =>
+                        handleNewCurrencyClick(
+                          userAuthProfile.id,
+                          setUserCurrency,
+                          currency
+                        )
+                      }
                     >
                       <div className="flex gap-2 items-center">
                         <Flag code={currency.countryCode} className="w-5 h-5" />

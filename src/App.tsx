@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { RouterProvider } from "react-router-dom";
 import "./App.css";
 import { SearchContext } from "./app/contexts/searchContext";
+import { UserContext } from "./contexts/userContext";
 import { router } from "./router";
 import { supabase } from "./supabase/supabaseClient";
 import type {
@@ -13,7 +14,6 @@ import type {
   SearchContextType,
   UserProfile,
 } from "./types/types";
-import { UserContext } from "./userContext";
 import {
   camel,
   getProducts,
