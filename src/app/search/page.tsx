@@ -6,12 +6,12 @@ import { useCurrencyRates } from "@/getRates";
 import type { Product, ProductFilters } from "@/types/types";
 import { newPrice, price } from "@/utilities";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 
 interface ISearchPageProps {}
-
-const SearchPage: React.FunctionComponent<ISearchPageProps> = (props) => {
+function SearchContext() {
   const searchParams = useSearchParams();
+
   const query = searchParams.get("query");
   // const [searchQuery, setSearchQuery]
   const search = useSearch();
@@ -51,7 +51,6 @@ const SearchPage: React.FunctionComponent<ISearchPageProps> = (props) => {
   const { rates, loading } = useCurrencyRates();
   const router = useRouter();
   if (loading) return <p>Loading prices...</p>;
-
   return (
     <div className="container mx-auto py-4 px-2">
       <div className="mb-6">
@@ -187,7 +186,8 @@ const SearchPage: React.FunctionComponent<ISearchPageProps> = (props) => {
 
                 <div className="flex items-center gap-2 md:justify-between mb-2">
                   <span className="md:text-xl text-lg font-bold text-green-600">
-                    {newPrice(product, userCurrencyCode, rates)} {userCurrencyCode}
+                    {newPrice(product, userCurrencyCode, rates)}{" "}
+                    {userCurrencyCode}
                   </span>
                   {product.discount && (
                     <span className="text-sm text-gray-500 line-through">
@@ -231,6 +231,14 @@ const SearchPage: React.FunctionComponent<ISearchPageProps> = (props) => {
       </div>
     </div>
   );
+}
+
+const SearchPage: React.FunctionComponent<ISearchPageProps> = (props) => {
+  return(
+    <Suspense fallback={<div>loading...</div>}>
+      <SearchContext/>
+    </Suspense>
+  )
 };
 
 export default SearchPage;
