@@ -52,7 +52,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
   >({});
   const router = useRouter();
   const { rates, loading } = useCurrencyRates();
-  const [userCurrencyCode] = useUserCurrencyCode();
+  const userCurrencyCode = useUserCurrencyCode();
   const id = (product: Product) => {
     return Number(product.id);
   };

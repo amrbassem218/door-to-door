@@ -1,14 +1,12 @@
 "use client";
-import { getProfile } from "@/contexts/userContext";
 import { useCurrencyRates } from "@/getRates";
 import type { Product } from "@/types/types";
 import { newPrice, price, save } from "@/utilities";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 
-import { useEffect, useState } from "react";
-import { defaultCurrency } from "../currency/utils";
 import { useUserCurrencyCode } from "@/contexts/currencyContext";
+import { useEffect } from "react";
 interface IItemProps {
   item: Product;
   col?: string;
@@ -17,7 +15,7 @@ interface IItemProps {
 
 const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
   const { rates, loading } = useCurrencyRates();
-  const [userCurrencyCode] = useUserCurrencyCode();
+  const userCurrencyCode = useUserCurrencyCode();
   const router = useRouter();
   const { computedPrice, computedNewPrice } = React.useMemo(() => {
     return {
@@ -43,9 +41,9 @@ const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
       {/* <Separator className=''/> */}
       {/* Item Description */}
       <div className="mx-2 mt-2 pb-2 border-b-2 space-y-1">
-        <h1 className="text-lg font-medium">{item.name}</h1>
+        <h1 className="text-lg font-medium">{item.name} </h1>
         <div className="flex gap-2 text-md">
-          <p className="font-bold">{computedNewPrice}</p>
+          <p className="font-bold">{computedNewPrice} </p>
           <p className="line-through decoration-1">{computedPrice}</p>
         </div>
       </div>
@@ -53,8 +51,7 @@ const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
       {/* Footer */}
       <div className="mx-2 py-2">
         <p className="font-semibold text-green-600">
-          Save {save(item, userCurrencyCode, rates)}{" "}
-          {userCurrencyCode}
+          Save {save(item, userCurrencyCode, rates)} {userCurrencyCode}
         </p>
       </div>
     </div>

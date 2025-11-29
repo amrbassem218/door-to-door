@@ -49,7 +49,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
 
   const [isCrop, setIsCrop] = useState(false);
   const { rates, loading } = useCurrencyRates();
-  const [userCurrencyCode, setUserCurrencyCode] = useUserCurrencyCode();
+  const userCurrencyCode = useUserCurrencyCode();
   const [headerHeight, setHeaderHeight] = useState<number>(0);
   const [reviews, setReviews] = useState<ReviewType[]>();
 

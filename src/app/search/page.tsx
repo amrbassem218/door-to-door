@@ -47,7 +47,7 @@ const SearchPage: React.FunctionComponent<ISearchPageProps> = (props) => {
   const handleFilterChange = (newFilters: Partial<ProductFilters>) => {
     setFilters((prev) => ({ ...prev, ...newFilters }));
   };
-  const [userCurrencyCode, setUserCurrencyCode] = useUserCurrencyCode();
+  const userCurrencyCode = useUserCurrencyCode();
   const { rates, loading } = useCurrencyRates();
   const router = useRouter();
   if (loading) return <p>Loading prices...</p>;

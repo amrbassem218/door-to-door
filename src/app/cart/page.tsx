@@ -32,7 +32,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
   >({});
   const router = useRouter();
   const { rates, loading } = useCurrencyRates();
-  const [userCurrencyCode, setUserCurrencyCode] = useUserCurrencyCode();
+  const userCurrencyCode = useUserCurrencyCode();
   const id = (product: Product) => {
     return Number(product.id);
   };
