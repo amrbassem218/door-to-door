@@ -1,27 +1,26 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { BiCategory } from "react-icons/bi";
 import { FaHome } from "react-icons/fa";
 import { LuShoppingCart, LuUser } from "react-icons/lu";
-import { useLocation } from "react-router-dom";
 interface IBottomBarProps {}
 
 const BottomBar: React.FunctionComponent<IBottomBarProps> = (props) => {
   const [activeTab, setActiveTab] = useState("home");
 
-  const location = useLocation();
+  const pathName = usePathname();
   const tabs = ["home", "categories", "cart", "account"];
   const router = useRouter();
   useEffect(() => {
     setActiveTab("home");
     tabs.forEach((tab) => {
-      if (location.pathname.includes(tab)) {
+      if (pathName.includes(tab)) {
         setActiveTab(tab);
       }
     });
-  }, [location.pathname]);
+  }, [pathName]);
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
     router.push(`/${tab}`);

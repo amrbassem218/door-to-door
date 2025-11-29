@@ -1,7 +1,7 @@
 "use client";
+import { usePathname } from "next/navigation";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import NavigationButton from "../navigationButton";
 interface MobileTopicBarProps {}
 
@@ -11,11 +11,11 @@ const MobileTopicBar: React.FunctionComponent<MobileTopicBarProps> = (
   const [activeTab, setActiveTab] = useState(5);
   const tabs = ["Crops", "Furniture", "Clothes"];
 
-  const location = useLocation();
+  const pathName = usePathname();
   useEffect(() => {
     setActiveTab(5);
     tabs.forEach((tab, i) => {
-      if (location.pathname == `/category/${tab.toLowerCase()}`) {
+      if (pathName == `/category/${tab.toLowerCase()}`) {
         setActiveTab(i);
       }
     });
