@@ -1,3 +1,5 @@
+'use client';
+
 import { Loader } from "@googlemaps/js-api-loader";
 
 const loader = new Loader({
@@ -9,6 +11,11 @@ const loader = new Loader({
 let isLoaded = false;
 
 export async function loadGoogle() {
+  // Check if we're in browser environment
+  if (typeof window === 'undefined') {
+    throw new Error('Google Maps can only be loaded in browser');
+  }
+
   // Check if Google Maps is already loaded
   if (window.google && window.google.maps) {
     return window.google;
@@ -19,7 +26,7 @@ export async function loadGoogle() {
     // Wait for the existing load to complete
     return new Promise((resolve) => {
       const checkLoaded = () => {
-        if (window.google && window.google.maps) {
+        if (typeof window !== 'undefined' && window.google && window.google.maps) {
           resolve(window.google);
         } else {
           setTimeout(checkLoaded, 100);

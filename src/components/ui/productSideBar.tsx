@@ -10,24 +10,21 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { getProfile } from "@/contexts/userContext";
 import { useCurrencyRates } from "@/getRates";
-import type { pos, Product } from "@/types/types";
-import { measurements, newPrice, reverseGeo } from "@/utilities";
+import type { Product } from "@/types/types";
+import { measurements, newPrice } from "@/utilities";
 import type { Dispatch, SetStateAction } from "react";
 import * as React from "react";
-import { useEffect } from "react";
 import { CiLocationOn } from "react-icons/ci";
 import { FaAngleRight, FaChevronDown, FaHeart } from "react-icons/fa";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { Button } from "./button";
 
-import { supabase } from "@/supabase/supabaseClient";
+import { useUserCurrencyCode } from "@/contexts/currencyContext";
+import { useUserLocation } from "@/contexts/locationContext";
 import { addProductToCart } from "@/utils/cart-utils";
 import { useUser } from "@/utils/getUser";
 import NavigationButton from "../navigationButton";
-import { useUserCurrencyCode } from "@/contexts/currencyContext";
-import { useUserLocation } from "@/contexts/locationContext";
 interface IProductSideBarProps {
   product: Product;
   measurement: string;

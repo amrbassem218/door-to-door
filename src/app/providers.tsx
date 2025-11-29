@@ -22,13 +22,12 @@ import {
   type Currencies,
   type dbData,
   type FullLocation,
-  type pos,
   type Product,
   type ProductFilters,
   type SearchContextType,
   type UserProfile,
 } from "../types/types";
-import { camel, reverseGeo } from "../utilities";
+import { camel } from "../utilities";
 interface IProvidersProps {
   children: React.ReactNode;
 }
@@ -38,7 +37,7 @@ const Providers: React.FunctionComponent<IProvidersProps> = ({ children }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
 
-  const [userlocation, setUserLocation] = useState<FullLocation | null>(null);
+  const [userLocation, setUserLocation] = useState<FullLocation | null>(null);
   const [userCurrency, setUserCurrency] = useState<Currencies>(defaultCurrency);
   const [userAuthProfile, setUserAuthProfile] =
     useState<UserAuthProfile | null>(null);
@@ -199,7 +198,7 @@ const Providers: React.FunctionComponent<IProvidersProps> = ({ children }) => {
 
   return (
     <UserCurrencyContext.Provider value={[userCurrency, setUserCurrency]}>
-      <UserLocationContext.Provider value={[userlocation, setUserLocation]}>
+      <UserLocationContext.Provider value={[userLocation, setUserLocation]}>
         <UserAuthProfileContext.Provider
           value={[userAuthProfile, setUserAuthProfile]}
         >

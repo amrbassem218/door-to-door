@@ -19,7 +19,7 @@ const MobileTopicBar: React.FunctionComponent<MobileTopicBarProps> = (
         setActiveTab(i);
       }
     });
-  }, [location]);
+  }, [pathName]);
   return (
     <div className="flex justify-around text-lg ">
       {tabs.map((tab, i) => (
