@@ -33,7 +33,7 @@ const Review: React.FunctionComponent<IReviewProps> = ({review}) => {
               allowFraction 
               className=''
           />
-          <p className='font-semibold text-sm'>{review.tags && review.tags.join(', ')}</p>
+          <p className='font-semibold text-sm'></p>
         </div>
 
         {/* Date */}
