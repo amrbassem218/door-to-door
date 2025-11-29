@@ -7,7 +7,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { handleGoogleAuth } from "@/utilities";
 import * as React from "react";
 import { FaAngleRight, FaApple, FaFacebook } from "react-icons/fa";
 import { FaSquareXTwitter } from "react-icons/fa6";
@@ -23,6 +22,7 @@ import {
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
 
+import { handleGoogleAuth } from "@/utils/auth";
 import { useUser } from "@/utils/getUser";
 import { getDisplayName, handleLogout } from "@/utils/user-utils";
 import { useRouter } from "next/navigation";

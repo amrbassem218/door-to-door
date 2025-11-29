@@ -1,5 +1,5 @@
 'use client'
-import { handleGoogleAuth } from "@/utilities";
+import { handleGoogleAuth } from "@/utils/auth";
 import * as React from "react";
 import { FcGoogle } from "react-icons/fc";
 
