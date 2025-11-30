@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///media/amrbassem218/22C0575DC05735EF/door-to-door/src/components/login/googleButton.tsx"],"sourcesContent":["'use client'\nimport { handleGoogleAuth } from \"@/utils/auth\";\nimport * as React from \"react\";\nimport { FcGoogle } from \"react-icons/fc\";\n\ninterface GoogleSignButtonProps {}\n\nconst GoogleSignButton: React.FunctionComponent<GoogleSignButtonProps> = (\n  props\n) => {\n  return (\n    <button>\n      <FcGoogle size={40} onClick={() => handleGoogleAuth()} />\n    </button>\n  );\n};\n\nexport default GoogleSignButton;\n"],"names":[],"mappings":";;;;;AACA;AAEA;AAHA;;;;AAOA,MAAM,mBAAmE,CACvE;IAEA,qBACE,6LAAC;kBACC,cAAA,6LAAC,6JAAQ;YAAC,MAAM;YAAI,SAAS,IAAM,IAAA,4IAAgB;;;;;;;;;;;AAGzD;KARM;uCAUS","debugId":null}}]
+}

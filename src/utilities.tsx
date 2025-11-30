@@ -291,3 +291,5 @@ export const viewDate = (date: Date, separator?: string) => {
   };
 };
 
+
+export const notFoundInput = {error: (issue)  => issue.input == undefined ? "Required" : "Not a string"};

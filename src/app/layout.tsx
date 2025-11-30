@@ -1,9 +1,9 @@
 import Header from "@/components/header/Header";
 import type { Metadata } from "next";
+import { Toaster } from "sonner";
 import "../App.css";
 import "../index.css";
 import Providers from "./providers";
-import { Toaster } from "sonner";
 export const metadata: Metadata = {
   title: "EGEEX",
   description: "The first global egyptian market",
@@ -18,12 +18,11 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Providers>
-          <div>
-            {/* <TopBar /> */}
+          <div className="flex flex-col min-h-screen w-full">
             <Header />
             {children}
           </div>
-          <Toaster/>
+          <Toaster />
         </Providers>
       </body>
     </html>

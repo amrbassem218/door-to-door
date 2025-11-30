@@ -18,7 +18,7 @@ interface IHomeProps {}
 const Home: React.FunctionComponent<IHomeProps> = (props) => {
   // const [topSellingSeeMore, setTopSellingSeeMore] = useState(false);
   return (
-    <div className="mx-auto">
+    <div className="">
       <div className="mb-10">
         <Hero />
       </div>

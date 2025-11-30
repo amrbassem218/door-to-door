@@ -1,3 +1,4 @@
+'use client';
 import GoogleSignButton from "@/components/login/googleButton";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,31 +9,108 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { notFoundInput } from "@/utilities";
+import { handlePasswordLogin } from "@/utils/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
 import * as React from "react";
+import { Controller, useForm } from "react-hook-form";
 import { FaApple, FaFacebook } from "react-icons/fa";
 import { FaSquareXTwitter } from "react-icons/fa6";
-import { FcGoogle } from "react-icons/fc";
+import { toast } from "sonner";
+import z from "zod";
 
 interface ILoginProps {}
-
+const schema = z.object({
+  email: z.email("Enter a valid email address"),
+  password: z.string(notFoundInput).min(8, "Password must be at least 8 characters long"),
+});
+type zodSchema = z.infer<typeof schema>;
 const Login: React.FunctionComponent<ILoginProps> = (props) => {
+  const form = useForm<zodSchema>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+  const onSubmit = async(data: zodSchema) => {
+    const { email, password } = data;
+
+    const {data: userInfo, error} = await handlePasswordLogin(email, password);
+    if(error){
+      toast.error("Error logging in: " + error.message);
+      console.log("Error logging in:", error.message);
+    } else {
+      console.log("Login successful:", userInfo);
+    }
+  };
   return (
-    <div className="flex w-full h-screen items-center justify-center">
+    <div className="flex w-full flex-1 items-center justify-center my-10">
       <Card className="max-w-150">
         <CardHeader className="text-center">
-          <CardTitle >Sign In/ Register</CardTitle>
-          <CardDescription >
+          <CardTitle>Login</CardTitle>
+          <CardDescription>
             Continue with your email and password
           </CardDescription>
         </CardHeader>
         <CardContent className="gap-5 flex flex-col">
           <div>
-            <form action="" className="space-y-3 flex flex-col ">
-              <Input type="email" id="email" placeholder="Email"></Input>
-              <Input type="password" placeholder="Password"></Input>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-3 flex flex-col "
+            >
+              <FieldGroup>
+                <Controller
+                  control={form.control}
+                  name="email"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel>Email</FieldLabel>
+                      <Input
+                        type="email"
+                        placeholder="Enter Email"
+                        className="border border-border"
+                        {...field}
+                        aria-invalid={fieldState.invalid}
+                      />
+                      <FieldError
+                        errors={[{ message: fieldState.error?.message }]}
+                      />
+                    </Field>
+                  )}
+                />
+                <Controller
+                  control={form.control}
+                  name="password"
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel>Password</FieldLabel>
+                      <Input
+                        type="password"
+                        placeholder="Enter Password"
+                        className="border border-border"
+                        {...field}
+                        aria-invalid={fieldState.invalid}
+                      />
+                      <FieldError
+                        errors={[{ message: fieldState.error?.message }]}
+                      />
+                    </Field>
+                  )}
+                />
+              </FieldGroup>
               <Button type="submit">Submit</Button>
+              <div>
+                <p className="text-sm text-center text-muted-foreground">Don't have an account? <a href="/signup" className="text-blue-500 hover:text-blue-600">Sign up</a></p>
+              </div>
             </form>
           </div>
           <div>
@@ -47,7 +125,7 @@ const Login: React.FunctionComponent<ILoginProps> = (props) => {
 
             <div className="">
               <div className="flex gap-3 justify-around">
-                <GoogleSignButton/>
+                <GoogleSignButton />
                 <button>
                   <FaFacebook size={40} className="text-[#1877F2]" />
                 </button>
