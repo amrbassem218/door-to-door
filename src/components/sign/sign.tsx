@@ -26,6 +26,7 @@ import { handleGoogleAuth } from "@/utils/auth";
 import { useUser } from "@/utils/getUser";
 import { getDisplayName, handleLogout } from "@/utils/user-utils";
 import { useRouter } from "next/navigation";
+import LoginCard from "@/app/login/loginCard";
 
 interface ISignProps {}
 
@@ -84,55 +85,7 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
             <LuUser className="text-primary-foreground text-2xl lg:text-3xl" />
           </DialogTrigger>
           <DialogContent className="p-10 w-120 ">
-            <DialogHeader className="mx-auto">
-              <DialogTitle className="text-center">
-                Sign In/ Register
-              </DialogTitle>
-              <DialogDescription className="">
-                Continue with your email and password
-              </DialogDescription>
-            </DialogHeader>
-            <div>
-              <form action="" className="space-y-3 flex flex-col ">
-                <Input type="email" id="email" placeholder="Email"></Input>
-                <Input type="password" placeholder="Password"></Input>
-                <Button type="submit">Submit</Button>
-              </form>
-            </div>
-            <div>
-              <div className="flex items-center w-full my-4">
-                <Separator className="h-px bg-gray-300 flex-1" />
-                <p className="px-4 text-sm text-gray-500 whitespace-nowrap">
-                  or continue with
-                </p>
-                <Separator className="h-px bg-gray-300 flex-1" />
-              </div>
-              <div className="">
-                <div className="flex gap-3 justify-around">
-                  <button>
-                    <FcGoogle size={40} onClick={() => handleGoogleAuth()} />
-                  </button>
-                  <button>
-                    <FaFacebook size={40} className="text-[#1877F2]" />
-                  </button>
-                  <button>
-                    <FaApple size={40} />
-                  </button>
-                  <button>
-                    <FaSquareXTwitter size={40} />
-                  </button>
-                </div>
-              </div>
-            </div>
-            {/* TOS */}
-            <div className="mt-4">
-              <p className="text-xs text-muted text-center">
-                By continuing, you confirm that you are an adult and have read
-                and accepted our Free Membership Agreement and Privacy Policy.
-                Your information may be used for marketing purposes, but you can
-                opt out at any time.
-              </p>
-            </div>
+            <LoginCard />
           </DialogContent>
         </Dialog>
       )}
