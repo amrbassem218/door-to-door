@@ -50,6 +50,7 @@ const Login: React.FunctionComponent<ILoginProps> = (props) => {
       console.log("Error logging in:", error.message);
     } else {
       console.log("Login successful:", userInfo);
+      toast.success("Login successful!");
     }
   };
   return (

@@ -20,6 +20,7 @@ export const handlePasswordLogin = async (email: string, password: string) => {
   });
   return { data, error };
 };
+
 export const handlePasswordSignup = async (
   email: string,
   password: string,
@@ -38,9 +39,6 @@ export const handlePasswordSignup = async (
   });
   if (error) {
     return { data, error };
-  }
-  else if(data?.user.identities?.length === 0){
-    return { data: null, error: new Error("Email already registered but not confirmed. Please check your email to verify your account.") };
   }
   const userId = data.user?.id;
   if (userId) {

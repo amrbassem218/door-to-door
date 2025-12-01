@@ -2105,10 +2105,6 @@
     color: #222;
   }
 
-  .text-accent {
-    color: var(--accent);
-  }
-
   .text-black {
     color: var(--color-black);
   }
@@ -2564,12 +2560,6 @@
   @media (hover: hover) {
     .hover\:text-blue-600:hover {
       color: var(--color-blue-600);
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:text-primary:hover {
-      color: var(--primary);
     }
   }
 

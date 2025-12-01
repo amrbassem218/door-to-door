@@ -1380,11 +1380,6 @@ const handlePasswordSignup = async (email, password, firstName, lastName)=>{
             data,
             error
         };
-    } else if (data?.user.identities?.length === 0) {
-        return {
-            data: null,
-            error: new Error("Email already registered but not confirmed. Please check your email to verify your account.")
-        };
     }
     const userId = data.user?.id;
     if (userId) {

@@ -1269,7 +1269,9 @@ __turbopack_context__.s([
     "handleGoogleAuth",
     ()=>handleGoogleAuth,
     "handlePasswordLogin",
-    ()=>handlePasswordLogin
+    ()=>handlePasswordLogin,
+    "handlePasswordSignup",
+    ()=>handlePasswordSignup
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$supabase$2f$supabaseClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/supabase/supabaseClient.ts [app-ssr] (ecmascript)");
 "use client";
@@ -1278,7 +1280,7 @@ const handleGoogleAuth = ()=>{
     __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$supabase$2f$supabaseClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].auth.signInWithOAuth({
         provider: "google",
         options: {
-            redirectTo: `${("TURBOPACK compile-time falsy", 0) ? "TURBOPACK unreachable" : ''}/auth/callback`
+            redirectTo: `${("TURBOPACK compile-time falsy", 0) ? "TURBOPACK unreachable" : ""}/auth/callback`
         }
     });
 };
@@ -1287,6 +1289,43 @@ const handlePasswordLogin = async (email, password)=>{
         email,
         password
     });
+    return {
+        data,
+        error
+    };
+};
+const handlePasswordSignup = async (email, password, firstName, lastName)=>{
+    const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$supabase$2f$supabaseClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].auth.signUp({
+        email,
+        password,
+        options: {
+            emailRedirectTo: `${("TURBOPACK compile-time falsy", 0) ? "TURBOPACK unreachable" : ""}/auth/callback`
+        }
+    });
+    if (error) {
+        return {
+            data,
+            error
+        };
+    }
+    const userId = data.user?.id;
+    if (userId) {
+        const { error: profileError } = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$supabase$2f$supabaseClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].from("profiles").update([
+            {
+                id: userId,
+                first_name: firstName,
+                last_name: lastName,
+                full_name: `${firstName} ${lastName}`
+            }
+        ]).eq("id", userId);
+        if (profileError) {
+            console.log("Error creating user profile:", profileError.message);
+            return {
+                data,
+                error: profileError
+            };
+        }
+    }
     return {
         data,
         error
@@ -2384,6 +2423,8 @@ __turbopack_context__.s([
     ()=>measurements,
     "newPrice",
     ()=>newPrice,
+    "notFoundInput",
+    ()=>notFoundInput,
     "price",
     ()=>price,
     "save",
@@ -2612,6 +2653,9 @@ const viewDate = (date, separator)=>{
         dateParts: dateParts,
         part: part
     };
+};
+const notFoundInput = {
+    error: (issue)=>issue.input == undefined ? "Required" : "Not a string"
 };
 }),
 "[project]/src/components/currency/utils.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
