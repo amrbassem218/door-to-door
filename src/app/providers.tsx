@@ -1,4 +1,5 @@
 "use client";
+import RouteProtection from "@/components/auth/RouteProtection";
 import { defaultCurrency } from "@/components/currency/utils";
 import {
   UserAuthProfileContext,
@@ -214,7 +215,9 @@ const Providers: React.FunctionComponent<IProvidersProps> = ({ children }) => {
           <UserLangContext value={[userLang, setUserLang]}>
             <UserCartContext value={[userCart, setUserCart]}>
               <SearchContext.Provider value={searchContextValue}>
-                <div className="w-screen">{children}</div>
+                <RouteProtection>
+                  <div className="w-screen">{children}</div>
+                </RouteProtection>
               </SearchContext.Provider>
             </UserCartContext>
           </UserLangContext>

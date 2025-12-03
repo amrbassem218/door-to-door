@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useUserCurrencyCode } from "@/contexts/currencyContext";
 import { useCurrencyRates } from "@/getRates";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { addProductToCart, getCart } from "@/utils/cart-utils";
 import { useUser } from "@/utils/getUser";
 import { useRouter } from "next/navigation";
@@ -43,13 +44,14 @@ interface ICardSheetProps {
 
 const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
   const { user } = useUser();
+  const { executeWithAuth } = useRequireAuth();
+  const router = useRouter();
   const [cart, setCart] = useState<CartItem[]>();
   const [subtotal, setSubtotal] = useState(0);
   const [cartQuantity, setCartQuantity] = useState<Record<number, number>>({});
   const [cartMeasurement, setCartMeasurement] = useState<
     Record<number, string>
   >({});
-  const router = useRouter();
   const { rates, loading } = useCurrencyRates();
   const userCurrencyCode = useUserCurrencyCode();
   const id = (product: Product) => {
@@ -78,31 +80,26 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
       });
     }
   }, [cart]);
-  const handleAddToCart = async () => {
-    if (user) {
-      const status = await addProductToCart(
-        user,
-        props.product,
-        props.quantity
-      );
-      const data = await getCart(user);
-      if (data) {
-        let total = 0;
-        const currentCartQuantity = cartQuantity;
-        const currentCartMeasurement = cartMeasurement;
-        data.forEach(({ products: product, quantity, measurement }) => {
-          total += Math.round(product.priceBefore);
-          currentCartQuantity[id(product)] = quantity;
-          currentCartMeasurement[id(product)] = measurement;
-        });
-        setCartQuantity(currentCartQuantity);
-        setCartMeasurement(currentCartMeasurement);
-        setSubtotal(total);
-        setCart(data);
-      }
-    } else {
+  const handleAddToCart = executeWithAuth(async () => {
+    if (!user) return; // Type guard - user is guaranteed to exist by executeWithAuth
+
+    const status = await addProductToCart(user, props.product, props.quantity);
+    const data = await getCart(user);
+    if (data) {
+      let total = 0;
+      const currentCartQuantity = cartQuantity;
+      const currentCartMeasurement = cartMeasurement;
+      data.forEach(({ products: product, quantity, measurement }) => {
+        total += Math.round(product.priceBefore);
+        currentCartQuantity[id(product)] = quantity;
+        currentCartMeasurement[id(product)] = measurement;
+      });
+      setCartQuantity(currentCartQuantity);
+      setCartMeasurement(currentCartMeasurement);
+      setSubtotal(total);
+      setCart(data);
     }
-  };
+  });
 
   const handleMeasurementChange = (product: Product, mes: string) => {
     const pid = id(product);

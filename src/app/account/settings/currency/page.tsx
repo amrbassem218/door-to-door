@@ -23,10 +23,6 @@ const Currency: React.FunctionComponent<ICurrencyProps> = () => {
   useEffect(() => {
     getAllCurrencies(setAllCurrencies);
   }, []);
-  if (!user?.id) {
-    router.push("/login");
-    return <p>loading...</p>;
-  }
   return (
     <div className="">
       {/* Header */}

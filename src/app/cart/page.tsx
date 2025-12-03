@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 interface ICartProps {}
 
 const Cart: React.FunctionComponent<ICartProps> = (props) => {
-  const {user, loading} = useUser();
+  const { user, loading } = useUser();
   const [cart, setCart] = useState<Record<number, CartItem[]>>();
   const [cartItems, setCartItems] = useState<CartItem[]>();
   const [total, setTotal] = useState(0);
@@ -34,7 +34,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
   const router = useRouter();
   const { rates, loading: ratesLoading } = useCurrencyRates();
   const userCurrencyCode = useUserCurrencyCode();
-  // const {isLoading, session} = (); 
+  // const {isLoading, session} = ();
   const id = (product: Product) => {
     return Number(product.id);
   };
@@ -155,13 +155,12 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
       }
     }
   };
-  useEffect(() => {
-    if(!loading){
-      if(!user){
-        router.replace('/login')
-      }
+  const handleCheckout = () => {
+    if (user) {
+      // Proceed to checkout
     }
-  }, [user, loading]);
+  };
+
   if (ratesLoading) return <p>Loading prices...</p>;
 
   return (

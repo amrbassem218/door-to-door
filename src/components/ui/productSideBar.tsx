@@ -22,9 +22,11 @@ import { Button } from "./button";
 
 import { useUserCurrencyCode } from "@/contexts/currencyContext";
 import { useUserLocation } from "@/contexts/locationContext";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { addProductToCart } from "@/utils/cart-utils";
 import { useUser } from "@/utils/getUser";
 import NavigationButton from "../navigationButton";
+import { toast } from "sonner";
 interface IProductSideBarProps {
   product: Product;
   measurement: string;
@@ -50,18 +52,23 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
   const userCurrencyCode = useUserCurrencyCode();
   const [userLocation, setUserLocation] = useUserLocation();
   const { user } = useUser();
+  const { executeWithAuth } = useRequireAuth();
+  const handleBuyNow = executeWithAuth(async () => {
+    if (!user) return; // Type guard - user is guaranteed to exist by executeWithAuth
 
-  const handleBuyNow = async () => {
-    if (user) {
-      addProductToCart(user, product, quantity).then((status) => {
-        if (status == "success") {
-          console.log("product added sucessfully");
-        } else {
-          console.log("couldn't add product");
-        }
-      });
-    }
-  };
+    addProductToCart(user, product, quantity).then((status) => {
+      if (status == "success") {
+        console.log("product added sucessfully");
+      } else {
+        console.log("couldn't add product");
+      }
+    });
+  });
+  const handleAddToFavorites = executeWithAuth(async (product: Product) => {
+    if (!user) return; // Type guard - user is guaranteed to exist by executeWithAuth
+    // TODO: Add to favorites logic here
+    toast.success("Added to favorites!");
+  });
   if (loading) return <p>loading...</p>;
   return (
     <div
@@ -196,6 +203,7 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
           <Button
             variant={"outline"}
             className="text-muted w-10 hover:text-red-500"
+            onClick={() => handleAddToFavorites(product)}
           >
             <FaHeart className="" />
           </Button>

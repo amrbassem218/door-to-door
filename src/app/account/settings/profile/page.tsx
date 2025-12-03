@@ -1,14 +1,10 @@
-import * as React from 'react';
+"use client";
+import * as React from "react";
 
-interface IProfileProps {
-}
+interface IProfileProps {}
 
 const Profile: React.FunctionComponent<IProfileProps> = (props) => {
-  return (
-    <div>
-      Profile here
-    </div>
-  );
+  return <div>Profile here</div>;
 };
 
 export default Profile;

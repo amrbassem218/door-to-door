@@ -44,7 +44,12 @@ export const schema = z.object({
       "Too short! It should have at least 20 chars. A detailed title helps product's SEO"
     )
     .max(200, "Too Long! Limit is 200 characters"),
-  description: z.string().min(20, "Too short! It should have at least 20 chars. A detailed description helps product's SEO"),
+  description: z
+    .string()
+    .min(
+      20,
+      "Too short! It should have at least 20 chars. A detailed description helps product's SEO"
+    ),
   specifications: z
     .array(
       z.object({
@@ -389,7 +394,9 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
                                     </Select>
                                     <FieldError
                                       errors={[
-                                        { message: fieldState.error?.message },
+                                        {
+                                          message: fieldState.error?.message,
+                                        },
                                       ]}
                                     />
                                   </Field>

@@ -40,7 +40,7 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
               <LuUser className="text-2xl lg:text-3xl" />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem>Profile</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/account")}>Profile</DropdownMenuItem>
               <DropdownMenuItem>
                 <button
                   className=""
