@@ -43,7 +43,7 @@ const Providers: React.FunctionComponent<IProvidersProps> = ({ children }) => {
     useState<UserAuthProfile | null>(null);
   const [userLang, setUserLang] = useState<UserLanguage | null>(null);
   const [userCart, setUserCart] = useState<Cart | null>(null);
-  const user = useUser();
+  const { user } = useUser();
   const handleGetUserData = async () => {
     if (user) {
       try {
@@ -76,12 +76,21 @@ const Providers: React.FunctionComponent<IProvidersProps> = ({ children }) => {
           const currency = userProfile.currencies;
           setUserCurrency(currency);
 
+          const getUserSession = async () => {
+            const {
+              data: { session },
+            } = await supabase.auth.getSession();
+            return session;
+          };
+          const session = await getUserSession();
           // UserAuth
           const authProfile = {
             username: userProfile.username,
             fullName: userProfile.fullName,
             id: userProfile.id,
+            session: session,
           };
+
           setUserAuthProfile(authProfile);
         }
 

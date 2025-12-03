@@ -7,19 +7,18 @@ import {
   handleNewCurrencyClick,
 } from "@/components/currency/utils";
 import GoBackButton from "@/components/header/goBackButton";
-import { useUserAuthProfile } from "@/contexts/authContext";
 import { useUserCurrency } from "@/contexts/currencyContext";
+import { useUser } from "@/utils/getUser";
 import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Flag from "react-world-flags";
-import { useUser } from "@/utils/getUser";
 interface ICurrencyProps {}
 
 const Currency: React.FunctionComponent<ICurrencyProps> = () => {
   const [allCurrencies, setAllCurrencies] = useState<Currencies[]>([]);
   const [userCurrency, setUserCurrency] = useUserCurrency();
-  const user = useUser();
+  const { user } = useUser();
   const router = useRouter();
   useEffect(() => {
     getAllCurrencies(setAllCurrencies);
@@ -61,11 +60,7 @@ const Currency: React.FunctionComponent<ICurrencyProps> = () => {
           <div
             className="space-y-1"
             onClick={() => {
-              handleNewCurrencyClick(
-                user?.id,
-                setUserCurrency,
-                currency
-              );
+              handleNewCurrencyClick(user?.id, setUserCurrency, currency);
               router.back();
             }}
             key={i}

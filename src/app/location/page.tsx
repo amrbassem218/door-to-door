@@ -18,7 +18,7 @@ const LocationPage: React.FunctionComponent = () => {
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
   const router = useRouter();
 
-  const user = useUser();
+  const { user } = useUser();
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "",
     libraries, // Use the constant defined outside

@@ -12,16 +12,16 @@ import { MdDeleteOutline } from "react-icons/md";
 
 import MeasurementChange from "@/components/ui/measurementChange";
 import QuantityChange from "@/components/ui/quantityChange";
+import { useUserAuthProfile } from "@/contexts/authContext";
 import { useUserCurrencyCode } from "@/contexts/currencyContext";
 import { useCurrencyRates } from "@/getRates";
 import { cleanupDuplicateCarts, getCart } from "@/utils/cart-utils";
 import { useUser } from "@/utils/getUser";
 import { useRouter } from "next/navigation";
-
 interface ICartProps {}
 
 const Cart: React.FunctionComponent<ICartProps> = (props) => {
-  const user = useUser();
+  const {user, loading} = useUser();
   const [cart, setCart] = useState<Record<number, CartItem[]>>();
   const [cartItems, setCartItems] = useState<CartItem[]>();
   const [total, setTotal] = useState(0);
@@ -30,9 +30,11 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
   const [cartMeasurement, setCartMeasurement] = useState<
     Record<number, string>
   >({});
+  const [userAuthProfile, setUserAuthProfile] = useUserAuthProfile();
   const router = useRouter();
-  const { rates, loading } = useCurrencyRates();
+  const { rates, loading: ratesLoading } = useCurrencyRates();
   const userCurrencyCode = useUserCurrencyCode();
+  // const {isLoading, session} = (); 
   const id = (product: Product) => {
     return Number(product.id);
   };
@@ -153,7 +155,14 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
       }
     }
   };
-  if (loading) return <p>Loading prices...</p>;
+  useEffect(() => {
+    if(!loading){
+      if(!user){
+        router.replace('/login')
+      }
+    }
+  }, [user, loading]);
+  if (ratesLoading) return <p>Loading prices...</p>;
 
   return (
     <div>

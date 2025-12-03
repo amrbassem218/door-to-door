@@ -1,37 +1,24 @@
 "use client";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import * as React from "react";
-import { FaAngleRight, FaApple, FaFacebook } from "react-icons/fa";
-import { FaSquareXTwitter } from "react-icons/fa6";
-import { FcGoogle } from "react-icons/fc";
+import { FaAngleRight } from "react-icons/fa";
 import { LuUser } from "react-icons/lu";
-import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Input } from "../ui/input";
-import { Separator } from "../ui/separator";
 
-import { handleGoogleAuth } from "@/utils/auth";
+import LoginCard from "@/app/login/loginCard";
 import { useUser } from "@/utils/getUser";
 import { getDisplayName, handleLogout } from "@/utils/user-utils";
 import { useRouter } from "next/navigation";
-import LoginCard from "@/app/login/loginCard";
 
 interface ISignProps {}
 
 const Sign: React.FunctionComponent<ISignProps> = (props) => {
-  const user = useUser();
+  const { user } = useUser();
   const router = useRouter();
   return (
     <div>
@@ -55,7 +42,12 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
             <DropdownMenuContent>
               <DropdownMenuItem>Profile</DropdownMenuItem>
               <DropdownMenuItem>
-                <button className="" onClick={() => router.push("/add_product")}>Add a product</button>
+                <button
+                  className=""
+                  onClick={() => router.push("/add_product")}
+                >
+                  Add a product
+                </button>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <button className="text-red-500" onClick={() => handleLogout()}>

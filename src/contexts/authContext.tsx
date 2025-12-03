@@ -1,4 +1,5 @@
 "use client";
+import { Session } from "@supabase/supabase-js";
 import {
   createContext,
   useContext,
@@ -9,6 +10,7 @@ export interface UserAuthProfile {
   fullName: string | null;
   username: string | null;
   id: string | null;
+  session: Session | null;
 }
 export type UserAuthState = [
   UserAuthProfile | null,

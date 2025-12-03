@@ -38,7 +38,7 @@ const AuthCallbackPage = () => {
       setStatus("success");
       setMessage("Email confirmed! You can now log in.");
       setTimeout(() => {
-        router.replace("/login");
+        router.replace("/");
       }, 1500);
     };
 

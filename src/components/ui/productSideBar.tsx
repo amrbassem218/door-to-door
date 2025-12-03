@@ -49,7 +49,7 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
   const { rates, loading } = useCurrencyRates();
   const userCurrencyCode = useUserCurrencyCode();
   const [userLocation, setUserLocation] = useUserLocation();
-  const user = useUser();
+  const { user } = useUser();
 
   const handleBuyNow = async () => {
     if (user) {

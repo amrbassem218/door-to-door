@@ -6,9 +6,11 @@ import { useEffect, useState } from "react";
 
 export const useUser = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     supabase.auth.getSession().then(({data: {session}}) => {
       setUser(session?.user ?? null);
+      setLoading(false);
     })
 
     const {data: listener} = supabase.auth.onAuthStateChange((e, session) => {
@@ -19,5 +21,5 @@ export const useUser = () => {
       listener.subscription.unsubscribe();
     })
   }, [])
-  return user;
+  return {user, loading};
 }

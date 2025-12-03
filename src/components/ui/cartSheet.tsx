@@ -26,7 +26,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { getProfile } from "@/contexts/userContext";
+import { useUserCurrencyCode } from "@/contexts/currencyContext";
 import { useCurrencyRates } from "@/getRates";
 import { addProductToCart, getCart } from "@/utils/cart-utils";
 import { useUser } from "@/utils/getUser";
@@ -34,7 +34,6 @@ import { useRouter } from "next/navigation";
 import { FaChevronDown } from "react-icons/fa";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import NavigationButton from "../navigationButton";
-import { useUserCurrencyCode } from "@/contexts/currencyContext";
 
 interface ICardSheetProps {
   product: Product;
@@ -43,7 +42,7 @@ interface ICardSheetProps {
 }
 
 const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
-  const user = useUser();
+  const { user } = useUser();
   const [cart, setCart] = useState<CartItem[]>();
   const [subtotal, setSubtotal] = useState(0);
   const [cartQuantity, setCartQuantity] = useState<Record<number, number>>({});

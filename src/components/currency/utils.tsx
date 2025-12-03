@@ -44,6 +44,12 @@ export const handleNewCurrencyClick = async (
       });
     }
   }
+  else{
+      setUserCurrency(newCurrency);
+      toast("Currency changed succssfully", {
+        description: `changed language to ${newCurrency.currencyName}`,
+      });
+  }
 };
 // TODO: FIX THE RATES
 export const defaultCurrency = {

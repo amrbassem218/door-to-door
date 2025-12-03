@@ -1,9 +1,7 @@
-import * as React from "react";
-import { getDisplayName } from "@/utils/user-utils";
+import { DialogTrigger } from "@/components/ui/dialog";
 import { useUser } from "@/utils/getUser";
-import {
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { getDisplayName } from "@/utils/user-utils";
+import * as React from "react";
 import { FaAngleRight } from "react-icons/fa";
 import { LuUser } from "react-icons/lu";
 interface IUserNameDisplayProps {}
@@ -11,7 +9,7 @@ interface IUserNameDisplayProps {}
 const UserNameDisplay: React.FunctionComponent<IUserNameDisplayProps> = (
   props
 ) => {
-  const user = useUser();
+  const { user } = useUser();
   return (
     <div>
       {user ? (

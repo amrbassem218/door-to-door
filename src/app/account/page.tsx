@@ -11,7 +11,7 @@ import { RiCoupon2Line } from "react-icons/ri";
 interface IAccountProps {}
 
 const Account: React.FunctionComponent<IAccountProps> = (props) => {
-  const user = useUser();
+  const { user } = useUser();
   const router = useRouter();
   return (
     <div className="space-y-5 bg-gray-100">

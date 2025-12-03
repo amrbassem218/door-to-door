@@ -22,6 +22,7 @@ import { FaAngleRight } from "react-icons/fa";
 import Flag from "react-world-flags";
 import { getAllCurrencies, handleNewCurrencyClick } from "../currency/utils";
 import { useUserAuthProfile } from "@/contexts/authContext";
+import { useUser } from "@/utils/getUser";
 interface ICurrencyDropDownProps {}
 
 const CurrencyDropDown: React.FunctionComponent<ICurrencyDropDownProps> = (
@@ -29,16 +30,12 @@ const CurrencyDropDown: React.FunctionComponent<ICurrencyDropDownProps> = (
 ) => {
   const [open, setOpen] = React.useState(false);
   const [userCurrency, setUserCurrency] = useUserCurrency();
-  const [userAuthProfile, setUserAuthProfile] = useUserAuthProfile();
   const [allCurrencies, setAllCurrencies] = useState<Currencies[]>([]);
   const router = useRouter();
+  const {user} = useUser();
   useEffect(() => {
     getAllCurrencies(setAllCurrencies);
   }, []);
-  if (!userAuthProfile) {
-    router.push("/login");
-    return <p>loading...</p>;
-  }
   return (
     <div className="space-y-1">
       <h1 className="text-xl  font-bold">Currency</h1>
@@ -71,7 +68,7 @@ const CurrencyDropDown: React.FunctionComponent<ICurrencyDropDownProps> = (
                       value={currency.currencyCode}
                       onSelect={() =>
                         handleNewCurrencyClick(
-                          userAuthProfile.id,
+                          user?.id,
                           setUserCurrency,
                           currency
                         )
@@ -79,7 +76,6 @@ const CurrencyDropDown: React.FunctionComponent<ICurrencyDropDownProps> = (
                     >
                       <div className="flex gap-2 items-center">
                         <Flag code={currency.countryCode} className="w-5 h-5" />
-                        {/* TODO: Should change this to currency instead*/}
                         <p>
                           {currency.currencyName} ({currency.currencyCode})
                         </p>
