@@ -1,17 +1,17 @@
 "use client";
 import { supabase } from "@/supabase/supabaseClient";
 import type { Product } from "@/types/types";
+import { camel } from "@/utilities";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import Item from "./item";
-import { camel } from "@/utilities";
 
 interface IAppProps {
   product: Product;
 }
 
-const SimialrProducts: React.FunctionComponent<IAppProps> = ({ product }) => {
+const SimilarProducts: React.FunctionComponent<IAppProps> = ({ product }) => {
   const [similarProducts, setSimilarProducts] = useState<Product[]>();
   const router = useRouter();
   useEffect(() => {
@@ -47,7 +47,11 @@ const SimialrProducts: React.FunctionComponent<IAppProps> = ({ product }) => {
         <div className="grid grid-cols-12 gap-5">
           {similarProducts &&
             similarProducts.map((item, i) => (
-              <div key={`${item.name}-${i}`} className="lg:col-span-2 col-span-6" onClick={() => router.push(`/product/${item.id}`)}>
+              <div
+                key={`${item.name}-${i}`}
+                className="lg:col-span-2 col-span-6"
+                onClick={() => router.push(`/product/${item.id}`)}
+              >
                 <Item item={item} />
               </div>
             ))}
@@ -57,4 +61,4 @@ const SimialrProducts: React.FunctionComponent<IAppProps> = ({ product }) => {
   );
 };
 
-export default SimialrProducts;
+export default SimilarProducts;

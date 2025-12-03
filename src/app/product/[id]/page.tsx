@@ -12,12 +12,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import ProductHighLight from "@/components/ui/productHighlightSection";
 import ProductSideBar from "@/components/ui/productSideBar";
 import Review from "@/components/ui/review";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import SimialrProducts from "@/components/ui/similarProducts";
+import SimilarProducts from "@/components/ui/similarProducts";
 import { useUserCurrencyCode } from "@/contexts/currencyContext";
 import { useCurrencyRates } from "@/getRates";
 import { supabase } from "@/supabase/supabaseClient";
@@ -55,9 +54,15 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
 
   const reviewsRef = useRef<HTMLElement>(null);
   const specificationsRef = useRef<HTMLElement>(null);
-  const descriptionRef = useRef<HTMLElement>(null);
+  const moreToLoveRef = useRef<HTMLElement>(null);
   const storeRef = useRef<HTMLElement>(null);
   const router = useRouter();
+  const sections = [
+    { name: "Customer Reviews", ref: reviewsRef },
+    { name: "Specifications", ref: specificationsRef },
+    { name: "About Store", ref: storeRef },
+    { name: "More to love", ref: moreToLoveRef },
+  ];
   useEffect(() => {
     if (product) {
       setMeasurement(
@@ -174,13 +179,6 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   // Add scroll listener for tab activation
   useEffect(() => {
     const handleScroll = () => {
-      const sections = [
-        { name: "Customer Reviews", ref: reviewsRef },
-        { name: "Specifications", ref: specificationsRef },
-        { name: "Full Description", ref: descriptionRef },
-        { name: "About Store", ref: storeRef },
-      ];
-
       const scrollPosition = window.scrollY + headerHeight + 60; // Add offset for sticky nav
 
       for (let i = sections.length - 1; i >= 0; i--) {
@@ -206,7 +204,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
     const sectionRefs = {
       "Customer Reviews": reviewsRef,
       Specifications: specificationsRef,
-      "Full Description": descriptionRef,
+      "More to love": moreToLoveRef,
       "About Store": storeRef,
     };
 
@@ -356,24 +354,19 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
           style={{ top: `${headerHeight}px` }}
         >
           <ul className="flex gap-4 text-muted cursor-pointer mx-5 sm:mx-0 text-sm">
-            {[
-              "Customer Reviews",
-              "Specifications",
-              "Full Description",
-              "About Store",
-            ].map((e, i) => {
-              return e == activeTab ? (
+            {sections.map(({ name }, i) => {
+              return name == activeTab ? (
                 <li key={i} className="flex items-center text-black font-bold ">
                   <FaLocationDot size={15} />
-                  {e}
+                  {name}
                 </li>
               ) : (
                 <li
                   key={i}
-                  onClick={() => handleTabClick(e)}
+                  onClick={() => handleTabClick(name)}
                   className="hover:text-secondary transition-colors"
                 >
-                  {e}
+                  {name}
                 </li>
               );
             })}
@@ -454,23 +447,31 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
           </div>
 
           {/* Specification Content */}
-          <div className="w-full flex-1 bg-gray-100"></div>
+          <div className="w-full flex-1 ">
+            <div>
+              <div className="border-y-border w-full max-h-50 border-y-1 grid grid-cols-2">
+                {Object.keys(product.specifications).length > 0 &&
+                  Object.keys(product.specifications).map((key) => (
+                    <div
+                      className="cols-span-1 grid grid-cols-12 border-b-1 border-border"
+                      key={key}
+                    >
+                      <div className="col-span-3 bg-gray-100 p-5">
+                        <span className="font-semibold">{key}</span>
+                      </div>
+                      <div className="col-span-9 p-5">
+                        <span className="text-muted">
+                          {product.specifications[key]}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+              <ul></ul>
+            </div>
+          </div>
         </section>
 
-        <Separator />
-
-        {/* Full Description Section */}
-        {/* <section ref={descriptionRef} className='w-full flex flex-col py-2 px-3 sm:px-0 bg-background space-y-2'>
-                <div className='flex gap-1 items-center justify-between '>
-                    <h1 className='text-lg sm:text-xl font-normal'>Full Description</h1>
-                    <FaAngleRight className='text-muted ' size={12}/>
-                </div>
-
-                <div className='w-full bg-gray-100 p-4'>
-                    <p>{product.description}</p>
-                </div>
-            </section>
-             */}
         <Separator />
 
         {/* About Store Section */}
@@ -486,36 +487,16 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
 
           {/* Store Content */}
           <div className="w-full bg-gray-100 p-4">
-            {/* Add store information content here */}
-            <p>Store information and details...</p>
+            <p>There doesn't Exist data about this store</p>
           </div>
         </section>
 
         <Separator />
 
-        {/* Highlights Section */}
-        <section className="w-full flex flex-col  py-2 px-3 sm:px-0 bg-background space-y-2">
-          {/* Header */}
-          <div className="flex gap-1 items-center justify-between ">
-            <h1 className="text-lg sm:text-xl font-normal">Highlights</h1>
-            {/* <FaAngleRight className='text-muted ' size={12}/> */}
-          </div>
-
-          {/* Highlights Content */}
-          <div className="">
-            <ProductHighLight
-              text={
-                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore sunt veritatis repellendus tempore accusantium consequuntur enim ducimus quo cum minima quibusdam odit deleniti excepturi quaerat possimus aspernatur ullam, beatae omnis quia mollitia inventore voluptate quos laborum! Cumque quae eos eligendi tempore laudantium quidem, voluptates natus accusantium iure dicta maiores totam molestias illum adipisci earum sapiente quibusdam libero excepturi animi fugit cupiditate nihil quas deleniti blanditiis! Facilis, voluptates rem ut, maxime, quo omnis ea repellat fuga dicta at perspiciatis quibusdam! Quae, inventore amet? Hic dolor voluptates unde odio sapiente dolore, aperiam sunt nostrum distinctio ex maxime beatae provident deleniti natus error."
-              }
-            />
-          </div>
+        {/*More to love  */}
+        <section ref={moreToLoveRef}>
+          <SimilarProducts product={product} />
         </section>
-
-        <Separator />
-
-        <div>
-          <SimialrProducts product={product} />
-        </div>
       </div>
       {/* Right sideBar for pc*/}
       <div className="hidden sm:block sm:col-span-7">

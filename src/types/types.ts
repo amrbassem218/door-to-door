@@ -18,6 +18,7 @@ export interface Product{
     minOrder?: number;
     tags?: string[] ;
     discount: number;
+    specifications: Record<string, string>;
 }
 
 export type dbData = any[] | null;
