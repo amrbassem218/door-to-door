@@ -50,8 +50,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   const { rates, loading } = useCurrencyRates();
   const userCurrencyCode = useUserCurrencyCode();
   const [headerHeight, setHeaderHeight] = useState<number>(0);
-  const [reviews, setReviews] = useState<ReviewType[]>();
-
+  const [reviews, setReviews] = useState<ReviewType[]>([]);
   const reviewsRef = useRef<HTMLElement>(null);
   const specificationsRef = useRef<HTMLElement>(null);
   const moreToLoveRef = useRef<HTMLElement>(null);
@@ -68,7 +67,6 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
       setMeasurement(
         localStorage.getItem(`${product.id}_measurement`) ?? measurements[0]
       );
-      console.log("ma ho by7sl");
       if (localStorage.getItem(`${product?.id}_quantity`)) {
         setQuantity(
           Number(localStorage.getItem(`${product?.id}_quantity`)) ??
@@ -376,7 +374,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
         {/* Review Section*/}
         <section
           ref={reviewsRef}
-          className="w-full h-50 sm:h-150 py-2 px-3 sm:p-0 bg-background sm:space-y-3"
+          className="w-full  py-2 px-3 sm:p-0 bg-background sm:space-y-3"
         >
           {/* Header */}
           <div className="space-y-2">
@@ -450,7 +448,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
           <div className="w-full flex-1 ">
             <div>
               <div className="border-y-border w-full max-h-50 border-y-1 grid grid-cols-2">
-                {Object.keys(product.specifications).length > 0 &&
+                {product?.specifications && Object.keys(product.specifications).length > 0 &&
                   Object.keys(product.specifications).map((key) => (
                     <div
                       className="cols-span-1 grid grid-cols-12 border-b-1 border-border"

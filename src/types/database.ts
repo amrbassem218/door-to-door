@@ -211,9 +211,11 @@ export type Database = {
           country_code: string | null
           country_name: string | null
           currency: number
+          first_name: string | null
           full_name: string | null
           id: string
           language: string
+          last_name: string | null
           location: Json | null
           updated_at: string | null
           username: string | null
@@ -226,9 +228,11 @@ export type Database = {
           country_code?: string | null
           country_name?: string | null
           currency?: number
+          first_name?: string | null
           full_name?: string | null
           id: string
           language?: string
+          last_name?: string | null
           location?: Json | null
           updated_at?: string | null
           username?: string | null
@@ -241,9 +245,11 @@ export type Database = {
           country_code?: string | null
           country_name?: string | null
           currency?: number
+          first_name?: string | null
           full_name?: string | null
           id?: string
           language?: string
+          last_name?: string | null
           location?: Json | null
           updated_at?: string | null
           username?: string | null
@@ -262,44 +268,44 @@ export type Database = {
       reviews: {
         Row: {
           created_at: string
-          helpful_count: number | null
           id: number
-          product_id: number | null
-          review_description: string | null
+          images: string[] | null
+          likes: number | null
+          product_id: number
           star_count: number | null
-          tags: string[] | null
-          user_id: string | null
+          text: string | null
+          user_id: string
         }
         Insert: {
           created_at?: string
-          helpful_count?: number | null
           id?: number
-          product_id?: number | null
-          review_description?: string | null
+          images?: string[] | null
+          likes?: number | null
+          product_id: number
           star_count?: number | null
-          tags?: string[] | null
-          user_id?: string | null
+          text?: string | null
+          user_id?: string
         }
         Update: {
           created_at?: string
-          helpful_count?: number | null
           id?: number
-          product_id?: number | null
-          review_description?: string | null
+          images?: string[] | null
+          likes?: number | null
+          product_id?: number
           star_count?: number | null
-          tags?: string[] | null
-          user_id?: string | null
+          text?: string | null
+          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "reviews_product_id_fkey"
+            foreignKeyName: "reviews 2.0_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "products"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "reviews_user_id_fkey"
+            foreignKeyName: "reviews 2.0_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"

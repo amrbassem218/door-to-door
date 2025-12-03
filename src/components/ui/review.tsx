@@ -11,7 +11,7 @@ interface IReviewProps {
 const Review: React.FunctionComponent<IReviewProps> = ({review}) => {
   const createdAtDate = new Date(review.createdAt);
   return (
-    <div className='space-y-2'>
+    <div className='space-y-2 px-2'>
 
       <div className='space-y-1'>
         {/* Avatar and name */}
@@ -43,9 +43,9 @@ const Review: React.FunctionComponent<IReviewProps> = ({review}) => {
         <p className='text-primary text-xs font-semibold'>Verified Purchase</p>
 
         {/* Review */}
-        <p>{review.reviewDescription}</p>
+        <p className='text-sm'>{review.text}</p>
 
-        <p className='text-muted text-xs'>{review.helpfulCount ?? 0} people found this helpful</p>
+        <p className='text-muted text-xs'>{review.likes ?? 0} people found this helpful</p>
       </div>
       
       <div className='flex items-center space-x-2'>
