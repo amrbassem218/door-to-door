@@ -1,136 +1,132 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* =====================
+     FONT FAMILY
+     ===================== */
+  --font-family-sans: "Inter", sans-serif;
+
+  /* =====================
+     RADIUS
+     ===================== */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --color-background: var(--background);
-  --color-background-secondary: var(--background-secondary);
-  --color-background-secondary-3: var(--background-secondary-3);
-  --color-text: var(--text);
-  --color-heading: var(--heading);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
+
+  /* =====================
+     BACKGROUNDS
+     ===================== */
+  --color-background: var(--bg);
+  --color-background-secondary: var(--bg-light);
+  --color-background-muted: var(--bg-dark);
+
+  /* =====================
+     TEXT
+     ===================== */
+  --color-foreground: var(--text);
+  --color-muted-foreground: var(--text-muted);
+
+  /* =====================
+     SURFACES
+     ===================== */
+  --color-card: var(--bg-light);
+  --color-card-foreground: var(--text);
+
+  --color-popover: var(--bg-light);
+  --color-popover-foreground: var(--text);
+
+  /* =====================
+     BRAND / ACTION
+     ===================== */
   --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-foreground: var(--highlight);
+
   --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
+  --color-secondary-foreground: var(--highlight);
+
+  /* =====================
+     SEMANTIC STATES
+     ===================== */
+  --color-success: var(--success);
+  --color-success-foreground: var(--highlight);
+
+  --color-destructive: var(--danger);
+  --color-destructive-foreground: var(--highlight);
+
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--highlight);
+
+  --color-info: var(--info);
+  --color-info-foreground: var(--highlight);
+
+  /* =====================
+     BORDERS / INPUT / RING
+     ===================== */
   --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+  --color-border-muted: var(--border-muted);
+  --color-input: var(--border);
+  --color-ring: var(--primary);
+
+  /* =====================
+     CHARTS
+     ===================== */
+  --color-chart-1: var(--primary);
+  --color-chart-2: var(--secondary);
+  --color-chart-3: var(--success);
+  --color-chart-4: var(--warning);
+  --color-chart-5: var(--danger);
+
+  /* =====================
+     SIDEBAR
+     ===================== */
+  --color-sidebar: var(--bg-light);
+  --color-sidebar-foreground: var(--text);
+  --color-sidebar-primary: var(--primary);
+  --color-sidebar-primary-foreground: var(--highlight);
+  --color-sidebar-border: var(--border);
+  --color-sidebar-ring: var(--primary);
 }
 
 :root {
-  --radius: 0.625rem;
-
-  /* Base */
-  --background: #F9FAFB;       /* main background */
-
-  /* Text */
-  --text: #1A1A1A;             /* main text */
-  --heading: #1A1A1A;          /* headings/titles */
-  --muted: #666666;            /* secondary/less important text */
-
-  --primary: #0A2342; /* deep navy */
-  --primary-foreground: #F1F5F9; /* near-white for logo */
-  --muted-foreground: #9CA3AF; /* for "Hello there" */
-  --secondary: #E5C07B; /* gold for hover/active */
-  --secondary-foreground: #1A1A1A; /* text/icons on secondary bg */
-  --background-secondary: #102A44; /* for dropdowns/buttons */
-
-   /* --accent: #3A7D44;           success/positive / small highlights */
-  --accent: #F3F4F6;           /* success/positive / small highlights */
-  --accent-foreground: #0A2342;
-
-  /* Functional */
-  --destructive: #E03131;      /* errors/warnings */
-  --border: #EDEDED;           /* card borders, inputs */
-  --input: #FFFFFF;            /* input backgrounds */
-  --ring: #0A2342;             /* focus outline = primary */
-
-  /* Components */
-  --card: #FFFFFF;
-  --card-foreground: #1A1A1A;
-
-  --popover: #FFFFFF;
-  --popover-foreground: #1A1A1A;
-
-  /* Charts (optional) */
-  --chart-1: #E5C07B; 
-  --chart-2: #3A7D44; 
-  --chart-3: #0A2342; 
-  --chart-4: #A83232; 
-  --chart-5: #6A4E23;
-}
-
-
-.dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --bg-dark: oklch(0.92 0.005 203);
+  --bg: oklch(0.96 0.005 203);
+  --bg-light: oklch(1 0.005 203);
+  --text: oklch(0.15 0.01 203);
+  --text-muted: oklch(0.4 0.01 203);
+  --highlight: oklch(1 0.01 203);
+  --border: oklch(86.07% 0.0001 271.152);
+  --border-muted: oklch(0.7 0.01 203);
+  --primary: oklch(0.4 0.1 203);
+  --secondary: oklch(0.4 0.1 23);
+  --danger: oklch(0.5 0.05 30);
+  --warning: oklch(0.5 0.05 100);
+  --success: oklch(0.5 0.05 160);
+  --info: oklch(0.5 0.05 260);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  html,
   body {
     @apply bg-background;
+    font-family: "Inter", sans-serif !important;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Playfair Display", serif !important;
   }
   Button,
-  button{
-    @apply cursor-pointer
+  button {
+    @apply cursor-pointer;
   }
 }

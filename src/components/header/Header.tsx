@@ -19,11 +19,11 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
   //       }
   return (
     <div
-      className={`top-0 left-0 w-full bg-primary text-primary-foreground z-50 `}
+      className={`top-0 left-0   w-full z-50 `}
     >
       {/* <TopBar/> */}
-      <div className=" w-full ">
-        <div className="sm:px-20 px-2 mx-auto">
+      <div className=" w-full bg-transparent text-accent">
+        <div className="px-8 max-w-450 mx-auto ">
           <div className="flex items-center justify-between w-full lg:h-20 lg:gap-15 h-12 ">
             {/* Logo & Menu */}
             <div className="flex items-center gap-2">
@@ -33,6 +33,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
               </div>
               <Link
                 className="cursor-pointer font-semibold lg:text-3xl text-lg"
+                style={{ fontFamily: '"Playfair Display", serif' }}
                 href={"/"}
               >
                 EGEEX
@@ -57,9 +58,9 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
           </div>
         </div>
         {/* <Separator className='w-full'/> */}
-        <div className={`hidden sm:block `}>
+        {/* <div className={`hidden sm:block `}>
           <TopicBar />
-        </div>
+        </div> */}
 
         {/* Mobile stuff */}
         <div className="sm:hidden ">

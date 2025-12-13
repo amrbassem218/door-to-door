@@ -72,11 +72,11 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
   if (loading) return <p>loading...</p>;
   return (
     <div
-      className="w-full border-1 p-4 sticky top-0 h-[100vh] overflow-hidden"
+      className="w-full border-1 border-border p-4 sticky top-0  overflow-hidden "
       style={{ top: `${headerHeight}px` }}
     >
       {/* Price */}
-      <div className="flex flex-col items-start border-b-1 pb-3">
+      <div className="flex flex-col items-start border-b-1  pb-3 ">
         <p className="text-2xl">
           {newPrice(product, userCurrencyCode, rates, quantity, measurement)}{" "}
           {userCurrencyCode}{" "}

@@ -57,7 +57,7 @@ const Menu: React.FunctionComponent<IMenuProps> = (props) => {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger>
-        <IoIosMenu className="text-2xl text-primary-foreground" />
+        <IoIosMenu className="text-2xl " />
       </SheetTrigger>
       <SheetContent side="left" className="gap-0">
         <SheetHeader>
