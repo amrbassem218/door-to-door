@@ -23,9 +23,14 @@ export const useUserAuthProfile = () => {
   if(!userAuthProfileState){
     throw new Error('user Auth was not found')
   }
-  if(!userAuthProfileState){
-    
-  }
   return userAuthProfileState;
 };
 
+export const userUserName = () => {
+  const userAuthProfileState = useContext(UserAuthProfileContext);
+  if(!userAuthProfileState){
+    throw new Error('user Auth was not found')
+  }
+  const [userAuthProfile, setUserAuthProfile] = userAuthProfileState;
+  return userAuthProfile?.username ?? "anon";
+}

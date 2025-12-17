@@ -1,6 +1,7 @@
 "use client";
 import RouteProtection from "@/components/auth/RouteProtection";
 import { defaultCurrency } from "@/components/currency/utils";
+import { getCurrentLocation } from "@/components/location/getCurrentLocation";
 import {
   UserAuthProfileContext,
   type UserAuthProfile,
@@ -63,16 +64,15 @@ const Providers: React.FunctionComponent<IProvidersProps> = ({ children }) => {
           // User location
           // TODO: FIX THE LOCATION
           //
-          // const geoLocation = userProfile.location as pos;
-          // const textualLocation = await reverseGeo(geoLocation);
-          // if (textualLocation) {
-          //   const fullLocation: FullLocation = {
-          //     ...geoLocation,
-          //     ...textualLocation,
-          //   };
-          //   setUserLocation(fullLocation);
-          // }
-
+          const geoLocation: FullLocation = userProfile.FullLocation as any;
+          if (!geoLocation) {
+            console.log("i'm here yk")
+            const currentLocation = await getCurrentLocation();
+            setUserLocation(currentLocation);
+            console.log(currentLocation)
+          } else {
+            setUserLocation(geoLocation);
+          }
           // Currencies
           const currency = userProfile.currencies;
           setUserCurrency(currency);

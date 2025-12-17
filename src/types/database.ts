@@ -213,6 +213,7 @@ export type Database = {
           currency: number
           first_name: string | null
           full_name: string | null
+          FullLocation: Json | null
           id: string
           language: string
           last_name: string | null
@@ -230,6 +231,7 @@ export type Database = {
           currency?: number
           first_name?: string | null
           full_name?: string | null
+          FullLocation?: Json | null
           id: string
           language?: string
           last_name?: string | null
@@ -247,6 +249,7 @@ export type Database = {
           currency?: number
           first_name?: string | null
           full_name?: string | null
+          FullLocation?: Json | null
           id?: string
           language?: string
           last_name?: string | null

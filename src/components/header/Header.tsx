@@ -1,11 +1,11 @@
 import Link from "next/link";
 import * as React from "react";
-import Menu from "../home/menu";
 import Sign from "../sign/sign";
 import SearchBar from "../ui/searchBar";
 import CartHeader from "./cartHeader";
 import ChangeInfo from "./changeInfo";
 import GoBackButton from "./goBackButton";
+import LocationChange from "./LocationChange";
 
 interface IHeaderProps {
   showSearch?: boolean;
@@ -22,12 +22,16 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
       <div className=" w-full bg-transparent text-accent">
         <div className="px-8 max-w-450 mx-auto ">
           <div className="flex items-center justify-between w-full lg:h-20 lg:gap-15 h-12 ">
-            {/* Logo & Menu */}
+            {/* Left Side */}
             <div className="flex items-center gap-2">
-              <div className="flex items-center">
+              {/* Back button and menu for phones */}
+              <div className="flex items-center md:hidden">
                 <GoBackButton />
-                <Menu />
+                {/* TODO: Return the menu for phones */}
+                {/* <Menu /> */}
               </div>
+
+              {/* LOGO */}
               <Link
                 className="cursor-pointer font-semibold lg:text-3xl text-lg"
                 style={{ fontFamily: '"Playfair Display", serif' }}
@@ -35,14 +39,17 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
               >
                 EGEEX
               </Link>
+              <LocationChange/> 
             </div>
 
+            {/* Search Bar */}
             <div className="flex-1 hidden sm:inline">
               <SearchBar styles="w-full" />
             </div>
 
+            {/*  Right Side */}
             <div className="flex gap-5">
-              {/* Language & currency */}
+            {/* Language & currency */}
               <ChangeInfo />
               {/* Sign */}
               <div className="flex gap-1 items-center ">

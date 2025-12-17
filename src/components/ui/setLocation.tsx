@@ -16,29 +16,6 @@ interface ISetLocationProps {
 
 const LocationDialog: React.FunctionComponent<ISetLocationProps> = () => {
   const [location, setLocation] = useUserLocation();
-  // const [fullLocation, setFullLocation] = useState<FullLocation>();
-  // useEffect(() => {
-  //   if(!location){
-  //       navigator.geolocation.getCurrentPosition(
-  //         (pos) => {
-  //           const lat = pos.coords.latitude;
-  //           const lng = pos.coords.longitude
-  //           setLocation({
-  //             lat: lat,
-  //             lng: lng,
-  //           });
-  //           const geo = reverseGeo({lat, lng});
-  //           if(geo){
-  //             // setFullLocation(geo);
-  //           }
-  //         },
-  //         () => {
-  //           // setLocation({ lat: 30.0444, lng: 31.2357 });
-  //         }
-  //       );
-  //     }
-  //   }
-  // }, [])
   return (
     <div>
       <h1 className="text-xl text-heading font-bold">Ship to</h1>
