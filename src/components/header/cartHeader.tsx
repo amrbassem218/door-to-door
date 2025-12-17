@@ -17,7 +17,7 @@ const CartHeader: React.FunctionComponent<ICartHeaderProps> = (props) => {
     >
       <LuShoppingCart className="text-2xl lg:text-3xl" />
       <div className="flex-col  justify-center items-center hidden md:flex">
-        <div className="w-10 h-3 bg-secondary flex items-center justify-center p-2 rounded-md">
+        <div className="w-8  bg-secondary flex items-center justify-center px-2 rounded-md">
           <p className="text-sm font-bold text-secondary-foreground">
             {cartLength}
           </p>

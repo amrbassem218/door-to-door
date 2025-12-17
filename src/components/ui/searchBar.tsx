@@ -1,10 +1,11 @@
 "use client";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
-import { IoFilter, IoSearchOutline } from "react-icons/io5";
+import { IoFilter, IoSearch } from "react-icons/io5";
 
 import { useSearch } from "@/contexts/searchContext";
 import { useRouter } from "next/navigation";
+import { FaAngleDown } from "react-icons/fa6";
 import { Button } from "./button";
 import { Input } from "./input";
 interface ISearchBarProps {
@@ -70,7 +71,14 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({
       ref={searchRef}
       className={`justify-center relative h-10 bg-background-secondary w-120 max-w-full flex items-center gap-1 rounded-sm ${styles}`}
     >
-      <IoSearchOutline className="text-primary absolute left-2" size={18} />
+      {/* <IoSearchOutline className="text-primary absolute left-2" size={18} /> */}
+      <button
+        className="absolute left-0 w-16 h-full flex items-center justify-between bg-background-muted rounded-l-sm text-text text-sm px-3 text-muted-foreground font-medium"
+        type="button"
+      >
+        All
+        <FaAngleDown className="ml-1 text-muted-foreground w-2 h-2" />
+      </button>
       <form
         className="w-full h-full"
         action=""
@@ -82,7 +90,7 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({
         <Input
           type="text"
           placeholder="Search crops, furniture and more..."
-          className="w-full border-0 px-8 h-full text-text"
+          className="w-full border-0 px-18 h-full text-text"
           value={query}
           onFocus={() => setIsFocused && setIsFocused(true)}
           onBlur={() => setIsFocused && setIsFocused(false)}
@@ -90,13 +98,12 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({
           ref={searchBarRef}
         />
       </form>
-      <Button
-        className="cursor-pointer absolute right-0"
-        variant={"link"}
+      <button
+        className="cursor-pointer absolute right-0 w-12 h-full flex items-center justify-center bg-primary rounded-r-md text-text"
         onClick={() => handleFilter()}
       >
-        <IoFilter className="text-primary" />
-      </Button>
+        <IoSearch className="w-6 h-6 text-background" />
+      </button>
       {/* Suggestions dropdown */}
       {suggestions.length > 0 && query && (
         <div className="absolute top-full left-0 right-0 bg-background border border-border rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
