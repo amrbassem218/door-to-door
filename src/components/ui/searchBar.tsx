@@ -1,25 +1,35 @@
 "use client";
 import * as React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoFilter, IoSearchOutline } from "react-icons/io5";
 
-import { Input } from "./input";
-import { Button } from "./button";
 import { useSearch } from "@/contexts/searchContext";
 import { useRouter } from "next/navigation";
+import { Button } from "./button";
+import { Input } from "./input";
 interface ISearchBarProps {
   styles?: string;
+  isFocused?: boolean;
+  setIsFocused?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SearchBar: React.FunctionComponent<ISearchBarProps> = ({ styles }) => {
+const SearchBar: React.FunctionComponent<ISearchBarProps> = ({
+  styles,
+  isFocused,
+  setIsFocused,
+}) => {
   const search = useSearch();
   const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [isSuggested, setIsSuggested] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  const searchBarRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
   const router = useRouter();
   const handleFilter = () => {};
-  useEffect(() => {54e8560
-    if (query && search) {
+  useEffect(() => {
+    if (isSuggested) {
+      setSuggestions([]);
+    } else if (query && search) {
       search.searchProducts(query).then((results) => {
         setSuggestions(results);
       });
@@ -45,6 +55,14 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({ styles }) => {
   }, []);
 
   const handleSearchSubmit = (suggestionQuery?: string) => {
+    if (suggestionQuery) {
+      setQuery(suggestionQuery);
+      setIsSuggested(true);
+    } else {
+      setIsSuggested(false);
+    }
+    setSuggestions([]);
+    searchBarRef.current?.blur();
     router.push(`/search?query=${suggestionQuery ? suggestionQuery : query}`);
   };
   return (
@@ -64,9 +82,12 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({ styles }) => {
         <Input
           type="text"
           placeholder="Search crops, furniture and more..."
-          className="w-full border-0 px-8 h-full text-primary"
+          className="w-full border-0 px-8 h-full text-text"
           value={query}
+          onFocus={() => setIsFocused && setIsFocused(true)}
+          onBlur={() => setIsFocused && setIsFocused(false)}
           onChange={(e) => setQuery(e.target.value)}
+          ref={searchBarRef}
         />
       </form>
       <Button

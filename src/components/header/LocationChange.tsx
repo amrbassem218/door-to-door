@@ -26,9 +26,9 @@ const LocationChange: React.FunctionComponent<ILocationChangeProps> = (
         <IoLocationOutline className="w-6 h-6"/>
       </div>
       {/* Location Description */}
-      <div className="flex flex-col text-left">
+      <div className="flex flex-col text-left ">
         <p className="text-xs text-muted-foreground">Deliver to</p>
-        <p className="text-sm">{userLocation?.city}</p>
+        <p className="text-sm truncate font-medium">{userLocation?.city.split(' ')[0]}</p>
       </div>
     </button>
   );
