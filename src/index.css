@@ -1,14 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  /* =====================
-     FONT FAMILY
-     ===================== */
-  --font-family-sans: "Inter", sans-serif;
-
   /* =====================
      RADIUS
      ===================== */
@@ -92,38 +86,43 @@
 }
 
 :root {
-  --bg-dark: oklch(0.92 0.005 203);
-  --bg: oklch(0.96 0.005 203);
-  --bg-light: oklch(1 0.005 203);
-  --text: oklch(0.15 0.01 203);
-  --text-muted: oklch(0.4 0.01 203);
-  --highlight: oklch(1 0.01 203);
-  --border: oklch(86.07% 0.0001 271.152);
-  --border-muted: oklch(0.7 0.01 203);
-  --primary: oklch(0.4 0.1 203);
-  --secondary: oklch(0.4 0.1 23);
-  --danger: oklch(0.5 0.05 30);
-  --warning: oklch(0.5 0.05 100);
-  --success: oklch(0.5 0.05 160);
-  --info: oklch(0.5 0.05 260);
+  /* Egyptian-inspired neutrals */
+  --bg-dark: oklch(0.94 0.02 40);
+  --bg: oklch(0.97 0.01 40);
+  --bg-light: oklch(0.99 0 40);
+
+  /* Warm text on light backgrounds */
+  --text: oklch(0.18 0.03 30);
+  --text-muted: oklch(0.45 0.02 35);
+  --highlight: oklch(0.99 0 40);
+
+  /* Borders with warmth */
+  --border: oklch(0.82 0.02 40);
+  --border-muted: oklch(0.88 0.01 40);
+
+  /* Primary: Deep Gold (Egyptian luxury) */
+  --primary: oklch(0.52 0.16 70);
+
+  /* Secondary: Warm Terracotta (Egyptian earth) */
+  --secondary: oklch(0.56 0.14 35);
+
+  /* Accent: Rich Teal (Egyptian lapis/Nile) */
+  --accent: oklch(0.54 0.12 210);
+
+  /* Status colors (adjusted for warmth) */
+  --danger: oklch(0.54 0.12 15);
+  --warning: oklch(0.62 0.14 55);
+  --success: oklch(0.58 0.11 150);
+  --info: oklch(0.56 0.1 240);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-  html,
   body {
     @apply bg-background;
-    font-family: "Inter", sans-serif !important;
-  }
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: "Playfair Display", serif !important;
+    font-family: "Playfair Display", serif;
   }
   Button,
   button {
