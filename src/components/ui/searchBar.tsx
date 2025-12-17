@@ -50,7 +50,7 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({ styles }) => {
   return (
     <div
       ref={searchRef}
-      className={`justify-center relative h-10 bg-background w-120 max-w-full flex items-center gap-1 rounded-md ${styles}`}
+      className={`justify-center relative h-10 bg-background-secondary w-120 max-w-full flex items-center gap-1 rounded-lg`}
     >
       <IoSearchOutline className="text-primary absolute left-2" size={18} />
       <form

@@ -6,7 +6,6 @@ import SearchBar from "../ui/searchBar";
 import CartHeader from "./cartHeader";
 import ChangeInfo from "./changeInfo";
 import GoBackButton from "./goBackButton";
-import TopicBar from "./topic bar/topicBar";
 
 interface IHeaderProps {
   showSearch?: boolean;
@@ -18,9 +17,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
   //         location.pathname == "/" && "sm:absolute"
   //       }
   return (
-    <div
-      className={`top-0 left-0   w-full z-50 `}
-    >
+    <div className={`top-0 left-0   w-full z-50 `}>
       {/* <TopBar/> */}
       <div className=" w-full bg-transparent text-accent">
         <div className="px-8 max-w-450 mx-auto ">
@@ -41,7 +38,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
             </div>
 
             <div className="flex-1 hidden sm:inline">
-              {showSearch && <SearchBar styles="w-full" />}
+              <SearchBar styles="w-full" />
             </div>
 
             <div className="flex gap-5">
