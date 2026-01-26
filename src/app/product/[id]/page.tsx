@@ -20,8 +20,15 @@ import SimilarProducts from "@/components/ui/similarProducts";
 import { useUserCurrencyCode } from "@/contexts/currencyContext";
 import { useCurrencyRates } from "@/getRates";
 import { supabase } from "@/supabase/supabaseClient";
-import type { Product, ReviewType } from "@/types/types";
-import { camel, measurements, newPrice, unitChange } from "@/utilities";
+import type { FullPrice, Product, ReviewType } from "@/types/types";
+import {
+  calcDiscount,
+  camel,
+  measurements,
+  newPrice,
+  price,
+  unitChange,
+} from "@/utilities";
 import { getProduct } from "@/utils/products-utils";
 import { useRouter } from "next/navigation";
 import * as React from "react";
@@ -45,23 +52,77 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   const [product, setProduct] = useState<Product>();
   const [measurement, setMeasurement] = useState(measurements[0]);
   const [quantity, setQuantity] = useState<number>(1);
-
   const [isCrop, setIsCrop] = useState(false);
-  const { rates, loading } = useCurrencyRates();
-  const userCurrencyCode = useUserCurrencyCode();
   const [headerHeight, setHeaderHeight] = useState<number>(0);
   const [reviews, setReviews] = useState<ReviewType[]>([]);
+  const [currentImage, setCurrentImage] = useState(0);
+  const [productFullPrice, setProductFullPrice] = useState<FullPrice>({
+    oldPrice: 0,
+    newPrice: 0,
+    discount: 0,
+  });
+  const { rates, loading } = useCurrencyRates();
+  const userCurrencyCode = useUserCurrencyCode();
+
   const reviewsRef = useRef<HTMLElement>(null);
   const specificationsRef = useRef<HTMLElement>(null);
   const moreToLoveRef = useRef<HTMLElement>(null);
   const storeRef = useRef<HTMLElement>(null);
   const router = useRouter();
+
   const sections = [
     { name: "Customer Reviews", ref: reviewsRef },
     { name: "Specifications", ref: specificationsRef },
     { name: "About Store", ref: storeRef },
     { name: "More to love", ref: moreToLoveRef },
   ];
+  const sortingTypes = [
+    "Most relevant",
+    "Latest",
+    "Oldest",
+    "Low to High",
+    "High to low",
+  ];
+
+  useEffect(() => {
+    if (id) {
+      const handleGetProduct = async () => {
+        let productInfo = await getProduct(Number(id));
+        productInfo = camel(productInfo);
+        setProduct(productInfo);
+        setIsCrop(productInfo.tags?.includes("crops"));
+        setQuantity(productInfo?.minOrder ?? 1);
+      };
+      handleGetProduct();
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (product) {
+      const productOldPrice = price(
+        product,
+        userCurrencyCode,
+        rates,
+        1,
+        measurement
+      );
+
+      const productNewPrice = newPrice(
+        product,
+        userCurrencyCode,
+        rates,
+        1,
+        measurement
+      );
+
+      const productDiscount = calcDiscount(productOldPrice, productNewPrice);
+      setProductFullPrice({
+        oldPrice: productOldPrice,
+        newPrice: productNewPrice,
+        discount: productDiscount,
+      });
+    }
+  }, [product, userCurrencyCode, rates, measurement]);
   useEffect(() => {
     if (product) {
       setMeasurement(
@@ -105,13 +166,6 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
     }
   }, [measurement]);
 
-  const sortingTypes = [
-    "Most relevant",
-    "Latest",
-    "Oldest",
-    "Low to High",
-    "High to low",
-  ];
   const handleMeasurementChange = (mes: string) => {
     const converted = unitChange(quantity, measurement, mes);
     const minOrderOfNewUnit = unitChange(product?.minOrder ?? 0, "kg", mes);
@@ -131,48 +185,6 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
       setQuantity(Number(type));
     }
   };
-
-  useEffect(() => {
-    if (id) {
-      const handleGetProduct = async () => {
-        let productInfo = await getProduct(Number(id));
-        productInfo = camel(productInfo);
-        setProduct(productInfo);
-        setIsCrop(productInfo.tags?.includes("crops"));
-        setQuantity(productInfo?.minOrder ?? 1);
-      };
-      handleGetProduct();
-    }
-  }, [id]);
-  const [currentImage, setCurrentImage] = useState(0);
-  useEffect(() => {
-    window.scrollTo(0, 0);
-
-    // Calculate header height dynamically
-    const headerElement =
-      document.querySelector("header") ||
-      document.querySelector('[class*="fixed"][class*="top-0"]');
-    if (headerElement) {
-      setHeaderHeight(headerElement.getBoundingClientRect().height);
-    }
-  }, [product]);
-
-  // Also update header height on window resize
-  useEffect(() => {
-    const updateHeaderHeight = () => {
-      const headerElement =
-        document.querySelector("header") ||
-        document.querySelector('[class*="fixed"][class*="top-0"]');
-      if (headerElement) {
-        setHeaderHeight(headerElement.getBoundingClientRect().height);
-      }
-    };
-
-    updateHeaderHeight();
-    window.addEventListener("resize", updateHeaderHeight);
-
-    return () => window.removeEventListener("resize", updateHeaderHeight);
-  }, []);
 
   // Add scroll listener for tab activation
   useEffect(() => {
@@ -221,42 +233,42 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   }
   if (loading) return <p>loading...</p>;
   return (
-    <div className="grid grid-cols-32 w-full sm:py-5 px-8 overflow-x-hidden gap-5 max-w-450 mx-auto" >
+    <div className="grid grid-cols-32 w-full sm:py-5 px-8 overflow-x-hidden gap-5 max-w-450 mx-auto">
       <div className="bg-gray-100 sm:bg-background flex flex-col gap-2 sm:mb-0 col-span-32  sm:col-span-25 relative ">
         {/* Main description of prod */}
         <div className="gap-10 flex flex-col bg-background">
           {/* Product Main */}
           <div className="flex flex-col sm:flex-row gap-5 border-b-1 ">
             {/* Images */}
-            <div className="gap-2 sm:flex hidden">
+            <div className="gap-3 sm:flex hidden">
               {/* Images sideBar */}
-              <ScrollArea className="w-20 h-90 ">
-                <div className="flex flex-col gap-1">
+              <ScrollArea className="w-20 h-120 ">
+                <div className="flex flex-col gap-4">
                   {product.gallery.map((image, i) => (
                     <div
                       key={i}
-                      className={`w-20 h-20 border-1 flex justify-center items-center ${
+                      className={`w-20 h-20  flex justify-center items-center ${
                         currentImage == i && "border-primary"
-                      } cursor-pointer`}
+                      } cursor-pointer overflow-hidden border-1 `}
                       onClick={() => setCurrentImage(i)}
                     >
                       <img
                         loading="lazy"
                         src={`${image}`}
                         alt=""
-                        className="object-contain h-full max-w-full "
+                        className="object-contain w-full"
                       />
                     </div>
                   ))}
                 </div>
               </ScrollArea>
               {/* Main image */}
-              <div className="w-90 h-90 border-1 flex justify-center items-center ">
+              <div className="w-120 h-120 flex justify-center items-center overflow-hidden">
                 <img
                   loading="lazy"
                   src={`${product.gallery[currentImage]}`}
                   alt=""
-                  className="object-contain h-full max-w-full "
+                  className="object-contain w-full"
                 />
               </div>
             </div>
@@ -284,45 +296,82 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
 
             {/* Product Main Description */}
             <div className="">
-              <div className="mb-2">
-                <h1 className="text-xl font-semibold">{product.name}</h1>
-                {/* Rating and Stock */}
-                <div className="flex items-end gap-1">
-                  <Rating
-                    readonly
-                    initialValue={product.rating}
-                    size={25}
-                    SVGstyle={{ display: "inline-block" }}
-                    allowFraction // allows values like 3.5 stars
-                  />
-                  <p className="text-md font-normal text-gray-600">
-                    ({product?.reviewCount ?? 0}) reviews |{" "}
-                  </p>
-                  <p
-                    className={`text-md font-normal ${
-                      product?.stockCount || isCrop
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}
-                  >
-                    {product?.stockCount || isCrop
-                      ? "In stock"
-                      : "Out of stock"}
-                  </p>
+              {/* Main product Info */}
+              <div>
+                {/* Title and ratings */}
+                <div className="mb-2">
+                  {/* TODO: Return this as the acctual Title */}
+
+                  {/* Header */}
+                  <h1 className="text-2xl font-semibold">
+                    Episson Children's model (J205) in the field of weaving
+                    manufacturing ) BathTowels{" "}
+                  </h1>
+
+                  {/* Rating and Stock */}
+                  <div className="flex items-end gap-1">
+                    <p className="text-md font-medium">
+                      {product.rating.toFixed(1)}
+                    </p>
+
+                    <Rating
+                      readonly
+                      initialValue={product.rating}
+                      size={18}
+                      SVGstyle={{ display: "inline-block" }}
+                      allowFraction // allows values like 3.5 stars
+                      fillColor=" oklch(0.56 0.14 35)"
+                    />
+                    <p className="text-sm font-normal text-gray-600">
+                      ({product?.reviewCount ?? 0}) reviews |{" "}
+                    </p>
+                    <p
+                      className={`text-sm font-normal ${
+                        product?.stockCount || isCrop
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {product?.stockCount || isCrop
+                        ? "In stock"
+                        : "Out of stock"}
+                    </p>
+                  </div>
                 </div>
+
+                {/* Product Price */}
+                <div className="space-y-2">
+                  {!isCrop && (
+                    <p className="text-xl flex items-end gap-1">
+                      <span className="text-secondary ">
+                        -{productFullPrice.discount}%
+                      </span>
+                      <span className="font-bold ">
+                        {userCurrencyCode} {productFullPrice.newPrice}{" "}
+                      </span>
+                      <span className="text-muted-foreground text-sm">
+                        (per {measurement})
+                      </span>
+                    </p>
+                  )}
+                </div>
+
+                {/* VAT & Returns */}
+                <div></div>
+
+                {/* Coupon */}
+                <div></div>
               </div>
 
-              <div className="space-y-2">
-                {!isCrop && (
-                  <h1 className="text-2xl">
-                    {newPrice(product, userCurrencyCode, rates, 1, measurement)}{" "}
-                    {userCurrencyCode}{" "}
-                    <span className="text-muted text-sm">
-                      (per {measurement})
-                    </span>
-                  </h1>
-                )}
-                <p>{product.description}</p>
+              {/* (optional) Extra options and selling points */}
+              <div>
+                {/* 1-2 Filters (color, size, model, material) */}
+                <div></div>
+
+                {/* (optional)  selling points */}
+                <div>
+                  <p className="truncate">{product.description}</p>
+                </div>
               </div>
               <div className="mt-2 border-b-2"></div>
             </div>
@@ -349,7 +398,10 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
         {/* Tabs for pc */}
         <nav
           className="hidden sm:flex items-center bg-background sm:mt-5 sticky z-40 h-10  "
-          style={{ top: `${headerHeight}px` }}
+          style={{
+            top: ` </span>
+                    ${headerHeight}px`,
+          }}
         >
           <ul className="flex gap-4 text-muted cursor-pointer mx-5 sm:mx-0 text-sm">
             {sections.map(({ name }, i) => {
@@ -448,7 +500,8 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
           <div className="w-full flex-1 ">
             <div>
               <div className="border-y-border w-full max-h-50 border-y-1 grid grid-cols-2">
-                {product?.specifications && Object.keys(product.specifications).length > 0 &&
+                {product?.specifications &&
+                  Object.keys(product.specifications).length > 0 &&
                   Object.keys(product.specifications).map((key) => (
                     <div
                       className="cols-span-1 grid grid-cols-12 border-b-1 border-border"

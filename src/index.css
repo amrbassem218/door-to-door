@@ -118,13 +118,30 @@
 }
 
 @layer base {
+  html {
+    font-size: 16px; /* Ensure root font-size is 16px for proper rem calculations */
+  }
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background;
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-optical-sizing: auto;
+    font-display: swap;
+    font-style: normal;
+    color: oklch(0.18 0.03 30);
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6{
     font-family: "Playfair Display", serif;
   }
+
   Button,
   button {
     @apply cursor-pointer;

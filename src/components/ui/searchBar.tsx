@@ -10,13 +10,11 @@ import { Button } from "./button";
 import { Input } from "./input";
 interface ISearchBarProps {
   styles?: string;
-  isFocused?: boolean;
   setIsFocused?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SearchBar: React.FunctionComponent<ISearchBarProps> = ({
   styles,
-  isFocused,
   setIsFocused,
 }) => {
   const search = useSearch();

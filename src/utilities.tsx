@@ -122,6 +122,12 @@ export const price = (
   }
   return Number(convertPrice(productPrice, userCurrency, rates)?.toFixed(2));
 };
+export const calcDiscount = (oldPrice: number, newPrice: number) => {
+  if(typeof oldPrice == 'number' && typeof newPrice == 'number'){
+    return Math.round(((oldPrice - newPrice) / oldPrice) * 100);
+  }
+  return null;
+}
 
 export const save = (
   product: Product,

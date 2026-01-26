@@ -16,16 +16,16 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
   const [isFocused, setIsFocused] = React.useState(false);
   return (
     <>
-    {
-      isFocused &&
-      <div
-        className={`inset-0  ${isFocused ? "fixed bg-black/40" : "bg-transparent"} z-50 transition-all ease-in-out`}
-        onClick={() => {
-          setIsFocused(false);
-        }}
-      />
-
-    }
+      {isFocused && (
+        <div
+          className={`inset-0  ${
+            isFocused ? "fixed bg-black/40" : "bg-transparent"
+          } z-50 transition-all ease-in-out`}
+          onClick={() => {
+            setIsFocused(false);
+          }}
+        />
+      )}
       <div className="top-0 left-0 w-full z-80 bg-background">
         <div className=" w-full  text-accent">
           <div className="px-8 mx-auto ">
@@ -52,7 +52,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
 
               {/* Search Bar */}
               <div className="flex-1 hidden sm:inline ">
-                <SearchBar styles="w-full" isFocused={isFocused} setIsFocused={setIsFocused} />
+                <SearchBar styles="w-full" setIsFocused={setIsFocused} />
               </div>
 
               {/*  Right Side */}
@@ -68,8 +68,9 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
                 <button>
                   <p className="text-sm font-light text-muted-foreground">
                     Returns
+                    <br />
+                    <span className="font-bold text-sm text-text">& Orders</span>
                   </p>
-                  <p className="font-semibold text-sm">& Orders</p>
                 </button>
 
                 {/* Cart */}
