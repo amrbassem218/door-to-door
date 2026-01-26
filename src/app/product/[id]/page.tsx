@@ -1,4 +1,5 @@
 "use client";
+import ListProd from "@/components/home/ListProds";
 import { Button } from "@/components/ui/button";
 import {
   Carousel,
@@ -6,12 +7,6 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import CartSheet from "@/components/ui/cartSheet";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   Popover,
   PopoverContent,
@@ -21,7 +16,6 @@ import ProductSideBar from "@/components/ui/productSideBar";
 import Review from "@/components/ui/review";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import SimilarProducts from "@/components/ui/similarProducts";
 import { useUserCurrencyCode } from "@/contexts/currencyContext";
 import { useCurrencyRates } from "@/getRates";
 import { supabase } from "@/supabase/supabaseClient";
@@ -43,6 +37,7 @@ import { FaAngleRight, FaLocationDot, FaTicket } from "react-icons/fa6";
 import { LuShoppingCart } from "react-icons/lu";
 import { Rating } from "react-simple-star-rating";
 import Error from "../../error/page";
+import ProductReviewSection from "./reviews";
 interface IProductProps {
   params: Promise<{
     id: string;
@@ -52,15 +47,15 @@ interface IProductProps {
 const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   const { id } = use(params);
   const [activeTab, setActiveTab] = useState("Customer Reviews");
-  const [reviewSort, setReviewSort] = useState("Most relevant");
   const [product, setProduct] = useState<Product>();
   const [measurement, setMeasurement] = useState(measurements[0]);
   const [quantity, setQuantity] = useState<number>(1);
   const [isCrop, setIsCrop] = useState(false);
   const [headerHeight, setHeaderHeight] = useState<number>(0);
-  const [reviews, setReviews] = useState<ReviewType[]>([]);
   const [currentImage, setCurrentImage] = useState(0);
-  const [selectedFilters, setSelecetdFilters] = useState<Record<string, number>>({});
+  const [selectedFilters, setSelecetdFilters] = useState<
+    Record<string, number>
+  >({});
   const [productFullPrice, setProductFullPrice] = useState<FullPrice>({
     oldPrice: 0,
     newPrice: 0,
@@ -81,13 +76,6 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
     { name: "About Store", ref: storeRef },
     { name: "More to love", ref: moreToLoveRef },
   ];
-  const sortingTypes = [
-    "Most relevant",
-    "Latest",
-    "Oldest",
-    "Low to High",
-    "High to low",
-  ];
 
   useEffect(() => {
     if (id) {
@@ -97,7 +85,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
         setProduct(productInfo);
         setIsCrop(productInfo.tags?.includes("crops"));
         setQuantity(productInfo?.minOrder ?? 1);
-        setSelecetdFilters(product.filters)
+        setSelecetdFilters(product.filters);
       };
       handleGetProduct();
     }
@@ -142,21 +130,6 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
         );
       }
 
-      const getReviews = async () => {
-        const { data: productReviews, error } = await supabase
-          .from("reviews")
-          .select("*, profiles(*)")
-          .eq("product_id", id);
-        if (error) {
-          console.log("couldn't get product reviews");
-          console.error(error);
-        } else if (productReviews) {
-          setReviews(camel(productReviews));
-          console.log(productReviews);
-          console.log("id: ", id);
-        }
-      };
-      getReviews();
     }
   }, [product]);
 
@@ -243,7 +216,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
       <div className="bg-gray-100 sm:bg-background flex flex-col gap-2 sm:mb-0 col-span-32 sm:col-span-25 relative ">
         {/* Product Main */}
         {/* Main description */}
-        <div className="flex flex-col sm:flex-row gap-5 border-b-1 ">
+        <div className="flex flex-col sm:flex-row gap-5 ">
           {/* Images */}
           <div className="gap-3 hidden sm:flex">
             {/* Images sideBar */}
@@ -273,7 +246,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
                 loading="lazy"
                 src={`${product.gallery[currentImage]}`}
                 alt=""
-                className={ `w-full h-full object-cover` }
+                className={`w-full h-full object-cover`}
               />
             </div>
           </div>
@@ -446,17 +419,14 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
                       })}
                     </div>
                   </div>
+
+                  <Separator />
                 </div>
               </div>
-
-              {/* (optional)  selling points */}
-              {/* <div>
-                <p className="truncate">{product.description}</p>
-              </div> */}
             </div>
           </div>
         </div>
-
+        <Separator className="my-7"/>
         {/* Bottom bar for mobile */}
         <div className="sm:hidden fixed bottom-0 left-0 h-12 border-t-1 w-full bg-background flex items-center gap-4 px-2 z-10 ">
           <div className="flex  gap-2">
@@ -474,159 +444,116 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
             )}
           </div>
         </div>
-        {/* Tabs for pc */}
-        <nav
-          className="hidden sm:flex items-center bg-background sm:mt-5 sticky z-40 h-10  "
-          style={{
-            top: ` </span>
-                    ${headerHeight}px`,
-          }}
-        >
-          <ul className="flex gap-4 text-muted cursor-pointer mx-5 sm:mx-0 text-sm">
-            {sections.map(({ name }, i) => {
-              return name == activeTab ? (
-                <li key={i} className="flex items-center text-black font-bold ">
-                  <FaLocationDot size={15} />
-                  {name}
-                </li>
-              ) : (
-                <li
-                  key={i}
-                  onClick={() => handleTabClick(name)}
-                  className="hover:text-secondary transition-colors"
-                >
-                  {name}
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
 
-        {/* Review Section*/}
-        <section
-          ref={reviewsRef}
-          className="w-full  py-2 px-3 sm:p-0 bg-background sm:space-y-3"
-        >
-          {/* Header */}
-          <div className="space-y-2">
-            <div className="flex gap-1 items-center justify-between ">
-              <h1 className="text-lg sm:text-xl font-normal">Reviews</h1>
-              <div className="flex gap-1 text-sm items-center">
-                <p>See all </p>
+        {/* Prdouct further details (left side) */}
+        <div className="space-y-5">
+          {/* Related items */}
+          <div>
+            <section className="w-full space-y-5">
+              <h1 className="text-2xl font-bold ">Related Items</h1>
+              <ListProd size="small" limit={12} />
+            </section>
+          </div>
+
+          {/* Tabs */}
+          <div className="space-y-3">
+            {/* Nav bar for pc */}
+            <nav
+              className="hidden sm:flex items-center bg-background sm:mt-5 sticky z-40 h-10  "
+              style={{
+                top: ` </span>
+                    ${headerHeight}px`,
+              }}
+            >
+              <ul className="flex gap-4 text-muted cursor-pointer mx-5 sm:mx-0 text-sm">
+                {sections.map(({ name }, i) => {
+                  return name == activeTab ? (
+                    <li
+                      key={i}
+                      className="flex items-center text-black font-bold "
+                    >
+                      <FaLocationDot size={15} />
+                      {name}
+                    </li>
+                  ) : (
+                    <li
+                      key={i}
+                      onClick={() => handleTabClick(name)}
+                      className="hover:text-secondary transition-colors"
+                    >
+                      {name}
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
+            <ProductReviewSection ref={reviewsRef} product={product}/>
+            <Separator />
+
+            {/* Specification Section */}
+            <section
+              ref={specificationsRef}
+              className="w-full flex flex-col h-62 py-2 px-3 sm:px-0 bg-background space-y-2"
+            >
+              {/* Header */}
+              <div className="flex gap-1 items-center justify-between ">
+                <h1 className="text-lg sm:text-xl font-normal">
+                  Specifications
+                </h1>
                 <FaAngleRight className="text-muted " size={12} />
               </div>
-            </div>
 
-            {/* Rating */}
-            <div className="flex container items-center gap-1">
-              <p className="text-2xl font-bold ">{product.rating}</p>
-              <Rating
-                readonly
-                initialValue={product.rating}
-                size={20}
-                SVGstyle={{ display: "inline-block" }}
-                allowFraction
-                className=""
-              />
-              <p>({product.reviewCount})</p>
-            </div>
-
-            {/* Sort */}
-            <div>
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <div className="flex gap-1 items-center">
-                    <p className="text-sm">
-                      Sort by{" "}
-                      <span className="hover:text-secondary">{reviewSort}</span>
-                    </p>
-                    <FaChevronDown size={12} className="" />
+              {/* Specification Content */}
+              <div className="w-full flex-1 ">
+                <div>
+                  <div className="border-y-border w-full max-h-50 border-y-1 grid grid-cols-2">
+                    {product?.specifications &&
+                      Object.keys(product.specifications).length > 0 &&
+                      Object.keys(product.specifications).map((key) => (
+                        <div
+                          className="cols-span-1 grid grid-cols-12 border-b-1 border-border"
+                          key={key}
+                        >
+                          <div className="col-span-3 bg-gray-100 p-5">
+                            <span className="font-semibold">{key}</span>
+                          </div>
+                          <div className="col-span-9 p-5">
+                            <span className="text-muted">
+                              {product.specifications[key]}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
                   </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  {sortingTypes.map((e) => (
-                    <DropdownMenuItem onClick={() => setReviewSort(e)}>
-                      {e}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-
-          {/* Reviews content */}
-          <div className="space-y-3">
-            {reviews?.map((review) => (
-              <Review review={review} />
-            ))}
-          </div>
-        </section>
-
-        <Separator />
-
-        {/* Specification Section */}
-        <section
-          ref={specificationsRef}
-          className="w-full flex flex-col h-62 py-2 px-3 sm:px-0 bg-background space-y-2"
-        >
-          {/* Header */}
-          <div className="flex gap-1 items-center justify-between ">
-            <h1 className="text-lg sm:text-xl font-normal">Specifications</h1>
-            <FaAngleRight className="text-muted " size={12} />
-          </div>
-
-          {/* Specification Content */}
-          <div className="w-full flex-1 ">
-            <div>
-              <div className="border-y-border w-full max-h-50 border-y-1 grid grid-cols-2">
-                {product?.specifications &&
-                  Object.keys(product.specifications).length > 0 &&
-                  Object.keys(product.specifications).map((key) => (
-                    <div
-                      className="cols-span-1 grid grid-cols-12 border-b-1 border-border"
-                      key={key}
-                    >
-                      <div className="col-span-3 bg-gray-100 p-5">
-                        <span className="font-semibold">{key}</span>
-                      </div>
-                      <div className="col-span-9 p-5">
-                        <span className="text-muted">
-                          {product.specifications[key]}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
+                  <ul></ul>
+                </div>
               </div>
-              <ul></ul>
-            </div>
+            </section>
+
+            <Separator />
+
+            {/* About Store Section */}
+            <section
+              ref={storeRef}
+              className="w-full flex flex-col py-2 px-3 sm:px-0 bg-background space-y-2"
+            >
+              {/* Header */}
+              <div className="flex gap-1 items-center justify-between ">
+                <h1 className="text-lg sm:text-xl font-normal">About Store</h1>
+                <FaAngleRight className="text-muted " size={12} />
+              </div>
+
+              {/* Store Content */}
+              <div className="w-full bg-gray-100 p-4">
+                <p>There doesn't Exist data about this store</p>
+              </div>
+            </section>
+
+            <Separator />
           </div>
-        </section>
+        </div>
 
-        <Separator />
-
-        {/* About Store Section */}
-        <section
-          ref={storeRef}
-          className="w-full flex flex-col py-2 px-3 sm:px-0 bg-background space-y-2"
-        >
-          {/* Header */}
-          <div className="flex gap-1 items-center justify-between ">
-            <h1 className="text-lg sm:text-xl font-normal">About Store</h1>
-            <FaAngleRight className="text-muted " size={12} />
-          </div>
-
-          {/* Store Content */}
-          <div className="w-full bg-gray-100 p-4">
-            <p>There doesn't Exist data about this store</p>
-          </div>
-        </section>
-
-        <Separator />
-
-        {/*More to love  */}
-        <section ref={moreToLoveRef}>
-          <SimilarProducts product={product} />
-        </section>
+        {/* Tabs for pc */}
       </div>
       {/* Right sideBar for pc*/}
       <div className="hidden sm:block sm:col-span-7">

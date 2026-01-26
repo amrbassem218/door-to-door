@@ -50,7 +50,7 @@ const Review: React.FunctionComponent<IReviewProps> = ({review}) => {
       
       <div className='flex items-center space-x-2'>
 
-        <Button className='border-1 border-primary p-1 px-2 rounded-md'>
+        <Button variant='link' className='border-primary p-1 px-2 rounded-md'>
           Helpful
         </Button>
 

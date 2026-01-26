@@ -6,8 +6,10 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 
 import { useUserCurrencyCode } from "@/contexts/currencyContext";
+import { useState } from "react";
 import { FaLevelDownAlt } from "react-icons/fa";
 import { Rating } from "react-simple-star-rating";
+import { Button } from "./button";
 interface IItemProps {
   item: Product;
   col?: string;
@@ -18,6 +20,7 @@ const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
   const { rates, loading } = useCurrencyRates();
   const userCurrencyCode = useUserCurrencyCode();
   const router = useRouter();
+  const [onHover, setOnHover] = useState(false);
   const { computedPrice, computedNewPrice } = React.useMemo(() => {
     return {
       computedNewPrice: newPrice(item, userCurrencyCode, rates),
@@ -28,7 +31,9 @@ const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
   return (
     <div
       onClick={() => router.push(`/product/${item.id}`)}
-      className={`${col} cursor-pointer ${style} p-2 w-56 space-y-1`}
+      className={`${col} transform-all duration-200 ease-in-out hover:scale-101 cursor-pointer ${style} p-2 w-56 space-y-1 relative `}
+      onMouseEnter={() => setOnHover(true)}
+      onMouseLeave={() => setOnHover(false)}
     >
       {/* Item Image */}
       <div className="h-42 w-full ">
@@ -67,7 +72,6 @@ const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
 
       {/* Rating and coupon */}
       <div className="space-y-1">
-
         {/* Rating*/}
         <div className="flex items-end gap-1 ">
           <Rating
@@ -83,7 +87,7 @@ const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
             ({item?.reviewCount ?? 0})
           </p>
         </div>
-        
+
         {/* Deal */}
         <div className="flex items-center gap-1 text-destructive">
           <FaLevelDownAlt className="scale-x-[-1]" />
@@ -91,6 +95,14 @@ const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
           <p className="text-xs font-medium">EGP100 off on a EGP800 order</p>
         </div>
       </div>
+
+      {/* {onHover && (
+        <div className="absolute top-0 left-0 w-full h-[120%]  bg-white">
+          <div className="mt-5 relative h-full">
+            <Button className="w-full rounded-sm absolute bottom-0">See preview</Button>
+          </div>
+        </div>
+      )} */}
     </div>
   );
 };

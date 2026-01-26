@@ -65,7 +65,7 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
             {/* Sign in for pc */}
             <div className="text-left font-medium text-muted text-xs sm:block hidden">
               <p className="text-muted">Hello there</p>
-              <p className="text-primary-foreground">Sign in/Register</p>
+              <p className="text-text">Sign in/Register</p>
             </div>
 
             {/* Sign in for mobile */}
@@ -74,7 +74,7 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
               <FaAngleRight size={10} className="sm:hidden text-heading" />
             </div>
 
-            <LuUser className="text-primary-foreground text-2xl lg:text-3xl" />
+            <LuUser className="text-text text-2xl lg:text-3xl" />
           </DialogTrigger>
           <DialogContent className="p-10 w-120 ">
             <LoginCard />
