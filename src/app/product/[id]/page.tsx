@@ -13,13 +13,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import ProductSideBar from "@/components/ui/productSideBar";
-import Review from "@/components/ui/review";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useUserCurrencyCode } from "@/contexts/currencyContext";
 import { useCurrencyRates } from "@/getRates";
-import { supabase } from "@/supabase/supabaseClient";
-import type { FullPrice, Product, ReviewType } from "@/types/types";
+import type { FullPrice, Product } from "@/types/types";
 import {
   calcDiscount,
   camel,
@@ -32,12 +30,13 @@ import { getProduct } from "@/utils/products-utils";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { use, useEffect, useRef, useState } from "react";
-import { FaAngleDown, FaChevronDown } from "react-icons/fa";
+import { FaAngleDown } from "react-icons/fa";
 import { FaAngleRight, FaLocationDot, FaTicket } from "react-icons/fa6";
 import { LuShoppingCart } from "react-icons/lu";
 import { Rating } from "react-simple-star-rating";
 import Error from "../../error/page";
 import ProductReviewSection from "./reviews";
+import ProductSpeceficationsSection from "./specifications";
 interface IProductProps {
   params: Promise<{
     id: string;
@@ -129,7 +128,6 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
             1,
         );
       }
-
     }
   }, [product]);
 
@@ -426,7 +424,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
             </div>
           </div>
         </div>
-        <Separator className="my-7"/>
+        <Separator className="my-7" />
         {/* Bottom bar for mobile */}
         <div className="sm:hidden fixed bottom-0 left-0 h-12 border-t-1 w-full bg-background flex items-center gap-4 px-2 z-10 ">
           <div className="flex  gap-2">
@@ -487,50 +485,19 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
                 })}
               </ul>
             </nav>
-            <ProductReviewSection ref={reviewsRef} product={product}/>
-            <Separator />
 
-            {/* Specification Section */}
-            <section
+            {/* Reviews */}
+            <ProductReviewSection ref={reviewsRef} product={product} />
+
+            <Separator className="my-4" />
+
+            {/* Specefications */}
+            <ProductSpeceficationsSection
               ref={specificationsRef}
-              className="w-full flex flex-col h-62 py-2 px-3 sm:px-0 bg-background space-y-2"
-            >
-              {/* Header */}
-              <div className="flex gap-1 items-center justify-between ">
-                <h1 className="text-lg sm:text-xl font-normal">
-                  Specifications
-                </h1>
-                <FaAngleRight className="text-muted " size={12} />
-              </div>
+              product={product}
+            />
 
-              {/* Specification Content */}
-              <div className="w-full flex-1 ">
-                <div>
-                  <div className="border-y-border w-full max-h-50 border-y-1 grid grid-cols-2">
-                    {product?.specifications &&
-                      Object.keys(product.specifications).length > 0 &&
-                      Object.keys(product.specifications).map((key) => (
-                        <div
-                          className="cols-span-1 grid grid-cols-12 border-b-1 border-border"
-                          key={key}
-                        >
-                          <div className="col-span-3 bg-gray-100 p-5">
-                            <span className="font-semibold">{key}</span>
-                          </div>
-                          <div className="col-span-9 p-5">
-                            <span className="text-muted">
-                              {product.specifications[key]}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                  </div>
-                  <ul></ul>
-                </div>
-              </div>
-            </section>
-
-            <Separator />
+            <Separator className="my-4" />
 
             {/* About Store Section */}
             <section
@@ -539,7 +506,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
             >
               {/* Header */}
               <div className="flex gap-1 items-center justify-between ">
-                <h1 className="text-lg sm:text-xl font-normal">About Store</h1>
+                <h1 className="text-2xl sm:text-xl font-bold">About Store</h1>
                 <FaAngleRight className="text-muted " size={12} />
               </div>
 
@@ -549,7 +516,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
               </div>
             </section>
 
-            <Separator />
+            <Separator className="my-4" />
           </div>
         </div>
 
