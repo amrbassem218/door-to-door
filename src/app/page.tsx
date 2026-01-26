@@ -23,19 +23,19 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
         <Hero />
       </div>
 
-      <div className="md:mx-20 mx-5">
+      <div className="mx-5 md:mx-20">
         {/* Today's deals */}
         <section className="mb-15 space-y-7">
           <h1 className="text-center text-3xl font-bold">Today's deals</h1>
           <div className="grid grid-cols-12 gap-5">
             {/* Best sellers */}
-            <Card className="md:col-span-4 col-span-12 transition-all text-card-foreground">
+            <Card className="md:col-span-4 col-span-12 transition-all text-card-foreground rounded-sm">
               <CardHeader>
                 <CardTitle className="mx-auto text-2xl font-semibold">
                   Bestsellers
                 </CardTitle>
                 <CardDescription className="mx-auto">
-                  <div className="px-2 w-40 p-1 rounded-md text-center bg-yellow-300">
+                  <div className="px-2 w-40 p-1 rounded-sm text-center bg-yellow-300">
                     <p className="text-heading">Best price & Quality</p>
                   </div>
                 </CardDescription>
@@ -82,7 +82,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
         </section>
 
         {/* More to love */}
-        <section className="space-y-7">
+        <section className="space-y-7 w-full">
           <h1 className="text-center text-3xl font-bold ">More to love</h1>
           <ListProd size="small" />
         </section>
