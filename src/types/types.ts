@@ -19,6 +19,7 @@ export interface Product {
   tags?: string[];
   discount: number;
   specifications: Record<string, string>;
+  filters: Record<string, number>;
 }
 
 export type dbData = any[] | null;

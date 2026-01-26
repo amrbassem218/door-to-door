@@ -12,6 +12,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import ProductSideBar from "@/components/ui/productSideBar";
 import Review from "@/components/ui/review";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -33,12 +38,11 @@ import { getProduct } from "@/utils/products-utils";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { use, useEffect, useRef, useState } from "react";
-import { FaChevronDown } from "react-icons/fa";
-import { FaAngleRight, FaLocationDot } from "react-icons/fa6";
+import { FaAngleDown, FaChevronDown } from "react-icons/fa";
+import { FaAngleRight, FaLocationDot, FaTicket } from "react-icons/fa6";
 import { LuShoppingCart } from "react-icons/lu";
 import { Rating } from "react-simple-star-rating";
 import Error from "../../error/page";
-
 interface IProductProps {
   params: Promise<{
     id: string;
@@ -56,6 +60,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   const [headerHeight, setHeaderHeight] = useState<number>(0);
   const [reviews, setReviews] = useState<ReviewType[]>([]);
   const [currentImage, setCurrentImage] = useState(0);
+  const [selectedFilters, setSelecetdFilters] = useState<Record<string, number>>({});
   const [productFullPrice, setProductFullPrice] = useState<FullPrice>({
     oldPrice: 0,
     newPrice: 0,
@@ -92,6 +97,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
         setProduct(productInfo);
         setIsCrop(productInfo.tags?.includes("crops"));
         setQuantity(productInfo?.minOrder ?? 1);
+        setSelecetdFilters(product.filters)
       };
       handleGetProduct();
     }
@@ -104,7 +110,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
         userCurrencyCode,
         rates,
         1,
-        measurement
+        measurement,
       );
 
       const productNewPrice = newPrice(
@@ -112,7 +118,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
         userCurrencyCode,
         rates,
         1,
-        measurement
+        measurement,
       );
 
       const productDiscount = calcDiscount(productOldPrice, productNewPrice);
@@ -126,13 +132,13 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   useEffect(() => {
     if (product) {
       setMeasurement(
-        localStorage.getItem(`${product.id}_measurement`) ?? measurements[0]
+        localStorage.getItem(`${product.id}_measurement`) ?? measurements[0],
       );
       if (localStorage.getItem(`${product?.id}_quantity`)) {
         setQuantity(
           Number(localStorage.getItem(`${product?.id}_quantity`)) ??
             product?.minOrder ??
-            1
+            1,
         );
       }
 
@@ -233,147 +239,220 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   }
   if (loading) return <p>loading...</p>;
   return (
-    <div className="grid grid-cols-32 w-full sm:py-5 px-8 overflow-x-hidden gap-5 max-w-450 mx-auto">
-      <div className="bg-gray-100 sm:bg-background flex flex-col gap-2 sm:mb-0 col-span-32  sm:col-span-25 relative ">
-        {/* Main description of prod */}
-        <div className="gap-10 flex flex-col bg-background">
-          {/* Product Main */}
-          <div className="flex flex-col sm:flex-row gap-5 border-b-1 ">
-            {/* Images */}
-            <div className="gap-3 sm:flex hidden">
-              {/* Images sideBar */}
-              <ScrollArea className="w-20 h-120 ">
-                <div className="flex flex-col gap-4">
-                  {product.gallery.map((image, i) => (
-                    <div
-                      key={i}
-                      className={`w-20 h-20  flex justify-center items-center ${
-                        currentImage == i && "border-primary"
-                      } cursor-pointer overflow-hidden border-1 `}
-                      onClick={() => setCurrentImage(i)}
-                    >
-                      <img
-                        loading="lazy"
-                        src={`${image}`}
-                        alt=""
-                        className="object-contain w-full"
-                      />
-                    </div>
-                  ))}
-                </div>
-              </ScrollArea>
-              {/* Main image */}
-              <div className="w-120 h-120 flex justify-center items-center overflow-hidden">
-                <img
-                  loading="lazy"
-                  src={`${product.gallery[currentImage]}`}
-                  alt=""
-                  className="object-contain w-full"
-                />
-              </div>
-            </div>
-
-            {/* Images for phone */}
-            <div className="">
-              <Carousel className="w-full h-70 border-1 sm:hidden overflow-visible">
-                <CarouselContent className="flex gap-2">
-                  {product.gallery.map((image, i) => (
-                    <CarouselItem
-                      key={i}
-                      className="basis-[80%] h-70 shrink-0 flex items-center justify-center"
-                    >
-                      <img
-                        loading="lazy"
-                        src={image}
-                        alt=""
-                        className="object-contain max-w-full h-full rounded-md"
-                      />
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-              </Carousel>
-            </div>
-
-            {/* Product Main Description */}
-            <div className="">
-              {/* Main product Info */}
-              <div>
-                {/* Title and ratings */}
-                <div className="mb-2">
-                  {/* TODO: Return this as the acctual Title */}
-
-                  {/* Header */}
-                  <h1 className="text-2xl font-semibold">
-                    Episson Children's model (J205) in the field of weaving
-                    manufacturing ) BathTowels{" "}
-                  </h1>
-
-                  {/* Rating and Stock */}
-                  <div className="flex items-end gap-1">
-                    <p className="text-md font-medium">
-                      {product.rating.toFixed(1)}
-                    </p>
-
-                    <Rating
-                      readonly
-                      initialValue={product.rating}
-                      size={18}
-                      SVGstyle={{ display: "inline-block" }}
-                      allowFraction // allows values like 3.5 stars
-                      fillColor=" oklch(0.56 0.14 35)"
+    <div className="grid grid-cols-32 w-full sm:py-5 px-8 overflow-x-hidden gap-5 max-w-450 mx-auto ">
+      <div className="bg-gray-100 sm:bg-background flex flex-col gap-2 sm:mb-0 col-span-32 sm:col-span-25 relative ">
+        {/* Product Main */}
+        {/* Main description */}
+        <div className="flex flex-col sm:flex-row gap-5 border-b-1 ">
+          {/* Images */}
+          <div className="gap-3 hidden sm:flex">
+            {/* Images sideBar */}
+            <ScrollArea className="w-20 h-120 ">
+              <div className="flex flex-col gap-4">
+                {product.gallery.map((image, i) => (
+                  <div
+                    key={i}
+                    className={`w-20 h-20  flex justify-center items-center ${
+                      currentImage == i && "border-primary"
+                    } cursor-pointer overflow-hidden border-1 `}
+                    onClick={() => setCurrentImage(i)}
+                  >
+                    <img
+                      loading="lazy"
+                      src={`${image}`}
+                      alt=""
+                      className="object-contain w-full"
                     />
-                    <p className="text-sm font-normal text-gray-600">
-                      ({product?.reviewCount ?? 0}) reviews |{" "}
-                    </p>
-                    <p
-                      className={`text-sm font-normal ${
-                        product?.stockCount || isCrop
-                          ? "text-green-600"
-                          : "text-red-600"
-                      }`}
-                    >
-                      {product?.stockCount || isCrop
-                        ? "In stock"
-                        : "Out of stock"}
-                    </p>
                   </div>
-                </div>
+                ))}
+              </div>
+            </ScrollArea>
+            {/* Main image */}
+            <div className="w-120 h-120 flex justify-center items-center overflow-hidden">
+              <img
+                loading="lazy"
+                src={`${product.gallery[currentImage]}`}
+                alt=""
+                className={ `w-full h-full object-cover` }
+              />
+            </div>
+          </div>
 
-                {/* Product Price */}
-                <div className="space-y-2">
-                  {!isCrop && (
+          {/* Images for phone */}
+          <div className="sm:hidden">
+            <Carousel className="w-full h-70 border-1 overflow-visible">
+              <CarouselContent className="flex gap-2">
+                {product.gallery.map((image, i) => (
+                  <CarouselItem
+                    key={i}
+                    className="basis-[80%] h-70 shrink-0 flex items-center justify-center"
+                  >
+                    <img
+                      loading="lazy"
+                      src={image}
+                      alt=""
+                      className="object-contain max-w-full h-full rounded-md"
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+          </div>
+
+          <div className="flex flex-col gap-4 min-w-0 flex-1">
+            {/* Main product Info */}
+            <div className="space-y-3">
+              {/* Title and ratings */}
+              <div className="">
+                {/* Header */}
+                <h1 className="text-2xl font-bold">{product.name}</h1>
+
+                {/* Rating and Stock */}
+                <div className="flex items-end gap-1">
+                  <p className="text-md font-medium">
+                    {product.rating.toFixed(1)}
+                  </p>
+
+                  <Rating
+                    readonly
+                    initialValue={product.rating}
+                    size={18}
+                    SVGstyle={{ display: "inline-block" }}
+                    allowFraction // allows values like 3.5 stars
+                    fillColor=" oklch(0.56 0.14 35)"
+                  />
+                  <p className="text-sm font-normal text-gray-600">
+                    ({product?.reviewCount ?? 0}) reviews |{" "}
+                  </p>
+                  <p
+                    className={`text-sm font-normal ${
+                      product?.stockCount || isCrop
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {product?.stockCount || isCrop
+                      ? "In stock"
+                      : "Out of stock"}
+                  </p>
+                </div>
+              </div>
+
+              {/* Product Price */}
+              <div className="space-y-2">
+                {!isCrop && (
+                  <div>
                     <p className="text-xl flex items-end gap-1">
-                      <span className="text-secondary ">
-                        -{productFullPrice.discount}%
-                      </span>
+                      {product.discount > 0 && (
+                        <span className="text-secondary mr-1">
+                          -{productFullPrice.discount}%
+                        </span>
+                      )}
                       <span className="font-bold ">
                         {userCurrencyCode} {productFullPrice.newPrice}{" "}
                       </span>
-                      <span className="text-muted-foreground text-sm">
+                      <span className="text-muted-foreground text-xs">
                         (per {measurement})
                       </span>
                     </p>
-                  )}
-                </div>
-
-                {/* VAT & Returns */}
-                <div></div>
-
-                {/* Coupon */}
-                <div></div>
+                    <p className="text-muted-foreground flex gap-1">
+                      Was:
+                      <span className="line-through">
+                        {userCurrencyCode} {product.priceBefore}
+                      </span>
+                    </p>
+                  </div>
+                )}
               </div>
 
-              {/* (optional) Extra options and selling points */}
+              {/* VAT & Returns */}
               <div>
-                {/* 1-2 Filters (color, size, model, material) */}
-                <div></div>
+                {/* VAT */}
+                <p className="text-muted-foreground text-sm font-medium">
+                  All prices don’t include VAT
+                </p>
 
-                {/* (optional)  selling points */}
-                <div>
-                  <p className="truncate">{product.description}</p>
+                {/* Returns */}
+                <Popover>
+                  <PopoverTrigger>
+                    <div className="text-primary text-left hover:underline decoration-1 cursor-pointer flex items-center gap-1">
+                      International Returns
+                      <FaAngleDown />
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent className="space-y-1">
+                    <h1 className="font-bold">Return this item </h1>
+                    <p className="text-sm">
+                      International returns are available for the shipping
+                      address you chose. You can return the item for any reason
+                      in new and unused condition: return shipping charges may
+                      apply.
+                    </p>
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              {/* Coupon */}
+              <div className="bg-secondary/20 w-full h-9 rounded-sm p-2 px-3 flex items-center justify-between text-secondary">
+                {/* Left part */}
+                <div className="flex items-center gap-2 ">
+                  <FaTicket />
+                  {/* TODO: Change with an actual copoun */}
+                  <p>
+                    {userCurrencyCode}100 off on {userCurrencyCode}800 order
+                  </p>
+                </div>
+                <FaAngleRight />
+              </div>
+            </div>
+
+            <Separator orientation="horizontal" className="w-full " />
+
+            {/* (optional) Extra options and selling points */}
+            <div>
+              {/* TODO: Add actual filters */}
+
+              {/* 1-2 Filters (color, size, model, material) */}
+              <div>
+                <div className="space-y-2">
+                  {/* Filter header */}
+                  <div className="flex items-center gap-1">
+                    <h3 className="text-muted-foreground">Color: </h3>
+                    <span className="text-text font-semibold">
+                      Purple & White
+                    </span>
+                  </div>
+
+                  {/* Choices */}
+                  <div>
+                    <div className="flex gap-4">
+                      {product.gallery.map((image, i) => {
+                        return (
+                          i < 4 && (
+                            <div
+                              key={i}
+                              // TODO: use actual filters
+                              className={`w-20 h-20  flex justify-center items-center ${i == 0 && "border border-blue-500"} cursor-pointer overflow-hidden border-1 `}
+                            >
+                              <img
+                                loading="lazy"
+                                src={`${image}`}
+                                alt=""
+                                className="object-contain w-full"
+                              />
+                            </div>
+                          )
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="mt-2 border-b-2"></div>
+
+              {/* (optional)  selling points */}
+              {/* <div>
+                <p className="truncate">{product.description}</p>
+              </div> */}
             </div>
           </div>
         </div>
