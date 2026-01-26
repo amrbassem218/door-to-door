@@ -20,13 +20,13 @@ const ListProd: React.FunctionComponent<IListProdProps> = ({limit, size}) => {
     }
     getProd();
   }, [])
-  const colSize = size == "large" ? 'md:col-span-6 col-span-12' : 'sm:col-span-2 col-span-6';
+  const colSize = size == "large" ? 'md:col-span-6 col-span-12' : 'sm:col-span-8 col-span-6';
   return (
     <div className='grid grid-cols-12 gap-2'>
         {items && items.map((item, i) => 
             {
                 return (!limit || (limit && i < limit)) && ( 
-                    <Item key={`${item.name}-${i}`} item={item} col={colSize} style='bg-card'/>
+                    <Item key={`${item.name}-${i}`} item={item} col={colSize} />
                 ) 
             }
         )}

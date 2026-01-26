@@ -1,12 +1,13 @@
 "use client";
 import { useCurrencyRates } from "@/getRates";
 import type { Product } from "@/types/types";
-import { newPrice, price, save } from "@/utilities";
+import { newPrice, price } from "@/utilities";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 
 import { useUserCurrencyCode } from "@/contexts/currencyContext";
-import { useEffect } from "react";
+import { FaLevelDownAlt } from "react-icons/fa";
+import { Rating } from "react-simple-star-rating";
 interface IItemProps {
   item: Product;
   col?: string;
@@ -27,32 +28,68 @@ const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
   return (
     <div
       onClick={() => router.push(`/product/${item.id}`)}
-      className={`${col} border-1 rounded-lg transition-transform duration-200 ease-in-out hover:scale-105 cursor-pointer bg-background ${style} px-2 w-40`}
+      className={`${col} cursor-pointer ${style} p-2 w-56 space-y-1`}
     >
       {/* Item Image */}
-      <div className="h-24 rounded-t-lg flex items-center justify-center overflow-hidden ">
+      <div className="h-42 w-full ">
         <img
           loading="lazy"
           src={item.thumbnail}
           alt=""
-          className=" object-contain h-full max-w-full"
+          className=" h-full w-full object-cover"
         />
       </div>
-      {/* <Separator className=''/> */}
+
       {/* Item Description */}
-      <div className="mx-2 mt-2 pb-2 border-b-2 space-y-1">
-        <h1 className="text-lg font-medium">{item.name} </h1>
-        <div className="flex gap-2 text-md">
-          <p className="font-bold">{computedNewPrice} </p>
-          <p className="line-through decoration-1">{computedPrice}</p>
+      <div className="space-y-1">
+        <div className="flex items-center gap-1">
+          {/* TODO: Fix to actual deals */}
+
+          {/* Deal */}
+          <div className="w-fit p-1 rounded-xs h-4 bg-info flex items-center justify-center">
+            <span className="text-xs text-primary-foreground">Superdeal</span>
+          </div>
+          <h1 className="text-medium  truncate">{item.name} </h1>
+        </div>
+
+        <div className="flex gap-1 text-md flex items-center">
+          <p className="font-semibold text-[1.4rem] leading-none">
+            <span className="text-sm font-medium">{userCurrencyCode}</span>
+            {computedNewPrice}{" "}
+          </p>
+
+          <p className="line-through decoration-1 text-muted-foreground text-sm">
+            {userCurrencyCode}
+            {computedPrice}
+          </p>
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="mx-2 py-2">
-        <p className="font-semibold text-green-600">
-          Save {save(item, userCurrencyCode, rates)} {userCurrencyCode}
-        </p>
+      {/* Rating and coupon */}
+      <div className="space-y-1">
+
+        {/* Rating*/}
+        <div className="flex items-end gap-1 ">
+          <Rating
+            readonly
+            initialValue={item.rating}
+            size={16}
+            SVGstyle={{ display: "inline-flex" }}
+            allowFraction // allows values like 3.5 stars
+            fillColor=" oklch(0.56 0.14 35)"
+          />
+          <p className="text-md font-medium">{item.rating.toFixed(1)}</p>
+          <p className="text-sm font-normal text-gray-600">
+            ({item?.reviewCount ?? 0})
+          </p>
+        </div>
+        
+        {/* Deal */}
+        <div className="flex items-center gap-1 text-destructive">
+          <FaLevelDownAlt className="scale-x-[-1]" />
+          {/* TODO: Replace with actual deal */}
+          <p className="text-xs font-medium">EGP100 off on a EGP800 order</p>
+        </div>
       </div>
     </div>
   );
