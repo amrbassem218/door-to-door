@@ -12,12 +12,12 @@ import { MdDeleteOutline } from "react-icons/md";
 
 import MeasurementChange from "@/components/ui/measurementChange";
 import QuantityChange from "@/components/ui/quantityChange";
-import { useUserAuthProfile } from "@/contexts/authContext";
 import { useUserCurrencyCode } from "@/contexts/currencyContext";
 import { useCurrencyRates } from "@/getRates";
 import { cleanupDuplicateCarts, getCart } from "@/utils/cart-utils";
 import { useUser } from "@/utils/getUser";
 import { useRouter } from "next/navigation";
+import EmptyCart from "./empty";
 interface ICartProps {}
 
 const Cart: React.FunctionComponent<ICartProps> = (props) => {
@@ -30,8 +30,9 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
   const [cartMeasurement, setCartMeasurement] = useState<
     Record<number, string>
   >({});
-  const [userAuthProfile, setUserAuthProfile] = useUserAuthProfile();
+  const [isEmpty, setIsEmpty] = useState(false);
   const router = useRouter();
+
   const { rates, loading: ratesLoading } = useCurrencyRates();
   const userCurrencyCode = useUserCurrencyCode();
   // const {isLoading, session} = ();
@@ -44,6 +45,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-U8tK4EfgFz0FAX0yYoXfE05yWfq2tqNLQw&s",
     "https://upload.wikimedia.org/wikipedia/commons/b/b7/PayPal_Logo_Icon_2014.svg",
   ];
+
   useEffect(() => {
     if (user) {
       const handleGetCartItems = async () => {
@@ -73,14 +75,14 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                 userCurrencyCode,
                 rates,
                 currentCartQuantity[id(product)],
-                currentCartMeasurement[id(product)]
+                currentCartMeasurement[id(product)],
               );
               currentSubTotal += newPrice(
                 product,
                 userCurrencyCode,
                 rates,
                 currentCartQuantity[id(product)],
-                currentCartMeasurement[id(product)]
+                currentCartMeasurement[id(product)],
               );
 
               if (sellerSeperatedCart[Number(product.sellerId)]) {
@@ -93,6 +95,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
             setSubtotal(currentSubTotal);
             setCart(sellerSeperatedCart);
             setCartItems(data);
+            setIsEmpty(cartItems.length === 0 );
           }
         } catch (error) {
           console.error("Error getting cart items:", error);
@@ -101,18 +104,19 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
       handleGetCartItems();
     }
   }, [user, cartQuantity, cartMeasurement]);
+
   const handleMeasurementChange = (mes: string, product?: Product) => {
     if (product) {
       const pid = id(product);
       const convertedMeasurement = Number(
-        unitChange(cartQuantity[pid], cartMeasurement[pid], mes)
+        unitChange(cartQuantity[pid], cartMeasurement[pid], mes),
       );
       setCartQuantity({ ...cartQuantity, [pid]: convertedMeasurement });
       setCartMeasurement({ ...cartMeasurement, [pid]: mes });
       localStorage.setItem(`${product.id}_measurement`, mes);
       localStorage.setItem(
         `${product.id}_quantity`,
-        convertedMeasurement.toString()
+        convertedMeasurement.toString(),
       );
     }
   };
@@ -140,12 +144,16 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
   const handleDeleteItem = async (
     product: Product,
     sellerId: number,
-    index: number
+    index: number,
   ) => {
     if (cart) {
       const newSellerList = cart[sellerId];
       newSellerList.splice(index, 1);
       setCart({ ...cart, [sellerId]: newSellerList });
+
+      // Set cart items
+      setCartItems((prev) => prev.filter((e) => e.products.id !== product.id));
+
       const { error } = await supabase
         .from("cart_items")
         .delete()
@@ -155,14 +163,22 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
       }
     }
   };
+  useEffect(() => {
+    if (cartItems) {
+      setIsEmpty(cartItems.length === 0);
+      console.log("cart Items: ", cartItems)
+      console.log("is empty: ",cartItems.length === 0)
+    }
+  }, [cartItems]);
   const handleCheckout = () => {
     if (user) {
       // Proceed to checkout
     }
   };
-
   if (ratesLoading) return <p>Loading prices...</p>;
-
+  if (isEmpty) {
+    return <EmptyCart />;
+  }
   return (
     <div>
       {cart && (
@@ -188,7 +204,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                       {cart[Number(sellerId)].map(
                         (
                           { products: product, quantity, measurement },
-                          index
+                          index,
                         ) => (
                           <div
                             key={index}
@@ -246,7 +262,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                                       handleDeleteItem(
                                         product,
                                         Number(sellerId),
-                                        index
+                                        index,
                                       )
                                     }
                                   />
@@ -261,7 +277,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                                       userCurrencyCode,
                                       rates,
                                       cartQuantity[id(product)],
-                                      cartMeasurement[id(product)]
+                                      cartMeasurement[id(product)],
                                     )}{" "}
                                     {userCurrencyCode}
                                   </h1>
@@ -271,7 +287,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                                       userCurrencyCode,
                                       rates,
                                       cartQuantity[id(product)],
-                                      cartMeasurement[id(product)]
+                                      cartMeasurement[id(product)],
                                     )}
                                   </p>
                                 </div>
@@ -282,7 +298,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                                     userCurrencyCode,
                                     rates,
                                     cartQuantity[id(product)],
-                                    cartMeasurement[id(product)]
+                                    cartMeasurement[id(product)],
                                   )}{" "}
                                   {userCurrencyCode}
                                 </p>
@@ -292,7 +308,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                               </div>
                             </div>
                           </div>
-                        )
+                        ),
                       )}
                     </div>
                   ))}
