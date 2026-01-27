@@ -182,7 +182,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
   return (
     <div>
       {cart && (
-        <section className="w-screen absolute left-0 h-screen bg-gray-100 sm:px-40 px-5">
+        <section className="w-screen absolute left-0 h-screen  sm:px-40 px-5">
           {/* Cart Section */}
           <div className="w-full mx-auto flex flex-col sm:grid grid-cols-12 gap-5 mt-5">
             <div className="col-span-8 space-y-2">
@@ -194,11 +194,11 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
               </Card>
 
               {/* Cart */}
-              <Card>
+              <Card >
                 <CardHeader>
                   <CardTitle>Cart Items</CardTitle>
                 </CardHeader>
-                <CardContent className="flex flex-col gap-3">
+                <CardContent className="flex flex-col gap-3 ">
                   {Object.keys(cart).map((sellerId) => (
                     <div key={sellerId} className="space-y-3 cursor-pointer">
                       {cart[Number(sellerId)].map(
@@ -271,7 +271,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                               <div className=" ">
                                 {/* Price */}
                                 <div className="flex gap-1 items-center">
-                                  <h1 className="text-md font-semibold ">
+                                  <p className="text-md font-semibold ">
                                     {newPrice(
                                       product,
                                       userCurrencyCode,
@@ -280,8 +280,8 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                                       cartMeasurement[id(product)],
                                     )}{" "}
                                     {userCurrencyCode}
-                                  </h1>
-                                  <p className="line-through text-sm text-muted">
+                                  </p>
+                                  <p className="line-through text-sm text-muted-foreground">
                                     {price(
                                       product,
                                       userCurrencyCode,
@@ -368,7 +368,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                       {(subtotal + 1000).toFixed(2)} {userCurrencyCode}
                     </p>
                   </div>
-                  <Button className="w-full text-lg bg-red-500 hover:bg-red-600 transition-all">
+                  <Button className="w-full text-lg transition-all">
                     Checkout
                   </Button>
                 </CardContent>
