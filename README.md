@@ -1,6 +1,6 @@
 <div align="center">
   <h1>EGEEX</h1>
-  <a href="https://www.egeex.com/">[Webiste Link]</a>
+  <a href="https://www.egeex.com/">[Website Link]</a>
   <br>
   <span>From Egyptian Fields to the World's Markets</span>
 </div>
@@ -10,17 +10,38 @@
 EGEEX is an ecommerce platform where Egyptian goods are distributed across the globe. This ranges from tomatoes to handmade rugs to pottery.
 
 
-<!-- ## Table of contents -->
-<!-- - [What is EGEEX?](#what-is-numitz) -->
-<!-- - [Implemented Features](#implemented-features) -->
-<!-- - [Tech stack](#tech-stack) -->
-<!-- - [How to use](#how-to-use) -->
-<!---->
-<!-- ## Implemented Features -->
-<!-- - Users can add products -->
-<!-- - Add to cart -->
-<!-- - change currency -->
-<!-- - change weight & Quantity -->
+## Table of contents
+- [What is EGEEX?](#what-is-numitz)
+- [Features](#features)
+- [Tech stack](#tech-stack)
+- [How to use](#how-to-use)
+
+## Features
+
+- add products
+- Add to cart
+- change currency
+- change weight & Quantity
+
+## How to start
+- Clone the repo  
+`git clone https://github.com/amrbassem218/door-to-door`  
+- install dependencies  
+`cd door-to-door`
+`npm i`  
+- run  
+`npm run dev`
+
+## Tech stack
+- Nextjs 
+- Typescript 
+- NextAPI for backend 
+- Supabase for database and authentication
+
+## Links
+- Website Link: https://www.egeex.com/
+
+
 
 <!-- ## How to use? -->
 <!---->
@@ -31,13 +52,4 @@ EGEEX is an ecommerce platform where Egyptian goods are distributed across the g
 <!-- ### Change Currency -->
 <!-- - Click on the Flag on the top right, a pop up would appear -->
 <!-- - Click on the currency displayed to change it  -->
-
-## Tech stack
-- Nextjs 
-- Typescript 
-- NextAPI for backend 
-- Supabase for database and authentication
-
-## Links
-- Website Link: https://www.egeex.com/
 
