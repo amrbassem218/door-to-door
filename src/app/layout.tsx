@@ -1,6 +1,7 @@
 import Header from "@/components/header/Header";
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
+import ComingSoon from "@/components/ui/comingSoon";
 import "../App.css";
 import "../index.css";
 import Providers from "./providers";
@@ -29,6 +30,7 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <ComingSoon />
         <Providers>
           <div className="flex flex-col min-h-screen w-full">
             <Header />
