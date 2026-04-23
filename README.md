@@ -13,8 +13,9 @@ EGEEX is an ecommerce platform where Egyptian goods are distributed across the g
 ## Table of contents
 - [What is EGEEX?](#what-is-numitz)
 - [Features](#features)
+- [How to start](#how-to-start)
 - [Tech stack](#tech-stack)
-- [How to use](#how-to-use)
+- [Links](#links)
 
 ## Features
 
