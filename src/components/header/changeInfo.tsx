@@ -1,5 +1,4 @@
 "use client";
-import { getProfile } from "@/contexts/userContext";
 import * as React from "react";
 import Flag from "react-world-flags";
 import {

@@ -21,7 +21,6 @@ import { useEffect, useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
 import Flag from "react-world-flags";
 import { getAllCurrencies, handleNewCurrencyClick } from "../currency/utils";
-import { useUserAuthProfile } from "@/contexts/authContext";
 import { useUser } from "@/utils/getUser";
 interface ICurrencyDropDownProps {}
 

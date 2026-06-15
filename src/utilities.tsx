@@ -1,9 +1,8 @@
 import type { User } from "@supabase/supabase-js";
 import camelcaseKeys from "camelcase-keys";
 import { all, create } from "mathjs";
-import { loadGoogle } from "./googleLoader";
 import { supabase } from "./supabase/supabaseClient";
-import type { pos, Product, ReverseGeo } from "./types/types";
+import type { pos, Product } from "./types/types";
 
 export const unitChange = (
   value: number,

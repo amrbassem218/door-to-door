@@ -9,7 +9,6 @@ import { useUserCurrencyCode } from "@/contexts/currencyContext";
 import { useState } from "react";
 import { FaLevelDownAlt } from "react-icons/fa";
 import { Rating } from "react-simple-star-rating";
-import { Button } from "./button";
 interface IItemProps {
   item: Product;
   col?: string;

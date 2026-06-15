@@ -1,9 +1,7 @@
 "use client";
-import { defaultCurrency } from "@/components/currency/utils";
 import {
   createContext,
   useContext,
-  useState,
   type Dispatch,
   type SetStateAction,
 } from "react";

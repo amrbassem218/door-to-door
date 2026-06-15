@@ -1,6 +1,5 @@
 "use client";
-import { useUserCart, useUserCartLength } from "@/contexts/cartContext";
-import { getProfile } from "@/contexts/userContext";
+import { useUserCartLength } from "@/contexts/cartContext";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { LuShoppingCart } from "react-icons/lu";

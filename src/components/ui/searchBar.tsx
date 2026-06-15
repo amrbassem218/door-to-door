@@ -1,12 +1,11 @@
 "use client";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
-import { IoFilter, IoSearch } from "react-icons/io5";
+import { IoSearch } from "react-icons/io5";
 
 import { useSearch } from "@/contexts/searchContext";
 import { useRouter } from "next/navigation";
 import { FaAngleDown } from "react-icons/fa6";
-import { Button } from "./button";
 import { Input } from "./input";
 interface ISearchBarProps {
   styles?: string;

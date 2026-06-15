@@ -11,7 +11,6 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { capetalize } from "@/utilities";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 interface ICategoryProps {}
 
