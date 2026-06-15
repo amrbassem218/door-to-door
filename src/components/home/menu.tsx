@@ -5,7 +5,6 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -56,9 +55,15 @@ const Menu: React.FunctionComponent<IMenuProps> = (props) => {
   };
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger>
-        <IoIosMenu className="text-2xl " />
-      </SheetTrigger>
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        className="cursor-pointer"
+        aria-label={open ? "Close menu" : "Open menu"}
+        aria-expanded={open}
+      >
+        <IoIosMenu className="text-xl " />
+      </button>
       <SheetContent side="left" className="gap-0">
         <SheetHeader>
           <SheetTitle className="flex gap-2 items-center">

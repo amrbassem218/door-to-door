@@ -37,7 +37,7 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
                 </div>
                 <FaAngleRight size={10} className="sm:hidden text-heading" />
               </div>
-              <LuUser className="text-2xl lg:text-3xl" />
+              <LuUser className="text-xl lg:text-2xl" />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem onClick={() => router.push("/account")}>Profile</DropdownMenuItem>
@@ -70,11 +70,11 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
 
             {/* Sign in for mobile */}
             <div className="sm:hidden flex items-center">
-              <p className="">sign in</p>
-              <FaAngleRight size={10} className="sm:hidden text-heading" />
+              <p className="text-xs">sign in</p>
+              <FaAngleRight size={8} className="sm:hidden text-heading" />
             </div>
 
-            <LuUser className="text-text text-2xl lg:text-3xl" />
+            <LuUser className="text-text text-xl lg:text-2xl" />
           </DialogTrigger>
           <DialogContent className="p-10 w-120 ">
             <LoginCard />

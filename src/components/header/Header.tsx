@@ -7,12 +7,11 @@ import CartHeader from "./cartHeader";
 import ChangeInfo from "./changeInfo";
 import GoBackButton from "./goBackButton";
 import LocationChange from "./LocationChange";
+import Menu from "../home/menu";
 
-interface IHeaderProps {
-  showSearch?: boolean;
-}
+interface IHeaderProps {}
 
-const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
+const Header: React.FunctionComponent<IHeaderProps> = () => {
   const [isFocused, setIsFocused] = React.useState(false);
   return (
     <>
@@ -32,22 +31,29 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
             <div className="flex items-center justify-between w-full py-3 gap-8">
               {/* Left Side */}
               <div className="flex items-center gap-6">
-                {/* Back button and menu for phones */}
+                {/* Mobile: Hamburger menu */}
                 <div className="flex items-center md:hidden">
+                  <Menu />
+                </div>
+
+                {/* Back button (desktop only - mobile uses hamburger) */}
+                <div className="hidden md:flex">
                   <GoBackButton />
-                  {/* TODO: Return the menu for phones */}
-                  {/* <Menu /> */}
                 </div>
 
                 {/* LOGO */}
                 <Link
-                  className="cursor-pointer font-semibold lg:text-3xl text-lg"
+                  className="cursor-pointer font-bold lg:text-3xl text-xl tracking-wide"
                   style={{ fontFamily: '"Playfair Display", serif' }}
                   href={"/"}
                 >
                   EGEEX
                 </Link>
-                <LocationChange />
+
+                {/* Location (desktop only) */}
+                <div className="hidden md:block">
+                  <LocationChange />
+                </div>
               </div>
 
               {/* Search Bar */}
@@ -56,16 +62,17 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
               </div>
 
               {/*  Right Side */}
-              <div className="flex gap-6 ">
-                {/* Language & currency */}
+              <div className="flex gap-6 items-center">
+                {/* Language & currency (desktop only) */}
                 <ChangeInfo />
 
                 {/* Sign */}
-                <div className="flex gap-1 items-center ">
+                <div className="flex gap-1 items-center">
                   <Sign />
                 </div>
 
-                <button>
+                {/* Returns & Orders (desktop only) */}
+                <button className="hidden sm:block">
                   <p className="text-sm font-light text-muted-foreground">
                     Returns
                     <br />
@@ -83,13 +90,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({ showSearch }) => {
           <TopicBar />
         </div> */}
 
-          {/* Mobile stuff */}
-          <div className="sm:hidden ">
-            {/* Mobile Search */}
-            <div className="mx-10 my-2">
-              {showSearch && <SearchBar styles="" />}
-            </div>
-          </div>
+
         </div>
       </div>
     </>

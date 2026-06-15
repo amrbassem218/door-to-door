@@ -15,7 +15,7 @@ const CartHeader: React.FunctionComponent<ICartHeaderProps> = (props) => {
       className="flex gap-1 items-center cursor-pointer"
       onClick={() => router.push("/cart")}
     >
-      <LuShoppingCart className="text-2xl lg:text-3xl" />
+      <LuShoppingCart className="text-xl lg:text-2xl" />
       <div className="flex-col  justify-center items-center hidden md:flex">
         <div className="w-8  bg-secondary flex items-center justify-center px-2 rounded-md">
           <p className="text-sm font-bold text-secondary-foreground">
