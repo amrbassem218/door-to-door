@@ -27,8 +27,8 @@ const Header: React.FunctionComponent<IHeaderProps> = () => {
       )}
       <div className="top-0 left-0 w-full z-80 bg-background">
         <div className=" w-full  text-accent">
-          <div className="px-8 mx-auto ">
-            <div className="flex items-center justify-between w-full py-3 gap-8">
+          <div className="px-4 sm:px-8 mx-auto ">
+            <div className="flex items-center justify-between w-full py-3 gap-4 sm:gap-8">
               {/* Left Side */}
               <div className="flex items-center gap-6">
                 {/* Mobile: Hamburger menu */}

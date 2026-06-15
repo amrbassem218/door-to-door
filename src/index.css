@@ -132,6 +132,8 @@
     font-display: swap;
     font-style: normal;
     color: oklch(0.18 0.03 30);
+    overflow-x: hidden;
+    width: 100%;
   }
   h1,
   h2,

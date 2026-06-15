@@ -210,11 +210,11 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   }
   if (loading) return <p>loading...</p>;
   return (
-    <div className="grid grid-cols-32 w-full sm:py-5 px-8 overflow-x-hidden gap-5 max-w-450 mx-auto ">
-      <div className="bg-gray-100 sm:bg-background flex flex-col gap-2 sm:mb-0 col-span-32 sm:col-span-25 relative ">
+    <div className="grid grid-cols-32 w-full sm:py-5 sm:px-8 px-2 overflow-x-hidden gap-5 max-w-450 mx-auto">
+      <div className="bg-gray-100 sm:bg-background flex flex-col gap-2 sm:mb-0 col-span-32 sm:col-span-25 relative">
         {/* Product Main */}
         {/* Main description */}
-        <div className="flex flex-col sm:flex-row gap-5 ">
+        <div className="flex flex-col sm:flex-row gap-5">
           {/* Images */}
           <div className="gap-3 hidden sm:flex">
             {/* Images sideBar */}
@@ -251,12 +251,12 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
 
           {/* Images for phone */}
           <div className="sm:hidden">
-            <Carousel className="w-full h-70 border-1 overflow-visible">
-              <CarouselContent className="flex gap-2">
+            <Carousel className="w-full h-70 border-1 overflow-visible px-2">
+              <CarouselContent className="flex gap-1">
                 {product.gallery.map((image, i) => (
                   <CarouselItem
                     key={i}
-                    className="basis-[80%] h-70 shrink-0 flex items-center justify-center"
+                    className="basis-[90%] h-70 shrink-0 flex items-center justify-center"
                   >
                     <img
                       loading="lazy"
@@ -279,7 +279,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
                 <h1 className="text-2xl font-bold">{product.name}</h1>
 
                 {/* Rating and Stock */}
-                <div className="flex items-end gap-1">
+                <div className="flex items-end gap-1 flex-wrap">
                   <p className="text-md font-medium">
                     {product.rating.toFixed(1)}
                   </p>
@@ -396,7 +396,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
 
                   {/* Choices */}
                   <div>
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 flex-wrap">
                       {product.gallery.map((image, i) => {
                         return (
                           i < 4 && (
