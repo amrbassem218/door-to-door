@@ -7,6 +7,7 @@ import type { Product, ProductFilters } from "@/types/types";
 import { newPrice, price } from "@/utilities";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
+import SearchBar from "@/components/ui/searchBar";
 
 interface ISearchPageProps {}
 function SearchContext() {
@@ -54,10 +55,13 @@ function SearchContext() {
   return (
     <div className="container mx-auto py-4 px-2">
       <div className="mb-6">
-        <h1 className="text-xl font-bold">
+        <div className="sm:hidden mb-4">
+          <SearchBar />
+        </div>
+        <span className="text-sm sm:text-base font-normal text-gray-600">
           Search Results for "{searchQuery}"
-        </h1>
-        <p className="text-gray-600">
+        </span>
+        <p className="text-xs sm:text-sm text-gray-400">
           Found {filteredProducts.length} products
         </p>
       </div>
@@ -234,11 +238,11 @@ function SearchContext() {
 }
 
 const SearchPage: React.FunctionComponent<ISearchPageProps> = (props) => {
-  return(
+  return (
     <Suspense fallback={<div>loading...</div>}>
-      <SearchContext/>
+      <SearchContext />
     </Suspense>
-  )
+  );
 };
 
 export default SearchPage;

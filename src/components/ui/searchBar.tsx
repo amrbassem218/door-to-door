@@ -70,7 +70,7 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({
     >
       {/* <IoSearchOutline className="text-primary absolute left-2" size={18} /> */}
       <button
-        className="absolute left-0 w-16 h-full flex items-center justify-between bg-background-muted rounded-l-sm text-text text-sm px-3 text-muted-foreground font-medium"
+        className="absolute left-0 w-12 h-full flex items-center justify-between bg-background-muted rounded-l-sm text-text text-xs sm:text-sm px-3 text-muted-foreground font-medium"
         type="button"
       >
         All
@@ -87,7 +87,7 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({
         <Input
           type="text"
           placeholder="Search crops, furniture and more..."
-          className="w-full border-0 px-18 h-full text-text"
+          className="w-full border-0 px-14 h-full text-text text-sm"
           value={query}
           onFocus={() => setIsFocused && setIsFocused(true)}
           onBlur={() => setIsFocused && setIsFocused(false)}
@@ -96,10 +96,10 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({
         />
       </form>
       <button
-        className="cursor-pointer absolute right-0 w-12 h-full flex items-center justify-center bg-primary rounded-r-md text-text"
+        className="cursor-pointer absolute right-0 w-10 h-full flex items-center justify-center bg-primary rounded-r-md text-text"
         onClick={() => handleFilter()}
       >
-        <IoSearch className="w-6 h-6 text-background" />
+        <IoSearch className="w-3 h-3 text-background" />
       </button>
       {/* Suggestions dropdown */}
       {suggestions.length > 0 && query && (
