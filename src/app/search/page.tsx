@@ -164,7 +164,7 @@ function SearchContext() {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-12 gap-6 md:col-span-13 col-span-16 max-w-screen">
+        <div className="grid grid-cols-12 gap-6 md:col-span-13 col-span-16 max-w-full">
           {filteredProducts.map((product) => (
             <div
               key={product.id}

@@ -182,7 +182,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
   return (
     <div>
       {cart && (
-        <section className="w-screen absolute left-0 h-screen  sm:px-40 px-5">
+        <section className="w-full absolute left-0 h-screen  sm:px-40 px-5">
           {/* Cart Section */}
           <div className="w-full mx-auto flex flex-col sm:grid grid-cols-12 gap-5 mt-5">
             <div className="col-span-8 space-y-2">

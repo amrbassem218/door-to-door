@@ -216,7 +216,7 @@ const Providers: React.FunctionComponent<IProvidersProps> = ({ children }) => {
             <UserCartContext value={[userCart, setUserCart]}>
               <SearchContext.Provider value={searchContextValue}>
                 <RouteProtection>
-                  <div className="w-screen">{children}</div>
+                  <div className="w-full">{children}</div>
                 </RouteProtection>
               </SearchContext.Provider>
             </UserCartContext>
