@@ -2,7 +2,7 @@
 
 import { withAuth } from "@/utils/auth";
 import { useUser } from "@/utils/getUser";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 /**
  * React hook that provides a function to execute callbacks only if user is authenticated
@@ -25,11 +25,14 @@ import { useRouter } from "next/navigation";
 export const useRequireAuth = (redirectTo: string = "/login") => {
   const { user } = useUser();
   const router = useRouter();
+  const pathname = usePathname();
+
+  const redirectWithReturn = `${redirectTo}?redirectTo=${encodeURIComponent(pathname)}`;
 
   const executeWithAuth = <T extends (...args: any[]) => any>(
     fn: T
   ): ((...args: Parameters<T>) => ReturnType<T> | void) => {
-    return withAuth(user, router, fn, redirectTo);
+    return withAuth(user, router, fn, redirectWithReturn);
   };
 
   return { executeWithAuth };

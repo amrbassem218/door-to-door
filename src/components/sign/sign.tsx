@@ -1,5 +1,4 @@
 "use client";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import * as React from "react";
 import { FaAngleRight } from "react-icons/fa";
 import { LuUser } from "react-icons/lu";
@@ -10,10 +9,10 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
-import LoginCard from "@/app/login/loginCard";
 import { useUser } from "@/utils/getUser";
 import { getDisplayName, handleLogout } from "@/utils/user-utils";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface ISignProps {}
 
@@ -60,26 +59,21 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
           </DropdownMenu>
         </div>
       ) : (
-        <Dialog>
-          <DialogTrigger className="flex items-center gap-1">
-            {/* Sign in for pc */}
-            <div className="text-left font-medium text-muted text-xs sm:block hidden">
-              <p className="text-muted">Hello there</p>
-              <p className="text-text">Sign in/Register</p>
-            </div>
+        <Link href="/login" className="flex items-center gap-1">
+          {/* Sign in for pc */}
+          <div className="text-left font-medium text-muted text-xs sm:block hidden">
+            <p className="text-muted">Hello there</p>
+            <p className="text-text">Sign in/Register</p>
+          </div>
 
-            {/* Sign in for mobile */}
-            <div className="sm:hidden flex items-center">
-              <p className="text-xs">sign in</p>
-              <FaAngleRight size={8} className="sm:hidden text-heading" />
-            </div>
+          {/* Sign in for mobile */}
+          <div className="sm:hidden flex items-center">
+            <p className="text-xs">sign in</p>
+            <FaAngleRight size={8} className="sm:hidden text-heading" />
+          </div>
 
-            <LuUser className="text-text text-xl lg:text-2xl" />
-          </DialogTrigger>
-          <DialogContent className="p-10 w-120 ">
-            <LoginCard />
-          </DialogContent>
-        </Dialog>
+          <LuUser className="text-text text-xl lg:text-2xl" />
+        </Link>
       )}
     </div>
   );

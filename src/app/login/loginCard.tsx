@@ -37,8 +37,9 @@ const schema = z.object({
 type zodSchema = z.infer<typeof schema>;
 interface ILoginCardProps {
   context?: "dialog" | "page";
+  redirectTo?: string;
 }
-const LoginCard: React.FunctionComponent<ILoginCardProps> = ({ context }) => {
+const LoginCard: React.FunctionComponent<ILoginCardProps> = ({ context, redirectTo = "/" }) => {
   const router = useRouter();
   const form = useForm<zodSchema>({
     resolver: zodResolver(schema),
@@ -60,6 +61,7 @@ const LoginCard: React.FunctionComponent<ILoginCardProps> = ({ context }) => {
     } else {
       console.log("Login successful:", userInfo);
       toast.success("Login successful!");
+      router.replace(redirectTo);
     }
   };
   const handleSignupClick = () => {
