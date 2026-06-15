@@ -8,8 +8,10 @@ function LoginContent() {
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") || "/";
   return (
-    <div className="flex w-full flex-1 items-center justify-center my-10">
-      <LoginForm redirectTo={redirectTo} />
+    <div className="flex w-full flex-1 items-center justify-center my-10 px-4">
+      <div className="w-full max-w-sm">
+        <LoginForm redirectTo={redirectTo} />
+      </div>
     </div>
   );
 }
