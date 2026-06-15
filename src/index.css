@@ -87,34 +87,30 @@
 }
 
 :root {
-  /* Egyptian-inspired neutrals */
-  --bg-dark: oklch(0.94 0.02 40);
-  --bg: oklch(0.97 0.01 40);
-  --bg-light: oklch(0.99 0 40);
+  /* Backgrounds */
+  --bg-dark: #f1ebe5;
+  --bg: #f8f4f0;
+  --bg-light: #ffffff;
 
-  /* Warm text on light backgrounds */
-  --text: oklch(0.18 0.03 30);
-  --text-muted: oklch(0.45 0.02 35);
-  --highlight: oklch(0.99 0 40);
+  /* Text */
+  --text: #2e2836; /* Shadow Grey */
+  --text-muted: #6b6670;
+  --highlight: #ffffff;
 
-  /* Borders with warmth */
-  --border: oklch(0.82 0.02 40);
-  --border-muted: oklch(0.88 0.01 40);
+  /* Borders */
+  --border: #e4ddd7;
+  --border-muted: #efe8e2;
 
-  /* Primary: Deep Gold (Egyptian luxury) */
-  --primary: oklch(0.52 0.16 70);
+  /* Brand Colors */
+  --primary: #6a2e35; /* Wine Plum */
+  --secondary: #be8a60; /* Camel */
+  --accent: #b6d094; /* Celadon */
 
-  /* Secondary: Warm Terracotta (Egyptian earth) */
-  --secondary: oklch(0.56 0.14 35);
-
-  /* Accent: Rich Teal (Egyptian lapis/Nile) */
-  --accent: oklch(0.54 0.12 210);
-
-  /* Status colors (adjusted for warmth) */
-  --danger: oklch(0.54 0.12 15);
-  --warning: oklch(0.62 0.14 55);
-  --success: oklch(0.58 0.11 150);
-  --info: oklch(0.56 0.1 240);
+  /* Status */
+  --danger: #a23f4a;
+  --warning: #e1aa7d;
+  --success: #8fae6a;
+  --info: #8ca6b8;
 }
 
 @layer base {
@@ -140,7 +136,7 @@
   h3,
   h4,
   h5,
-  h6{
+  h6 {
     font-family: "Playfair Display", serif;
   }
 

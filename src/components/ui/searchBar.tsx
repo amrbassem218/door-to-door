@@ -70,11 +70,11 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({
     >
       {/* <IoSearchOutline className="text-primary absolute left-2" size={18} /> */}
       <button
-        className="absolute left-0 w-12 h-full flex items-center justify-between bg-background-muted rounded-l-sm text-text text-xs sm:text-sm px-3 text-muted-foreground font-medium"
+        className="absolute left-0 w-fit h-full flex items-center justify-between bg-background-muted rounded-l-sm text-text text-xs sm:text-sm px-2 text-muted-foreground font-medium"
         type="button"
       >
         All
-        <FaAngleDown className="ml-1 text-muted-foreground w-2 h-2" />
+        <FaAngleDown className="ml-1 text-muted-foreground w-2 h-2 sm:w-3" />
       </button>
       <form
         className="w-full h-full"
@@ -99,7 +99,7 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({
         className="cursor-pointer absolute right-0 w-10 h-full flex items-center justify-center bg-primary rounded-r-md text-text"
         onClick={() => handleFilter()}
       >
-        <IoSearch className="w-3 h-3 text-background" />
+        <IoSearch className="w-3 h-3 md:w-4 md:h-4 text-background" />
       </button>
       {/* Suggestions dropdown */}
       {suggestions.length > 0 && query && (
