@@ -10,7 +10,6 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 
-import QuantityChange from "@/components/ui/quantityChange";
 import { useUserCurrencyCode } from "@/contexts/currencyContext";
 import { useCurrencyRates } from "@/getRates";
 import { cleanupDuplicateCarts, getCart } from "@/utils/cart-utils";
@@ -34,7 +33,10 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
 
   const { rates, loading: ratesLoading } = useCurrencyRates();
   const userCurrencyCode = useUserCurrencyCode();
-  // const {isLoading, session} = ();
+  const shippingCost =
+    rates && userCurrencyCode && rates["usd"]
+      ? (10 / rates["usd"]) * rates[userCurrencyCode.toLowerCase()]
+      : 0;
   const id = (product: Product) => {
     return Number(product.id);
   };
@@ -46,7 +48,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
   ];
 
   useEffect(() => {
-    if (user) {
+    if (user && rates && userCurrencyCode) {
       const handleGetCartItems = async () => {
         try {
           // First clean up any duplicate carts
@@ -57,8 +59,8 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
           if (data) {
             let currentTotal = 0;
             let currentSubTotal = 0;
-            const currentCartQuantity = cartQuantity;
-            const currentCartMeasurement = cartMeasurement;
+            const currentCartQuantity = { ...cartQuantity };
+            const currentCartMeasurement = { ...cartMeasurement };
             const sellerSeperatedCart: Record<number, CartItem[]> = {};
             data.forEach((item) => {
               const { products: product, quantity, measurement } = item;
@@ -102,7 +104,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
       };
       handleGetCartItems();
     }
-  }, [user, cartQuantity, cartMeasurement]);
+  }, [user, cartQuantity, cartMeasurement, rates, userCurrencyCode]);
 
   const handleMeasurementChange = (mes: string, product?: Product) => {
     if (product) {
@@ -117,27 +119,6 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
         `${product.id}_quantity`,
         convertedMeasurement.toString(),
       );
-    }
-  };
-  const handleQuantityChange = (type: string, product?: Product) => {
-    if (product) {
-      const qnt = cartQuantity[id(product)];
-      if (type == "plus") {
-        setCartQuantity({
-          ...cartQuantity,
-          [product.id]: cartQuantity && qnt + 1,
-        });
-        localStorage.setItem(`${product.id}_quantity`, (qnt + 1).toString());
-      } else if (type == "minus") {
-        setCartQuantity({
-          ...cartQuantity,
-          [product.id]: cartQuantity && qnt - 1,
-        });
-        localStorage.setItem(`${product.id}_quantity`, (qnt - 1).toString());
-      } else {
-        setCartQuantity({ ...cartQuantity, [id(product)]: Number(type) });
-        localStorage.setItem(`${product.id}_quantity`, type);
-      }
     }
   };
   const handleDeleteItem = async (
@@ -187,17 +168,17 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
             <div className="col-span-8 space-y-2">
               {/* Cart Header */}
               <Card>
-                <CardHeader className="max-sm:px-0">
+                <CardHeader className="">
                   <CardTitle>Cart ({cartItems?.length})</CardTitle>
                 </CardHeader>
               </Card>
 
               {/* Cart */}
               <Card>
-                <CardHeader className="max-sm:px-0">
+                <CardHeader className="">
                   <CardTitle>Cart Items</CardTitle>
                 </CardHeader>
-                <CardContent className="flex flex-col gap-3 max-sm:px-0">
+                <CardContent className="flex flex-col gap-3 px-0">
                   {Object.keys(cart).map((sellerId) => (
                     <div key={sellerId} className="space-y-3 cursor-pointer">
                       {cart[Number(sellerId)].map(
@@ -245,56 +226,71 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                                   />
                                 </div>
                               </div>
-                              {/* <div */}
-                              {/*   className="sm:hidden mt-1 flex gap-2 " */}
-                              {/*   onClick={(e) => e.stopPropagation()} */}
-                              {/* > */}
-                              {/*   <span className="text-muted-foreground"> */}
-                              {/*     Quantity:{" "} */}
-                              {/*   </span> */}
-                              {/*   <QuantityChange */}
-                              {/*     handleQuantityChange={handleQuantityChange} */}
-                              {/*     value={cartQuantity[id(product)]} */}
-                              {/*     product={product} */}
-                              {/*   /> */}
-                              {/* </div> */}
-                              <div className=" ">
-                                {/* Price */}
-                                <div className="flex gap-1 items-center">
-                                  <p className="text-md font-semibold ">
-                                    {newPrice(
-                                      product,
-                                      userCurrencyCode,
-                                      rates,
-                                      cartQuantity[id(product)],
-                                      cartMeasurement[id(product)],
-                                    )}{" "}
-                                    {userCurrencyCode}
-                                  </p>
-                                  <p className="line-through text-sm text-muted-foreground">
-                                    {price(
-                                      product,
-                                      userCurrencyCode,
-                                      rates,
-                                      cartQuantity[id(product)],
-                                      cartMeasurement[id(product)],
-                                    )}
-                                  </p>
+                              <div className="mt-1">
+                                <div className="flex flex-col gap-0.5">
+                                  <div className="flex gap-1 items-baseline">
+                                    <span className="text-xs text-muted-foreground">
+                                      {cartQuantity[id(product)] ?? quantity} x{" "}
+                                      {newPrice(
+                                        product,
+                                        userCurrencyCode,
+                                        rates,
+                                        1,
+                                        cartMeasurement[id(product)],
+                                      )}{" "}
+                                      {userCurrencyCode}
+                                    </span>
+                                    <span className="text-sm font-semibold">
+                                      ={" "}
+                                      {(
+                                        (cartQuantity[id(product)] ??
+                                          quantity) *
+                                        Number(
+                                          newPrice(
+                                            product,
+                                            userCurrencyCode,
+                                            rates,
+                                            1,
+                                            cartMeasurement[id(product)],
+                                          ),
+                                        )
+                                      ).toFixed(2)}{" "}
+                                      {userCurrencyCode}
+                                    </span>
+                                  </div>
+                                  <div className="flex gap-2 items-center">
+                                    <p className="text-md font-semibold">
+                                      {newPrice(
+                                        product,
+                                        userCurrencyCode,
+                                        rates,
+                                        cartQuantity[id(product)],
+                                        cartMeasurement[id(product)],
+                                      )}{" "}
+                                      {userCurrencyCode}
+                                    </p>
+                                    <p className="line-through text-sm text-muted-foreground">
+                                      {price(
+                                        product,
+                                        userCurrencyCode,
+                                        rates,
+                                        cartQuantity[id(product)],
+                                        cartMeasurement[id(product)],
+                                      )}
+                                    </p>
+                                    <p className="text-xs text-red-600 font-medium">
+                                      Save{" "}
+                                      {save(
+                                        product,
+                                        userCurrencyCode,
+                                        rates,
+                                        cartQuantity[id(product)],
+                                        cartMeasurement[id(product)],
+                                      )}{" "}
+                                      {userCurrencyCode}
+                                    </p>
+                                  </div>
                                 </div>
-                                <p className="text-xs text-red-600 font-medium">
-                                  Save{" "}
-                                  {save(
-                                    product,
-                                    userCurrencyCode,
-                                    rates,
-                                    cartQuantity[id(product)],
-                                    cartMeasurement[id(product)],
-                                  )}{" "}
-                                  {userCurrencyCode}
-                                </p>
-                                <p className="text-muted text-xs">
-                                  Shipping: 543 {userCurrencyCode}
-                                </p>
                               </div>
                             </div>
                           </div>
@@ -307,10 +303,10 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
             </div>
             <div className="col-span-4 space-y-2">
               <Card>
-                <CardHeader className="max-sm:px-0">
+                <CardHeader className="">
                   <CardTitle>Summary</CardTitle>
                   <ScrollArea className="w-full mt-2 overflow-auto">
-                    <div className="flex gap-3 ">
+                    <div className="flex gap-3">
                       {cartItems &&
                         cartItems.map(({ products: product }, i) => (
                           <div
@@ -328,11 +324,10 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                     </div>
                   </ScrollArea>
                 </CardHeader>
-                <CardContent className="space-y-2 max-sm:px-0">
+                <CardContent className="space-y-2 ">
                   <div className="flex justify-between text-muted text-sm">
-                    <p className="">Items total:</p>
+                    <p>Items total:</p>
                     <p className="line-through">
-                      {" "}
                       {total.toFixed(2)} {userCurrencyCode}
                     </p>
                   </div>
@@ -343,19 +338,15 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                     </p>
                   </div>
                   <div className="flex justify-between font-semibold">
-                    <p>Subtotal: </p>
-                    <p>
-                      {subtotal.toFixed(2)} {userCurrencyCode}
-                    </p>
-                  </div>
-                  <div className="flex justify-between font-semibold">
                     <p>Shipping: </p>
-                    <p>1000 {userCurrencyCode}</p>
+                    <p>
+                      {shippingCost.toFixed(2)} {userCurrencyCode}
+                    </p>
                   </div>
                   <div className="flex justify-between font-bold text-lg">
                     <p>Total: </p>
                     <p>
-                      {(subtotal + 1000).toFixed(2)} {userCurrencyCode}
+                      {(subtotal + shippingCost).toFixed(2)} {userCurrencyCode}
                     </p>
                   </div>
                   <Button className="w-full text-lg transition-all">
@@ -364,10 +355,10 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                 </CardContent>
               </Card>
               <Card className="gap-1">
-                <CardHeader className="max-sm:px-0">
+                <CardHeader className="">
                   <CardTitle className="">Pay with</CardTitle>
                 </CardHeader>
-                <CardContent className="max-sm:px-0">
+                <CardContent className="">
                   <div className="flex gap-2">
                     {paymentOptions.map((pay, i) => (
                       <div
