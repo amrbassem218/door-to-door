@@ -40,7 +40,7 @@ import { FaAngleDown } from "react-icons/fa";
 import { FaAngleRight, FaLocationDot, FaTicket } from "react-icons/fa6";
 import { LuShoppingCart } from "react-icons/lu";
 import { Rating } from "react-simple-star-rating";
-import Error from "../../error/page";
+import { Skeleton } from "@/components/ui/skeleton";
 import ProductReviewSection from "./reviews";
 import ProductSpeceficationsSection from "./specifications";
 interface IProductProps {
@@ -248,10 +248,36 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
     }
   };
 
-  if (!product) {
-    return <Error />;
+  if (!product || loading) {
+    return (
+      <div className="sm:grid sm:grid-cols-32 w-full sm:py-5 sm:px-8 px-2 overflow-x-hidden sm:gap-5 max-w-450 mx-auto">
+        <div className="flex flex-col sm:flex-row gap-5 col-span-32 sm:col-span-25">
+          <div className="hidden sm:flex gap-3">
+            <div className="flex flex-col gap-4">
+              {[1, 2, 3, 4].map((i) => (
+                <Skeleton key={i} className="w-20 h-20 rounded" />
+              ))}
+            </div>
+            <Skeleton className="w-120 h-120 rounded" />
+          </div>
+          <div className="sm:hidden w-full">
+            <Skeleton className="w-full h-72 rounded" />
+          </div>
+          <div className="flex flex-col gap-4 flex-1 px-2 sm:px-0">
+            <Skeleton className="h-8 w-3/4" />
+            <Skeleton className="h-4 w-1/2" />
+            <Skeleton className="h-6 w-1/3" />
+            <Skeleton className="h-4 w-2/3" />
+            <Skeleton className="h-9 w-full" />
+            <Skeleton className="h-20 w-full" />
+          </div>
+        </div>
+        <div className="hidden sm:block sm:col-span-7">
+          <Skeleton className="w-full h-96 rounded" />
+        </div>
+      </div>
+    );
   }
-  if (loading) return <p>loading...</p>;
   return (
     <div className="sm:grid sm:grid-cols-32 w-full sm:py-5 sm:px-8 px-2 overflow-x-hidden sm:gap-5 max-w-450 mx-auto">
       <div className="bg-gray-100 sm:bg-background flex flex-col gap-2 sm:mb-0 col-span-32 sm:col-span-25 relative">
