@@ -23,7 +23,7 @@ const ListProd: React.FunctionComponent<IListProdProps> = ({ limit, size }) => {
   const colSize =
     size == "large" ? "md:col-span-6 col-span-12" : "sm:col-span-2 col-span-6";
   return (
-    <div className="flex flex-wrap justify-between space-y-2 min-w-0 w-full ">
+    <div className="flex flex-wrap items-center justify-center gap-2 min-w-0 w-full ">
       {items &&
         items.map((item, i) => {
           return (

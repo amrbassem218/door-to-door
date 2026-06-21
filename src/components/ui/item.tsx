@@ -31,12 +31,12 @@ const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
   return (
     <div
       onClick={() => router.push(`/product/${item.id}`)}
-      className={`${col} transform-all duration-200 ease-in-out hover:scale-101 cursor-pointer ${style} p-2 w-56 space-y-1 relative `}
+      className={`${col} transform-all duration-200 ease-in-out hover:scale-101 cursor-pointer ${style} p-2 w-40 sm:w-56 space-y-1 relative `}
       onMouseEnter={() => setOnHover(true)}
       onMouseLeave={() => setOnHover(false)}
     >
       {/* Item Image */}
-      <div className="h-42 w-full ">
+      <div className="h-36 sm:h-42 w-full ">
         <img
           loading="lazy"
           src={item.thumbnail}

@@ -212,7 +212,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   }
   if (loading) return <p>loading...</p>;
   return (
-    <div className="grid grid-cols-32 w-full sm:py-5 sm:px-8 px-2 overflow-x-hidden gap-5 max-w-450 mx-auto">
+    <div className="sm:grid sm:grid-cols-32 w-full sm:py-5 sm:px-8 px-2 overflow-x-hidden sm:gap-5 max-w-450 mx-auto">
       <div className="bg-gray-100 sm:bg-background flex flex-col gap-2 sm:mb-0 col-span-32 sm:col-span-25 relative">
         {/* Product Main */}
         {/* Main description */}
