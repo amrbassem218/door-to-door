@@ -1,17 +1,18 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
 
 const Hero = () => {
   return (
     <div className="relative sm:h-150 h-100 overflow-hidden">
-      <Image
-        src={"/hero.webp"}
-        alt="hero image"
-        fill
-        className="object-cover"
-        priority
-      />
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+      >
+        <source src="/door2door_vid.mp4" type="video/mp4" />
+      </video>
 
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/70 to-transparent"></div>
       <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/0 to-transparent"></div>
