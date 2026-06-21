@@ -58,7 +58,7 @@ const ListProd: React.FunctionComponent<IListProdProps> = ({ limit, size }) => {
       {!isVisible ? (
         <Skeleton size={size} />
       ) : (
-        <div className="flex flex-wrap justify-center gap-4 w-full">
+        <div className="flex flex-wrap items-center justify-center gap-2 min-w-0 w-full">
           {items &&
             items.map((item, i) => {
               return (
