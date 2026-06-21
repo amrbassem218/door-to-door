@@ -19,7 +19,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useUserCurrencyCode } from "@/contexts/currencyContext";
 import { useCurrencyRates } from "@/getRates";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 import type { FullPrice, Product } from "@/types/types";
+import { addProductToCart } from "@/utils/cart-utils";
+import { useUser } from "@/utils/getUser";
 import {
   calcDiscount,
   camel,
@@ -28,7 +31,8 @@ import {
   price,
   unitChange,
 } from "@/utilities";
-import { getProduct } from "@/utils/products-utils";
+import { getProduct, getProducts } from "@/utils/products-utils";
+import Item from "@/components/ui/item";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { use, useEffect, useRef, useState } from "react";
@@ -64,6 +68,14 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   });
   const { rates, loading } = useCurrencyRates();
   const userCurrencyCode = useUserCurrencyCode();
+
+  const { user } = useUser();
+  const { executeWithAuth } = useRequireAuth();
+
+  const [relatedItems, setRelatedItems] = useState<Product[]>([]);
+  const [scrollableLoaded, setScrollableLoaded] = useState(2);
+  const [showMore, setShowMore] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   const reviewsRef = useRef<HTMLElement>(null);
   const specificationsRef = useRef<HTMLElement>(null);
@@ -145,6 +157,29 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
     }
   }, [measurement]);
 
+  useEffect(() => {
+    getProducts().then((prods) => {
+      if (prods) setRelatedItems(prods.slice(0, 12));
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!sentinelRef.current || scrollableLoaded >= relatedItems.length)
+      return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setScrollableLoaded((prev) =>
+            Math.min(prev + 2, relatedItems.length),
+          );
+        }
+      },
+      { rootMargin: "200px" },
+    );
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, [relatedItems, scrollableLoaded]);
+
   const handleMeasurementChange = (mes: string) => {
     const converted = unitChange(quantity, measurement, mes);
     const minOrderOfNewUnit = unitChange(product?.minOrder ?? 0, "kg", mes);
@@ -164,6 +199,12 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
       setQuantity(Number(type));
     }
   };
+
+  const handleBuyNow = executeWithAuth(async () => {
+    if (!user || !product) return;
+    await addProductToCart(user, product, quantity);
+    router.push("/cart");
+  });
 
   // Add scroll listener for tab activation
   useEffect(() => {
@@ -421,7 +462,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
                     </div>
                   </div>
 
-                  <Separator />
+                  <Separator className="hidden sm:block" />
                 </div>
               </div>
             </div>
@@ -430,9 +471,10 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
         <Separator className="my-7" />
         {/* Bottom bar for mobile */}
         <div className="sm:hidden fixed bottom-0 left-0 h-12 border-t-1 w-full bg-background flex items-center gap-4 px-2 z-10 ">
-          <div className="flex  gap-2">
-            <button onClick={() => router.push("/cart")}></button>
-            <LuShoppingCart className="text-muted text-2xl" />
+          <div className="flex gap-2">
+            <button onClick={() => router.push("/cart")}>
+              <LuShoppingCart className="text-muted text-2xl" />
+            </button>
           </div>
           <div className="flex gap-2 w-full">
             <CartSheet product={product} quantity={quantity} styles="w-30" />
@@ -441,7 +483,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
                 Contact Seller
               </Button>
             ) : (
-              <Button className="m-auto flex-1 border-1 ">Buy Now</Button>
+              <Button className="m-auto flex-1 border-1 " onClick={handleBuyNow}>Buy Now</Button>
             )}
           </div>
         </div>
@@ -451,8 +493,55 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
           {/* Related items */}
           <div>
             <section className="w-full space-y-5">
-              <h1 className="text-2xl font-bold ">Related Items</h1>
-              <ListProd size="small" limit={12} />
+              <h1 className="text-2xl font-bold">Related Items</h1>
+
+              {/* Row 1 - Horizontal scrollable */}
+              <div className="flex overflow-x-auto gap-4 pb-2 snap-x snap-mandatory scrollbar-hide">
+                {relatedItems.slice(0, scrollableLoaded).map((item) => (
+                  <div key={item.name} className="snap-start shrink-0 w-40">
+                    <Item item={item} />
+                  </div>
+                ))}
+                {relatedItems.length > scrollableLoaded && (
+                  <div ref={sentinelRef} className="shrink-0 w-4" />
+                )}
+              </div>
+
+              {/* See more / See less */}
+              {relatedItems.length > 0 && (
+                <div className="flex justify-center pt-2">
+                  <button
+                    onClick={() => setShowMore(!showMore)}
+                    className="text-primary font-medium hover:underline cursor-pointer"
+                  >
+                    {showMore ? "See Less ▲" : "See More ▼"}
+                  </button>
+                </div>
+              )}
+
+              {/* Expanded rows */}
+              {showMore && relatedItems.length > 0 && (
+                <div className="space-y-14">
+                  <div className="flex flex-wrap items-center justify-center gap-2">
+                    {relatedItems
+                      .slice(0, Math.ceil(relatedItems.length / 2))
+                      .map((item) => (
+                        <div key={item.name} className="w-40">
+                          <Item item={item} />
+                        </div>
+                      ))}
+                  </div>
+                  <div className="flex flex-wrap items-center justify-center gap-2">
+                    {relatedItems
+                      .slice(Math.ceil(relatedItems.length / 2))
+                      .map((item) => (
+                        <div key={item.name} className="w-40">
+                          <Item item={item} />
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              )}
             </section>
           </div>
 
