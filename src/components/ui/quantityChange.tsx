@@ -11,7 +11,7 @@ interface IQuantityChangeProps {
   product?: Product;
 }
 
-const QuantityChange: React.FunctionComponent<IQuantityChangeProps> = ({handleQuantityChange, value, styles, sqauresStyle, mobile, product}) => {
+const QuantityChange: React.FunctionComponent<IQuantityChangeProps> = ({handleQuantityChange, value, styles, sqauresStyle, product}) => {
   return (
     <div className={`flex items-center h-6 w-26 ${styles}`}>
         <button className={`border-1 p-2 cursor-pointer h-full flex items-center justify-center w-8 ${sqauresStyle}`} onClick={() => handleQuantityChange("minus", product)}>

@@ -10,7 +10,6 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 
-import MeasurementChange from "@/components/ui/measurementChange";
 import QuantityChange from "@/components/ui/quantityChange";
 import { useUserCurrencyCode } from "@/contexts/currencyContext";
 import { useCurrencyRates } from "@/getRates";
@@ -95,7 +94,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
             setSubtotal(currentSubTotal);
             setCart(sellerSeperatedCart);
             setCartItems(data);
-            setIsEmpty(cartItems.length === 0 );
+            setIsEmpty(cartItems.length === 0);
           }
         } catch (error) {
           console.error("Error getting cart items:", error);
@@ -166,8 +165,8 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
   useEffect(() => {
     if (cartItems) {
       setIsEmpty(cartItems.length === 0);
-      console.log("cart Items: ", cartItems)
-      console.log("is empty: ",cartItems.length === 0)
+      console.log("cart Items: ", cartItems);
+      console.log("is empty: ", cartItems.length === 0);
     }
   }, [cartItems]);
   const handleCheckout = () => {
@@ -182,23 +181,23 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
   return (
     <div>
       {cart && (
-        <section className="w-full absolute left-0 h-screen  sm:px-40 px-5">
+        <section className="w-full absolute left-0 h-screen sm:px-40">
           {/* Cart Section */}
           <div className="w-full mx-auto flex flex-col sm:grid grid-cols-12 gap-5 mt-5">
             <div className="col-span-8 space-y-2">
               {/* Cart Header */}
               <Card>
-                <CardHeader>
+                <CardHeader className="max-sm:px-0">
                   <CardTitle>Cart ({cartItems?.length})</CardTitle>
                 </CardHeader>
               </Card>
 
               {/* Cart */}
-              <Card >
-                <CardHeader>
+              <Card>
+                <CardHeader className="max-sm:px-0">
                   <CardTitle>Cart Items</CardTitle>
                 </CardHeader>
-                <CardContent className="flex flex-col gap-3 ">
+                <CardContent className="flex flex-col gap-3 max-sm:px-0">
                   {Object.keys(cart).map((sellerId) => (
                     <div key={sellerId} className="space-y-3 cursor-pointer">
                       {cart[Number(sellerId)].map(
@@ -208,12 +207,12 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                         ) => (
                           <div
                             key={index}
-                            className="flex gap-3 w-full p-3 border border-gray-200 rounded-lg transition-all"
+                            className="flex gap-3 w-full p-3 transition-all"
                             onClick={() =>
                               router.push(`/product/${product.id}`)
                             }
                           >
-                            <div className=" w-15 h-20 flex-shrink-0 flex items-center justify-center">
+                            <div className="w-15 flex-shrink-0 self-stretch flex items-center justify-center">
                               <img
                                 loading="lazy"
                                 src={product.thumbnail}
@@ -222,39 +221,17 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                               />
                             </div>
 
-                            <div className="flex flex-col flex-1 relative min-w-0">
-                              <div className="flex justify-between items-center w-full">
-                                <div className="flex-1 min-w-0 ">
-                                  <h1 className="truncate text-sm">
+                            <div className="flex flex-col flex-1 min-w-0">
+                              <div className="flex justify-between items-start w-full">
+                                <div className="flex-1 min-w-0">
+                                  <h1 className="line-clamp-3 text-sm">
                                     {product.name}
                                   </h1>
                                 </div>
                                 <div
-                                  className="absolute right-0 flex gap-2 items-center flex-shrink-0"
+                                  className="flex gap-2 items-center flex-shrink-0"
                                   onClick={(e) => e.stopPropagation()}
                                 >
-                                  {/* Measurement change */}
-                                  <div>
-                                    <MeasurementChange
-                                      handleMeasurementChange={
-                                        handleMeasurementChange
-                                      }
-                                      product={product}
-                                      label={cartMeasurement[id(product)]}
-                                    />
-                                  </div>
-                                  {/* Qty. */}
-                                  <div>
-                                    <QuantityChange
-                                      handleQuantityChange={
-                                        handleQuantityChange
-                                      }
-                                      value={cartQuantity[id(product)]}
-                                      product={product}
-                                    />
-                                  </div>
-
-                                  {/* Delete */}
                                   <MdDeleteOutline
                                     size={18}
                                     className="hover:text-red-500 transition-all cursor-pointer"
@@ -268,6 +245,19 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                                   />
                                 </div>
                               </div>
+                              {/* <div */}
+                              {/*   className="sm:hidden mt-1 flex gap-2 " */}
+                              {/*   onClick={(e) => e.stopPropagation()} */}
+                              {/* > */}
+                              {/*   <span className="text-muted-foreground"> */}
+                              {/*     Quantity:{" "} */}
+                              {/*   </span> */}
+                              {/*   <QuantityChange */}
+                              {/*     handleQuantityChange={handleQuantityChange} */}
+                              {/*     value={cartQuantity[id(product)]} */}
+                              {/*     product={product} */}
+                              {/*   /> */}
+                              {/* </div> */}
                               <div className=" ">
                                 {/* Price */}
                                 <div className="flex gap-1 items-center">
@@ -317,7 +307,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
             </div>
             <div className="col-span-4 space-y-2">
               <Card>
-                <CardHeader>
+                <CardHeader className="max-sm:px-0">
                   <CardTitle>Summary</CardTitle>
                   <ScrollArea className="w-full mt-2 overflow-auto">
                     <div className="flex gap-3 ">
@@ -338,7 +328,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                     </div>
                   </ScrollArea>
                 </CardHeader>
-                <CardContent className="space-y-2">
+                <CardContent className="space-y-2 max-sm:px-0">
                   <div className="flex justify-between text-muted text-sm">
                     <p className="">Items total:</p>
                     <p className="line-through">
@@ -374,10 +364,10 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                 </CardContent>
               </Card>
               <Card className="gap-1">
-                <CardHeader>
+                <CardHeader className="max-sm:px-0">
                   <CardTitle className="">Pay with</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="max-sm:px-0">
                   <div className="flex gap-2">
                     {paymentOptions.map((pay, i) => (
                       <div
