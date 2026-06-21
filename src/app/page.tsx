@@ -35,58 +35,58 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
         <Hero />
       </div>
 
-      <div className="mx-5 md:mx-20">
+      <div>
         {/* Today's deals */}
-        <section className="mb-15 space-y-7">
+        <section className="mb-15 space-y-7 px-2 md:px-20">
           <h1 className="text-center text-3xl font-bold">Today's deals</h1>
           <div className="grid grid-cols-12 gap-5">
             {/* Best sellers */}
-            <Card className="md:col-span-4 col-span-12 transition-all text-card-foreground rounded-sm">
-              <CardHeader>
-                <CardTitle className="mx-auto text-2xl font-semibold">
+            <Card className="md:col-span-4 col-span-12 transition-all text-card-foreground rounded-sm md:py-6 md:gap-6 py-3 gap-2">
+              <CardHeader className="md:px-6 px-3 md:gap-1.5 gap-0.5">
+                <CardTitle className="mx-auto text-lg md:text-2xl font-semibold">
                   Bestsellers
                 </CardTitle>
                 <CardDescription className="mx-auto">
-                  <div className="px-2 w-40 p-1 rounded-sm text-center bg-yellow-300">
-                    <p className="text-heading">Best price & Quality</p>
+                  <div className="px-1 md:px-2 w-fit p-0.5 md:p-1 rounded-sm text-center bg-yellow-300">
+                    <p className="text-heading text-xs md:text-sm">Best price & Quality</p>
                   </div>
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="md:px-6 px-3">
                 <ListProd limit={2} size="large" />
               </CardContent>
             </Card>
 
             {/* Big save */}
-            <Card className="md:col-span-4 col-span-12 transition-all text-card-foreground">
-              <CardHeader>
-                <CardTitle className="mx-auto text-2xl font-semibold">
+            <Card className="md:col-span-4 col-span-12 transition-all text-card-foreground md:py-6 md:gap-6 py-3 gap-2">
+              <CardHeader className="md:px-6 px-3 md:gap-1.5 gap-0.5">
+                <CardTitle className="mx-auto text-lg md:text-2xl font-semibold">
                   Big Save
                 </CardTitle>
                 <CardDescription className="mx-auto">
-                  <div className="px-2 w-40 p-1 rounded-md text-center bg-red-300/80">
-                    <p className="text-heading">Up to 50% off</p>
+                  <div className="px-1 md:px-2 w-fit p-0.5 md:p-1 rounded-md text-center bg-red-300/80">
+                    <p className="text-heading text-xs md:text-sm">Up to 50% off</p>
                   </div>
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="md:px-6 px-3">
                 <ListProd limit={2} size="large" />
               </CardContent>
             </Card>
 
             {/* Super deals */}
-            <Card className="md:col-span-4 col-span-12 transition-all text-card-foreground">
-              <CardHeader>
-                <CardTitle className="mx-auto text-2xl font-semibold">
+            <Card className="md:col-span-4 col-span-12 transition-all text-card-foreground md:py-6 md:gap-6 py-3 gap-2">
+              <CardHeader className="md:px-6 px-3 md:gap-1.5 gap-0.5">
+                <CardTitle className="mx-auto text-lg md:text-2xl font-semibold">
                   SuperDeals
                 </CardTitle>
                 <CardDescription className="mx-auto">
-                  <div className="px-2 w-40 p-1 rounded-md text-center bg-red-300">
-                    <p className="text-heading">Up to 75% off</p>
+                  <div className="px-1 md:px-2 w-fit p-0.5 md:p-1 rounded-md text-center bg-red-300">
+                    <p className="text-heading text-xs md:text-sm">Up to 75% off</p>
                   </div>
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="md:px-6 px-3">
                 <ListProd limit={2} size="large" />
               </CardContent>
             </Card>
@@ -94,7 +94,7 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
         </section>
 
         {/* More to love */}
-        <section className="space-y-7 w-full">
+        <section className="space-y-7 w-full px-2 md:px-20">
           <h1 className="text-center text-3xl font-bold ">More to love</h1>
           <ListProd size="small" />
         </section>

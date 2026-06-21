@@ -58,7 +58,13 @@ const ListProd: React.FunctionComponent<IListProdProps> = ({ limit, size }) => {
       {!isVisible ? (
         <Skeleton size={size} />
       ) : (
-        <div className="flex flex-wrap items-center justify-center gap-2 min-w-0 w-full">
+        <div
+          className={`${
+            size === "large"
+              ? "grid grid-cols-2 gap-3"
+              : "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"
+          } min-w-0 w-full`}
+        >
           {items &&
             items.map((item, i) => {
               return (

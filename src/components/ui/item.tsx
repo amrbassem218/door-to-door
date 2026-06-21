@@ -30,78 +30,60 @@ const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
   return (
     <div
       onClick={() => router.push(`/product/${item.id}`)}
-      className={`${col} transform-all duration-200 ease-in-out hover:scale-101 cursor-pointer ${style} p-2 w-40 sm:w-56 space-y-1 relative `}
+      className={`${col} transform-all duration-200 ease-in-out hover:scale-101 cursor-pointer ${style} w-full aspect-[3/4] bg-gray-100 rounded-sm overflow-hidden relative flex flex-col`}
       onMouseEnter={() => setOnHover(true)}
       onMouseLeave={() => setOnHover(false)}
     >
       {/* Item Image */}
-      <div className="h-36 sm:h-42 w-full ">
+      <div className="flex-1 min-h-0 w-full bg-gray-100 flex items-center justify-center overflow-hidden">
         <img
           loading="lazy"
           src={item.thumbnail}
           alt=""
-          className=" h-full w-full object-cover"
+          className="h-full w-full object-cover"
         />
       </div>
 
-      {/* Item Description */}
-      <div className="space-y-1">
+      {/* Item Description + Rating */}
+      <div className="bg-background p-2 space-y-1">
         <div className="flex items-center gap-1">
-          {/* TODO: Fix to actual deals */}
-
-          {/* Deal */}
-          <div className="w-fit p-1 rounded-xs h-4 bg-info flex items-center justify-center">
+          <div className="w-fit p-1 rounded-xs h-4 bg-info flex items-center justify-center shrink-0">
             <span className="text-xs text-primary-foreground">Superdeal</span>
           </div>
-          <h1 className="text-medium  truncate">{item.name} </h1>
+          <h1 className="text-sm truncate">{item.name}</h1>
         </div>
 
-        <div className="flex gap-1 text-md flex items-center">
-          <p className="font-semibold text-[1.4rem] leading-none">
+        <div className="flex gap-1 items-center">
+          <p className="font-semibold text-[1.2rem] leading-none">
             <span className="text-sm font-medium">{userCurrencyCode}</span>
-            {computedNewPrice}{" "}
+            {computedNewPrice}
           </p>
-
-          <p className="line-through decoration-1 text-muted-foreground text-sm">
+          <p className="line-through decoration-1 text-muted-foreground text-xs">
             {userCurrencyCode}
             {computedPrice}
           </p>
         </div>
-      </div>
 
-      {/* Rating and coupon */}
-      <div className="space-y-1">
-        {/* Rating*/}
-        <div className="flex items-end gap-1 ">
+        <div className="flex items-center gap-1">
           <Rating
             readonly
             initialValue={item.rating}
-            size={16}
+            size={12}
             SVGstyle={{ display: "inline-flex" }}
-            allowFraction // allows values like 3.5 stars
+            allowFraction
             fillColor=" oklch(0.56 0.14 35)"
           />
-          <p className="text-md font-medium">{item.rating.toFixed(1)}</p>
-          <p className="text-sm font-normal text-gray-600">
+          <p className="text-xs font-medium">{item.rating.toFixed(1)}</p>
+          <p className="text-xs font-normal text-gray-600">
             ({item?.reviewCount ?? 0})
           </p>
         </div>
 
-        {/* Deal */}
         <div className="flex items-center gap-1 text-destructive">
           <FaLevelDownAlt className="scale-x-[-1]" />
-          {/* TODO: Replace with actual deal */}
           <p className="text-xs font-medium">EGP100 off on a EGP800 order</p>
         </div>
       </div>
-
-      {/* {onHover && (
-        <div className="absolute top-0 left-0 w-full h-[120%]  bg-white">
-          <div className="mt-5 relative h-full">
-            <Button className="w-full rounded-sm absolute bottom-0">See preview</Button>
-          </div>
-        </div>
-      )} */}
     </div>
   );
 };
