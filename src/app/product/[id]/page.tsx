@@ -5,6 +5,8 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
 } from "@/components/ui/carousel";
 import CartSheet from "@/components/ui/cartSheet";
 import {
@@ -250,23 +252,24 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
           </div>
 
           {/* Images for phone */}
-          <div className="sm:hidden">
-            <Carousel className="w-full h-70 border-1 overflow-visible px-2">
-              <CarouselContent className="flex gap-1">
+          <div className="sm:hidden -mx-2">
+            <Carousel>
+              <CarouselContent className="-ml-0 w-screen">
                 {product.gallery.map((image, i) => (
-                  <CarouselItem
-                    key={i}
-                    className="basis-[90%] h-70 shrink-0 flex items-center justify-center"
-                  >
-                    <img
-                      loading="lazy"
-                      src={image}
-                      alt=""
-                      className="object-contain max-w-full h-full rounded-md"
-                    />
+                  <CarouselItem key={i} className="pl-0">
+                    <div className="h-72 w-full bg-gray-100 flex items-center justify-center border">
+                      <img
+                        loading="lazy"
+                        src={image}
+                        alt=""
+                        className="max-h-full max-w-full object-contain"
+                      />
+                    </div>
                   </CarouselItem>
                 ))}
               </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
             </Carousel>
           </div>
 
