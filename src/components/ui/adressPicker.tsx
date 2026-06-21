@@ -6,7 +6,7 @@ import type { pos } from "@/types/types";
 interface ILocationPageProps {
   position: pos | null;
   setPosition: React.Dispatch<React.SetStateAction<pos | null>>;
-  styles: object;
+  styles: React.CSSProperties;
 }
 
 const AdressPicker: React.FunctionComponent<ILocationPageProps> = ({
