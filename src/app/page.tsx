@@ -1,5 +1,4 @@
-import Hero from "@/components/home/hero";
-import ListProd from "@/components/home/ListProds";
+"use client";
 import {
   Card,
   CardContent,
@@ -8,15 +7,28 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import * as React from "react";
+import dynamic from "next/dynamic";
 import "../App.css";
-export function generateStaticParams() {
-  return [{ slug: [""] }];
-}
+
+const Hero = dynamic(() => import("@/components/home/hero"), {
+  ssr: false,
+  loading: () => <div className="animate-pulse h-64 w-full bg-gray-200 mb-10" />,
+});
+
+const ListProd = dynamic(() => import("@/components/home/ListProds"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex flex-wrap justify-center gap-4 w-full">
+      {[1, 2, 3, 4].map((i) => (
+        <div key={i} className="animate-pulse w-48 h-64 rounded bg-gray-200" />
+      ))}
+    </div>
+  ),
+});
 
 interface IHomeProps {}
 
 const Home: React.FunctionComponent<IHomeProps> = (props) => {
-  // const [topSellingSeeMore, setTopSellingSeeMore] = useState(false);
   return (
     <div className="">
       <div className="mb-10">

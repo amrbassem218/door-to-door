@@ -2,13 +2,22 @@ import { supabase } from "@/supabase/supabaseClient";
 import type { dbData } from "@/types/types";
 import { camel } from "@/utilities";
 import { Index } from "flexsearch";
+
+let cachedProducts: any = null;
+
 export const getProducts = async () => {
+  if (cachedProducts) return cachedProducts;
   const { data: products, error } = await supabase.from("products").select();
   if (products) {
+    cachedProducts = camel(products);
   } else {
     console.error(error);
   }
-  return camel(products);
+  return cachedProducts;
+};
+
+export const clearProductsCache = () => {
+  cachedProducts = null;
 };
 
 export const indexProducts = async (products: dbData) => {
