@@ -28,7 +28,8 @@ import {
   price,
   unitChange,
 } from "@/utilities";
-import { getProduct } from "@/utils/products-utils";
+import { getProduct, getProducts } from "@/utils/products-utils";
+import Item from "@/components/ui/item";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { use, useEffect, useRef, useState } from "react";
@@ -64,6 +65,11 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   });
   const { rates, loading } = useCurrencyRates();
   const userCurrencyCode = useUserCurrencyCode();
+
+  const [relatedItems, setRelatedItems] = useState<Product[]>([]);
+  const [scrollableLoaded, setScrollableLoaded] = useState(2);
+  const [showMore, setShowMore] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   const reviewsRef = useRef<HTMLElement>(null);
   const specificationsRef = useRef<HTMLElement>(null);
@@ -144,6 +150,29 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
       localStorage.setItem(`${product?.id}_measurement`, measurement);
     }
   }, [measurement]);
+
+  useEffect(() => {
+    getProducts().then((prods) => {
+      if (prods) setRelatedItems(prods.slice(0, 12));
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!sentinelRef.current || scrollableLoaded >= relatedItems.length)
+      return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setScrollableLoaded((prev) =>
+            Math.min(prev + 2, relatedItems.length),
+          );
+        }
+      },
+      { rootMargin: "200px" },
+    );
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, [relatedItems, scrollableLoaded]);
 
   const handleMeasurementChange = (mes: string) => {
     const converted = unitChange(quantity, measurement, mes);
@@ -421,7 +450,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
                     </div>
                   </div>
 
-                  <Separator />
+                  <Separator className="hidden sm:block" />
                 </div>
               </div>
             </div>
@@ -451,8 +480,51 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
           {/* Related items */}
           <div>
             <section className="w-full space-y-5">
-              <h1 className="text-2xl font-bold ">Related Items</h1>
-              <ListProd size="small" limit={12} />
+              <h1 className="text-2xl font-bold">Related Items</h1>
+
+              {/* Row 1 - Horizontal scrollable */}
+              <div className="flex overflow-x-auto gap-4 pb-2 snap-x snap-mandatory scrollbar-hide">
+                {relatedItems.slice(0, scrollableLoaded).map((item) => (
+                  <div key={item.name} className="snap-start shrink-0">
+                    <Item item={item} />
+                  </div>
+                ))}
+                {relatedItems.length > scrollableLoaded && (
+                  <div ref={sentinelRef} className="shrink-0 w-4" />
+                )}
+              </div>
+
+              {/* See more / See less */}
+              {relatedItems.length > 0 && (
+                <div className="flex justify-center pt-2">
+                  <button
+                    onClick={() => setShowMore(!showMore)}
+                    className="text-primary font-medium hover:underline cursor-pointer"
+                  >
+                    {showMore ? "See Less ▲" : "See More ▼"}
+                  </button>
+                </div>
+              )}
+
+              {/* Expanded rows */}
+              {showMore && relatedItems.length > 0 && (
+                <div className="space-y-14">
+                  <div className="flex flex-wrap items-center justify-center gap-2">
+                    {relatedItems
+                      .slice(0, Math.ceil(relatedItems.length / 2))
+                      .map((item) => (
+                        <Item key={item.name} item={item} />
+                      ))}
+                  </div>
+                  <div className="flex flex-wrap items-center justify-center gap-2">
+                    {relatedItems
+                      .slice(Math.ceil(relatedItems.length / 2))
+                      .map((item) => (
+                        <Item key={item.name} item={item} />
+                      ))}
+                  </div>
+                </div>
+              )}
             </section>
           </div>
 
