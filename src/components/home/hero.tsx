@@ -22,23 +22,25 @@ const Hero: React.FunctionComponent<IHeroProps> = (props) => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/70 to-transparent"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/0 to-transparent"></div>
 
-        <div className=" z-10 flex items-center justify-center lg:mx-20 ">
-          <div className="absolute left-0 sm:bottom-35 bottom-10 w-150 max-w-full px-5">
-            <h1 className="lg:text-5xl text-2xl font-bold mb-4 text-white ">
-              From Egyptian Fields to the World's Markets
-            </h1>
-            <div className="space-y-3">
-              <SearchBar styles="w-full h-12" />
-              <div className="flex gap-2">
-                {suggestedKeywords.map((word) => (
-                  <Link
-                    key={word}
-                    className="p-3 h-5 border-1 border-white flex items-center justify-center rounded-md text-white hover:bg-background hover:text-black cursor-pointer transition-all"
-                    href={`/search?query=${word}`}
-                  >
-                    {word}
-                  </Link>
-                ))}
+        <div className="absolute inset-x-0 z-10 sm:bottom-35 bottom-10">
+          <div className="mx-auto max-w-7xl px-4 md:px-20">
+            <div className="w-150 max-w-full">
+              <h1 className="lg:text-5xl text-2xl font-bold mb-4 text-white ">
+                From Egyptian Fields to the World's Markets
+              </h1>
+              <div className="space-y-3">
+                <SearchBar styles="w-full h-12" />
+                <div className="flex flex-wrap gap-2">
+                  {suggestedKeywords.map((word) => (
+                    <Link
+                      key={word}
+                      className="p-3 h-5 border-1 border-white flex items-center justify-center rounded-md text-white hover:bg-background hover:text-black cursor-pointer transition-all"
+                      href={`/search?query=${word}`}
+                    >
+                      {word}
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

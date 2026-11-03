@@ -30,12 +30,12 @@ const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
   return (
     <div
       onClick={() => router.push(`/product/${item.id}`)}
-      className={`${col} transform-all duration-200 ease-in-out hover:scale-101 cursor-pointer ${style} w-full aspect-[3/4] bg-gray-100 rounded-sm overflow-hidden relative flex flex-col`}
+      className={`${col} transform-all duration-200 ease-in-out hover:scale-101 cursor-pointer ${style} w-full bg-gray-100 rounded-sm overflow-hidden relative flex flex-col`}
       onMouseEnter={() => setOnHover(true)}
       onMouseLeave={() => setOnHover(false)}
     >
       {/* Item Image */}
-      <div className="flex-1 min-h-0 w-full bg-gray-100 flex items-center justify-center overflow-hidden">
+      <div className="aspect-square w-full shrink-0 bg-gray-100 flex items-center justify-center overflow-hidden">
         <img
           loading="lazy"
           src={item.thumbnail}

@@ -70,24 +70,28 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
     toast.success("Added to favorites!");
   });
   if (loading) return <p>loading...</p>;
+  const inStock = !!product?.stockCount;
   return (
-    <div
-      className="w-full border-1 border-border p-4 sticky top-0  overflow-hidden "
-      style={{ top: `${headerHeight}px` }}
+    <aside
+      className="w-full border border-border rounded-md p-5 sticky flex flex-col gap-5 overflow-y-auto bg-background"
+      style={{
+        top: `${headerHeight + 20}px`,
+        height: `calc(100vh - ${headerHeight + 40}px)`,
+      }}
     >
       {/* Price */}
-      <div className="flex flex-col items-start border-b-1  pb-3 ">
-        <p className="text-2xl">
+      <div className="space-y-1">
+        <p className="text-3xl font-bold leading-tight">
           {newPrice(product, userCurrencyCode, rates, quantity, measurement)}{" "}
-          {userCurrencyCode}{" "}
-          <span className="text-sm text-muted">
-            ({newPrice(product, userCurrencyCode, rates, 1, measurement)}{" "}
-            {userCurrencyCode} / {measurement})
-          </span>
+          <span className="text-lg font-semibold">{userCurrencyCode}</span>
+        </p>
+        <p className="text-sm text-muted-foreground">
+          {newPrice(product, userCurrencyCode, rates, 1, measurement)}{" "}
+          {userCurrencyCode} / {measurement}
         </p>
         <Popover>
           <PopoverTrigger>
-            <div className="text-primary text-left hover:underline decoration-1 cursor-pointer">
+            <div className="text-primary text-sm text-left hover:underline decoration-1 cursor-pointer">
               International Returns
             </div>
           </PopoverTrigger>
@@ -102,100 +106,103 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
         </Popover>
       </div>
 
-      {/* Seller */}
-      <div className="flex justify-between gap-6 border-b-1 py-3">
-        <p className="font-medium ">Sold by</p>
-        <div className="flex flex-1 items-center w-10 justify-end cursor-pointer">
-          <p className="truncate text-ellipsis overflow-hidden hover:underline">
-            {product.seller}
-          </p>
-          <FaAngleRight size={15} />
-        </div>
+      {/* Stock */}
+      <div
+        className={`flex items-center gap-2 text-lg font-semibold ${
+          inStock ? "text-green-600" : "text-red-600"
+        }`}
+      >
+        <span
+          className={`h-2.5 w-2.5 rounded-full ${
+            inStock ? "bg-green-600" : "bg-red-600"
+          }`}
+        />
+        {inStock ? "In stock" : "Out of stock"}
       </div>
 
-      {/* Shipping place */}
-      <div className="flex justify-between gap-6 border-b-1 py-3">
-        <p className="font-medium ">Ship to</p>
-        <div className="flex flex-1 items-center w-10 justify-end cursor-pointer">
-          <CiLocationOn />
-          <p className="truncate text-ellipsis overflow-hidden hover:underline">
-            {userLocation?.adress}
-          </p>
-          <FaAngleRight size={15} />
-        </div>
-      </div>
-
-      {/* Stock & Purchase */}
-      <div className="flex flex-col items-start border-b-1 py-3 gap-4">
-        <div className="flex justify-between  w-full">
-          <h1
-            className={`text-xl  font-medium ${
-              product?.stockCount ? "text-green-600" : "text-red-600"
-            }`}
-          >
-            {product?.stockCount ? "In stock" : "Out of stock"}
-          </h1>
-
-          {/* Measurement change */}
-          <div>
-            {/* <MeasurementChange handleMeasurementChange={handleMeasurementChange} label={measurement} product={product} styles='w-20 h-10'/> */}
-            <DropdownMenu>
-              <DropdownMenuTrigger className="m-auto">
-                <div className="text-sm text-heading decoration-0 bg-background p-1 px-2 rounded-lg border-gray-300 border-1 flex items-center gap-4 hover:bg-gray-100">
-                  Size: {measurement}
-                  <FaChevronDown className="text-muted text-sm" />
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="hover:bg-gray-100">
-                {measurements.map((mes) => (
-                  <DropdownMenuItem
-                    key={mes}
-                    className="hover:bg-gray-100"
-                    onClick={() => handleMeasurementChange(mes)}
-                  >
-                    {mes}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+      {/* Delivery & seller */}
+      <div className="rounded-md bg-background-secondary divide-y text-sm">
+        <div className="flex justify-between gap-6 p-3 cursor-pointer">
+          <p className="font-medium shrink-0">Ship to</p>
+          <div className="flex items-center min-w-0 gap-1">
+            <CiLocationOn className="shrink-0" />
+            <p className="truncate hover:underline">{userLocation?.adress}</p>
+            <FaAngleRight size={12} className="shrink-0" />
           </div>
         </div>
-        {/* Quantity */}
-        <div className="flex justify-center items-center gap-4 w-full">
-          <div className="flex items-center m-auto">
+        <div className="flex justify-between gap-6 p-3 cursor-pointer">
+          <p className="font-medium shrink-0">Sold by</p>
+          <div className="flex items-center min-w-0 gap-1">
+            <p className="truncate hover:underline">{product.seller}</p>
+            <FaAngleRight size={12} className="shrink-0" />
+          </div>
+        </div>
+      </div>
+
+      {/* Size & quantity */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between gap-3">
+          <p className="font-medium text-sm">Size</p>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <div className="text-sm bg-background py-1.5 px-3 rounded-md border flex items-center gap-4 hover:bg-gray-100">
+                {measurement}
+                <FaChevronDown className="text-muted text-xs" />
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {measurements.map((mes) => (
+                <DropdownMenuItem
+                  key={mes}
+                  className="hover:bg-gray-100"
+                  onClick={() => handleMeasurementChange(mes)}
+                >
+                  {mes}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        <div className="flex items-center justify-between gap-3">
+          <p className="font-medium text-sm">Quantity</p>
+          <div className="flex items-center">
             <button
-              className="border-1 p-1 cursor-pointer"
+              className="border p-1.5 cursor-pointer rounded-l-md hover:bg-gray-100"
               onClick={() => handleQuantityChange("minus")}
             >
-              <FiMinus size={20} />
+              <FiMinus size={16} />
             </button>
             <input
               type="number"
               value={quantity}
-              className="border-1 px-2 min-w-15 max-w-40 w-auto h-8"
+              className="border-y px-2 h-[30px] text-center"
               style={{
                 width: `${Math.max(
                   3,
-                  Math.min(8, quantity.toString().length + 1)
+                  Math.min(8, quantity.toString().length + 1),
                 )}rem`,
               }}
               onChange={(e) => handleQuantityChange(e.target.value)}
             />
             <button
-              className="border-1 p-1 cursor-pointer bg-primary text-white"
+              className="border border-primary p-1.5 cursor-pointer bg-primary text-white rounded-r-md"
               onClick={() => handleQuantityChange("plus")}
             >
-              <FiPlus size={20} />
+              <FiPlus size={16} />
             </button>
           </div>
-          <CartSheet product={product} quantity={quantity} />
         </div>
-        {/* Buy now & Heart */}
+      </div>
+
+      {/* Actions (pinned to the bottom) */}
+      <div className="mt-auto space-y-3">
+        <CartSheet product={product} quantity={quantity} />
         <div className="flex gap-2 w-full">
           <NavigationButton
             href={"/cart"}
             shadcn={true}
-            className="m-auto flex-1"
+            className="flex-1"
             onClick={() => handleBuyNow()}
           >
             Buy Now
@@ -205,21 +212,11 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
             className="text-muted w-10 hover:text-red-500"
             onClick={() => handleAddToFavorites(product)}
           >
-            <FaHeart className="" />
+            <FaHeart />
           </Button>
         </div>
       </div>
-
-      {/* shipping */}
-      {/* <div className='flex justify-between gap-6 border-b-1 py-3'>
-                <p className='font-medium '>Ship to</p>
-                <div className='flex flex-1 items-center w-10 justify-end cursor-pointer'>
-                    <CiLocationOn/>
-                    <p className='truncate text-ellipsis overflow-hidden hover:underline'>Said St. by Helw St.</p>
-                    <FaAngleRight size={15}/>
-                </div>
-            </div> */}
-    </div>
+    </aside>
   );
 };
 

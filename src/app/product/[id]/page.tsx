@@ -58,9 +58,6 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   const [isCrop, setIsCrop] = useState(false);
   const [headerHeight, setHeaderHeight] = useState<number>(0);
   const [currentImage, setCurrentImage] = useState(0);
-  const [selectedFilters, setSelecetdFilters] = useState<
-    Record<string, number>
-  >({});
   const [productFullPrice, setProductFullPrice] = useState<FullPrice>({
     oldPrice: 0,
     newPrice: 0,
@@ -73,9 +70,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   const { executeWithAuth } = useRequireAuth();
 
   const [relatedItems, setRelatedItems] = useState<Product[]>([]);
-  const [scrollableLoaded, setScrollableLoaded] = useState(2);
-  const [showMore, setShowMore] = useState(false);
-  const sentinelRef = useRef<HTMLDivElement>(null);
+  const [relatedVisible, setRelatedVisible] = useState(8);
 
   const reviewsRef = useRef<HTMLElement>(null);
   const specificationsRef = useRef<HTMLElement>(null);
@@ -98,7 +93,6 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
         setProduct(productInfo);
         setIsCrop(productInfo.tags?.includes("crops"));
         setQuantity(productInfo?.minOrder ?? 1);
-        setSelecetdFilters(product.filters);
       };
       handleGetProduct();
     }
@@ -158,27 +152,21 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   }, [measurement]);
 
   useEffect(() => {
-    getProducts().then((prods) => {
-      if (prods) setRelatedItems(prods.slice(0, 12));
+    if (!product) return;
+    getProducts().then((prods: Product[] | null) => {
+      if (!prods) return;
+      const tags = new Set((product.tags ?? []).map((t) => t.toLowerCase()));
+      const shared = (p: Product) =>
+        (p.tags ?? []).filter((t) => tags.has(t.toLowerCase())).length;
+      setRelatedItems(
+        prods
+          .filter((p) => p.id !== product.id)
+          .sort((x, y) => shared(y) - shared(x))
+          .slice(0, 24),
+      );
+      setRelatedVisible(8);
     });
-  }, []);
-
-  useEffect(() => {
-    if (!sentinelRef.current || scrollableLoaded >= relatedItems.length)
-      return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setScrollableLoaded((prev) =>
-            Math.min(prev + 2, relatedItems.length),
-          );
-        }
-      },
-      { rootMargin: "200px" },
-    );
-    observer.observe(sentinelRef.current);
-    return () => observer.disconnect();
-  }, [relatedItems, scrollableLoaded]);
+  }, [product]);
 
   const handleMeasurementChange = (mes: string) => {
     const converted = unitChange(quantity, measurement, mes);
@@ -447,51 +435,6 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
               </div>
             </div>
 
-            <Separator orientation="horizontal" className="w-full " />
-
-            {/* (optional) Extra options and selling points */}
-            <div>
-              {/* TODO: Add actual filters */}
-
-              {/* 1-2 Filters (color, size, model, material) */}
-              <div>
-                <div className="space-y-2">
-                  {/* Filter header */}
-                  <div className="flex items-center gap-1">
-                    <h3 className="text-muted-foreground">Color: </h3>
-                    <span className="text-text font-semibold">
-                      Purple & White
-                    </span>
-                  </div>
-
-                  {/* Choices */}
-                  <div>
-                    <div className="flex gap-4 flex-wrap">
-                      {product.gallery.map((image, i) => {
-                        return (
-                          i < 4 && (
-                            <div
-                              key={i}
-                              // TODO: use actual filters
-                              className={`w-20 h-20  flex justify-center items-center ${i == 0 && "border border-blue-500"} cursor-pointer overflow-hidden border-1 `}
-                            >
-                              <img
-                                loading="lazy"
-                                src={`${image}`}
-                                alt=""
-                                className="object-contain w-full"
-                              />
-                            </div>
-                          )
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <Separator className="hidden sm:block" />
-                </div>
-              </div>
-            </div>
           </div>
         </div>
         <Separator className="my-7" />
@@ -521,51 +464,20 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
             <section className="w-full space-y-5">
               <h1 className="text-2xl font-bold">Related Items</h1>
 
-              {/* Row 1 - Horizontal scrollable */}
-              <div className="flex overflow-x-auto gap-4 pb-2 snap-x snap-mandatory scrollbar-hide">
-                {relatedItems.slice(0, scrollableLoaded).map((item) => (
-                  <div key={item.name} className="snap-start shrink-0 w-40">
-                    <Item item={item} />
-                  </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-8">
+                {relatedItems.slice(0, relatedVisible).map((item) => (
+                  <Item key={item.id} item={item} />
                 ))}
-                {relatedItems.length > scrollableLoaded && (
-                  <div ref={sentinelRef} className="shrink-0 w-4" />
-                )}
               </div>
 
-              {/* See more / See less */}
-              {relatedItems.length > 0 && (
+              {relatedVisible < relatedItems.length && (
                 <div className="flex justify-center pt-2">
-                  <button
-                    onClick={() => setShowMore(!showMore)}
-                    className="text-primary font-medium hover:underline cursor-pointer"
+                  <Button
+                    variant="outline"
+                    onClick={() => setRelatedVisible((v) => v + 8)}
                   >
-                    {showMore ? "See Less ▲" : "See More ▼"}
-                  </button>
-                </div>
-              )}
-
-              {/* Expanded rows */}
-              {showMore && relatedItems.length > 0 && (
-                <div className="space-y-14">
-                  <div className="flex flex-wrap items-center justify-center gap-2">
-                    {relatedItems
-                      .slice(0, Math.ceil(relatedItems.length / 2))
-                      .map((item) => (
-                        <div key={item.name} className="w-40">
-                          <Item item={item} />
-                        </div>
-                      ))}
-                  </div>
-                  <div className="flex flex-wrap items-center justify-center gap-2">
-                    {relatedItems
-                      .slice(Math.ceil(relatedItems.length / 2))
-                      .map((item) => (
-                        <div key={item.name} className="w-40">
-                          <Item item={item} />
-                        </div>
-                      ))}
-                  </div>
+                    Show more
+                  </Button>
                 </div>
               )}
             </section>
