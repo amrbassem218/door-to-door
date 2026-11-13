@@ -162,10 +162,10 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
   return (
     <div>
       {cart && (
-        <section className="w-full absolute left-0 h-screen sm:px-40">
+        <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-5 pb-12">
           {/* Cart Section */}
-          <div className="w-full mx-auto flex flex-col sm:grid grid-cols-12 gap-5 mt-5">
-            <div className="col-span-8 space-y-2">
+          <div className="w-full flex flex-col lg:grid lg:grid-cols-12 gap-5 items-start">
+            <div className="w-full lg:col-span-8 space-y-3">
               {/* Cart Header */}
               <Card>
                 <CardHeader className="">
@@ -178,9 +178,9 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                 <CardHeader className="">
                   <CardTitle>Cart Items</CardTitle>
                 </CardHeader>
-                <CardContent className="flex flex-col gap-3 px-0">
+                <CardContent className="flex flex-col divide-y px-0">
                   {Object.keys(cart).map((sellerId) => (
-                    <div key={sellerId} className="space-y-3 cursor-pointer">
+                    <div key={sellerId} className="flex flex-col divide-y cursor-pointer">
                       {cart[Number(sellerId)].map(
                         (
                           { products: product, quantity, measurement },
@@ -188,17 +188,17 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                         ) => (
                           <div
                             key={index}
-                            className="flex gap-3 w-full p-3 transition-all"
+                            className="flex gap-4 w-full px-4 sm:px-6 py-4 transition-colors hover:bg-accent/40"
                             onClick={() =>
                               router.push(`/product/${product.id}`)
                             }
                           >
-                            <div className="w-15 flex-shrink-0 self-stretch flex items-center justify-center">
+                            <div className="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 flex items-center justify-center rounded-md bg-muted/30 overflow-hidden">
                               <img
                                 loading="lazy"
                                 src={product.thumbnail}
                                 alt=""
-                                className="object-contain max-w-full h-full"
+                                className="object-contain max-w-full max-h-full"
                               />
                             </div>
 
@@ -228,7 +228,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                               </div>
                               <div className="mt-1">
                                 <div className="flex flex-col gap-0.5">
-                                  <div className="flex gap-1 items-baseline">
+                                  <div className="flex flex-wrap gap-x-1 items-baseline">
                                     <span className="text-xs text-muted-foreground">
                                       {cartQuantity[id(product)] ?? quantity} x{" "}
                                       {newPrice(
@@ -258,7 +258,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                                       {userCurrencyCode}
                                     </span>
                                   </div>
-                                  <div className="flex gap-2 items-center">
+                                  <div className="flex flex-wrap gap-x-2 items-center">
                                     <p className="text-md font-semibold">
                                       {newPrice(
                                         product,
@@ -301,7 +301,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                 </CardContent>
               </Card>
             </div>
-            <div className="col-span-4 space-y-2">
+            <div className="w-full lg:col-span-4 space-y-3 lg:sticky lg:top-24">
               <Card>
                 <CardHeader className="">
                   <CardTitle>Summary</CardTitle>
@@ -311,7 +311,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                         cartItems.map(({ products: product }, i) => (
                           <div
                             key={`${product.name}-${i}`}
-                            className="w-10 h-15  overflow-auto flex items-center justify-center"
+                            className="w-12 h-14 shrink-0 flex items-center justify-center rounded border bg-muted/30"
                           >
                             <img
                               loading="lazy"
@@ -325,13 +325,13 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                   </ScrollArea>
                 </CardHeader>
                 <CardContent className="space-y-2 ">
-                  <div className="flex justify-between text-muted text-sm">
+                  <div className="flex justify-between text-muted-foreground text-sm">
                     <p>Items total:</p>
                     <p className="line-through">
                       {total.toFixed(2)} {userCurrencyCode}
                     </p>
                   </div>
-                  <div className="flex justify-between text-muted text-sm">
+                  <div className="flex justify-between text-muted-foreground text-sm">
                     <p>Items discount:</p>
                     <p className="text-destructive">
                       -{(total - subtotal).toFixed(2)} {userCurrencyCode}
@@ -343,13 +343,14 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                       {shippingCost.toFixed(2)} {userCurrencyCode}
                     </p>
                   </div>
+                  <Separator />
                   <div className="flex justify-between font-bold text-lg">
                     <p>Total: </p>
                     <p>
                       {(subtotal + shippingCost).toFixed(2)} {userCurrencyCode}
                     </p>
                   </div>
-                  <Button className="w-full text-lg transition-all">
+                  <Button className="w-full text-lg transition-all mt-2">
                     Checkout
                   </Button>
                 </CardContent>
@@ -363,7 +364,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                     {paymentOptions.map((pay, i) => (
                       <div
                         key={i}
-                        className="p-1 w-7 h-7 border-1 flex items-center justify-center"
+                        className="p-1 w-8 h-8 border rounded flex items-center justify-center"
                       >
                         <img
                           loading="lazy"
@@ -373,8 +374,8 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                         />
                       </div>
                     ))}
-                    <div className="p-1 border-1 flex items-center justify-center">
-                      <p className="text-muted text-xs">more...</p>
+                    <div className="p-1 border rounded flex items-center justify-center">
+                      <p className="text-muted-foreground text-xs">more...</p>
                     </div>
                   </div>
                   <Separator className="my-4" />
@@ -382,7 +383,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                     <h1 className=" text-heading font-semibold">
                       Free International Returns
                     </h1>
-                    <p className="text-muted text-sm">
+                    <p className="text-muted-foreground text-sm mt-1">
                       Free International returns are available for the shipping
                       address you chose in case product came in unexpected
                       state.

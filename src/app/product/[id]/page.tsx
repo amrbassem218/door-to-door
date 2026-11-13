@@ -172,10 +172,13 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
       const tags = new Set((product.tags ?? []).map((t) => t.toLowerCase()));
       const shared = (p: Product) =>
         (p.tags ?? []).filter((t) => tags.has(t.toLowerCase())).length;
+      const score = (p: Product) =>
+        shared(p) * 10 +
+        (product.sellerId != null && p.sellerId === product.sellerId ? 1 : 0);
       setRelatedItems(
         prods
-          .filter((p) => p.id !== product.id)
-          .sort((x, y) => shared(y) - shared(x))
+          .filter((p) => p.id !== product.id && shared(p) > 0)
+          .sort((x, y) => score(y) - score(x))
           .slice(0, 24),
       );
       setRelatedVisible(8);
@@ -475,7 +478,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
         {/* Prdouct further details (left side) */}
         <div className="space-y-5">
           {/* Related items */}
-          <div>
+          <div className={relatedItems.length === 0 ? "hidden" : undefined}>
             <section className="w-full space-y-5">
               <h1 className="text-2xl font-bold">Related Items</h1>
 
