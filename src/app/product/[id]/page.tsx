@@ -88,6 +88,17 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
     { name: "More to love", ref: moreToLoveRef },
   ];
 
+  // Track the sticky site header's height so sticky elements sit below it.
+  useEffect(() => {
+    const header = document.getElementById("site-header");
+    if (!header) return;
+    const update = () => setHeaderHeight(header.offsetHeight);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(header);
+    return () => ro.disconnect();
+  }, []);
+
   useEffect(() => {
     if (id) {
       const handleGetProduct = async () => {
@@ -242,7 +253,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
 
   if (!product || loading) {
     return (
-      <div className="sm:grid sm:grid-cols-32 w-full sm:py-5 sm:px-8 px-2 overflow-x-hidden sm:gap-5 max-w-450 mx-auto">
+      <div className="sm:grid sm:grid-cols-32 w-full sm:py-5 sm:px-8 px-2 overflow-x-clip sm:gap-5 max-w-450 mx-auto">
         <div className="flex flex-col sm:flex-row gap-5 col-span-32 sm:col-span-24">
           <div className="hidden sm:flex gap-3">
             <div className="flex flex-col gap-4">
@@ -271,7 +282,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
     );
   }
   return (
-    <div className="sm:grid sm:grid-cols-32 w-full sm:py-5 sm:px-8 px-2 overflow-x-hidden sm:gap-5 max-w-450 mx-auto">
+    <div className="sm:grid sm:grid-cols-32 w-full sm:py-5 sm:px-8 px-2 overflow-x-clip sm:gap-5 max-w-450 mx-auto">
       <div className="bg-background-muted sm:bg-background flex flex-col gap-2 sm:mb-0 col-span-32 sm:col-span-24 relative">
         {/* Product Main */}
         {/* Main description */}

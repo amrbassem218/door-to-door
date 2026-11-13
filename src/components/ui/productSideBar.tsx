@@ -17,6 +17,7 @@ import { useUserLocation } from "@/contexts/locationContext";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { addProductToCart } from "@/utils/cart-utils";
 import { useUser } from "@/utils/getUser";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { toast } from "sonner";
 import NavigationButton from "../navigationButton";
 
@@ -125,11 +126,23 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
       }
     });
   });
-  const handleAddToFavorites = executeWithAuth(async (product: Product) => {
-    if (!user) return; // Type guard - user is guaranteed to exist by executeWithAuth
-    // TODO: Add to favorites logic here
-    toast.success("Added to favorites!");
-  });
+  const BASE_LIKES = 16;
+  const [liked, setLiked] = React.useState(false);
+  const [popKey, setPopKey] = React.useState(0);
+  React.useEffect(() => {
+    try {
+      setLiked(localStorage.getItem(`${product.id}_liked`) === "1");
+    } catch {}
+  }, [product.id]);
+  const handleToggleLike = () => {
+    const next = !liked;
+    setLiked(next);
+    setPopKey((k) => k + 1);
+    try {
+      localStorage.setItem(`${product.id}_liked`, next ? "1" : "0");
+    } catch {}
+    toast.success(next ? "Added to favorites!" : "Removed from favorites");
+  };
   if (loading) return <p>loading...</p>;
 
   const hasDiscount = product.discount > 0;
@@ -143,11 +156,10 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
 
   return (
     <aside
-      className="w-full border border-border rounded-sm p-3 sticky flex flex-col gap-3 overflow-hidden bg-background"
+      className="w-full border border-border rounded-sm p-3 sticky flex flex-col gap-3 self-start bg-background"
       style={{
         zoom: SCALE,
         top: `${headerHeight / SCALE}px`,
-        height: `calc((100vh - ${headerHeight}px) / ${SCALE})`,
       }}
     >
       {/* Price */}
@@ -304,20 +316,43 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
           styles="w-full max-w-none! h-[34px] rounded-none text-xs font-bold border-secondary text-secondary bg-transparent hover:bg-transparent"
         />
         <div className="grid grid-cols-2 gap-2">
+          {/* Negotiate: not available yet */}
+          <div
+            className="group relative cursor-not-allowed"
+            title="Coming soon"
+          >
+            <Button
+              variant="ghost"
+              disabled
+              aria-disabled="true"
+              className="h-[34px] w-full rounded-none bg-background-muted text-xs font-bold gap-1 disabled:opacity-100 pointer-events-none"
+            >
+              <span className="flex items-center gap-1 group-hover:hidden">
+                <Icon name="chat" size={16} />
+                Negotiate
+              </span>
+              <span className="hidden group-hover:inline text-muted-foreground">
+                Coming soon
+              </span>
+            </Button>
+          </div>
+
+          {/* Love / favorite */}
           <Button
             variant="ghost"
-            className="h-[34px] rounded-none bg-background-muted text-xs font-bold gap-1"
+            aria-pressed={liked}
+            aria-label={liked ? "Remove from favorites" : "Add to favorites"}
+            className={`h-[34px] rounded-none text-xs font-bold gap-1 transition-colors active:scale-95 ${
+              liked
+                ? "bg-destructive/10 text-destructive hover:bg-destructive/15"
+                : "bg-background-muted hover:bg-border"
+            }`}
+            onClick={handleToggleLike}
           >
-            <Icon name="chat" size={16} />
-            Negotiate
-          </Button>
-          <Button
-            variant="ghost"
-            className="h-[34px] rounded-none bg-background-muted text-xs font-bold gap-1"
-            onClick={() => handleAddToFavorites(product)}
-          >
-            <Icon name="love" size={16} />
-            16
+            <span key={popKey} className={popKey ? "heart-pop inline-flex" : "inline-flex"}>
+              {liked ? <FaHeart size={14} /> : <FaRegHeart size={14} />}
+            </span>
+            {BASE_LIKES + (liked ? 1 : 0)}
           </Button>
         </div>
       </div>

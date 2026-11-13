@@ -25,7 +25,7 @@ const Header: React.FunctionComponent<IHeaderProps> = () => {
           }}
         />
       )}
-      <div className="top-0 left-0 w-full z-80 bg-background">
+      <div id="site-header" className="sticky top-0 left-0 w-full z-80 bg-background">
         <div className=" w-full  text-foreground">
           <div className="px-4 sm:px-8 mx-auto ">
             <div className="flex items-center justify-between w-full py-3 gap-4 sm:gap-8">
