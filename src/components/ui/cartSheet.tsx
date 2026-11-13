@@ -19,20 +19,12 @@ import { useEffect, useState } from "react";
 import { Button } from "./button";
 import { ScrollArea } from "./scroll-area";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { useUserCurrencyCode } from "@/contexts/currencyContext";
 import { useCurrencyRates } from "@/getRates";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { addProductToCart, getCart } from "@/utils/cart-utils";
 import { useUser } from "@/utils/getUser";
 import { useRouter } from "next/navigation";
-import { FaChevronDown } from "react-icons/fa";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import NavigationButton from "../navigationButton";
 
@@ -47,7 +39,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
   const { executeWithAuth } = useRequireAuth();
   const router = useRouter();
   const [cart, setCart] = useState<CartItem[]>();
-  const [subtotal, setSubtotal] = useState(0);
+  const [headerOffset, setHeaderOffset] = useState(0);
   const [cartQuantity, setCartQuantity] = useState<Record<number, number>>({});
   const [cartMeasurement, setCartMeasurement] = useState<
     Record<number, string>
@@ -86,17 +78,14 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
     const status = await addProductToCart(user, props.product, props.quantity);
     const data = await getCart(user);
     if (data) {
-      let total = 0;
       const currentCartQuantity = cartQuantity;
       const currentCartMeasurement = cartMeasurement;
       data.forEach(({ products: product, quantity, measurement }) => {
-        total += Math.round(product.priceBefore);
         currentCartQuantity[id(product)] = quantity;
         currentCartMeasurement[id(product)] = measurement;
       });
       setCartQuantity(currentCartQuantity);
       setCartMeasurement(currentCartMeasurement);
-      setSubtotal(total);
       setCart(data);
     }
   });
@@ -144,13 +133,32 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
       updateQty(product, qnt);
     }
   };
+  const handleOpenChange = (open: boolean) => {
+    if (!open) return;
+    // Keep the sheet below the sticky site header.
+    const header = document.getElementById("site-header");
+    setHeaderOffset(header ? Math.max(0, header.getBoundingClientRect().bottom) : 0);
+  };
   // if(!cartQuantity || !cartMeasurement){
   //   return <div>loading...</div>
   // }
   if (loading) return <p>loading...</p>;
+
+  const lineTotal = (product: Product) =>
+    Number(
+      newPrice(
+        product,
+        userCurrencyCode,
+        rates,
+        cartQuantity[id(product)],
+        cartMeasurement[id(product)]
+      )
+    ) || 0;
+  const subtotal = (cart ?? []).reduce((sum, { products }) => sum + lineTotal(products), 0);
+
   return (
     <div>
-      <Sheet>
+      <Sheet onOpenChange={handleOpenChange}>
         <SheetTrigger asChild>
           <Button
             variant={"outline"}
@@ -160,153 +168,94 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
             Add to Cart
           </Button>
         </SheetTrigger>
-        <SheetContent className="w-60 pl-2 flex flex-col h-screen">
-          <SheetHeader className="h-32 mb-3">
-            <SheetTitle>Cart</SheetTitle>
-            <div>
-              <div className="flex flex-col justify-center items-center">
-                <div className="mb-2 ">
-                  <h2 className="text-center text-heading">Subtotal</h2>
-                  <h3 className="text-center font-bold text-md text-warning ">
-                    {subtotal} {userCurrencyCode}
-                  </h3>
-                </div>
-                <NavigationButton
-                  href={"/cart"}
-                  shadcn={true}
-                  variant={"outline"}
-                  className="w-full h-7"
-                >
-                  Go to Cart
-                </NavigationButton>
-              </div>
-            </div>
+        <SheetContent
+          className="w-[22rem] max-w-[92vw] gap-0 p-0"
+          style={{
+            top: headerOffset,
+            height: `calc(100vh - ${headerOffset}px)`,
+          }}
+        >
+          {/* Header */}
+          <SheetHeader className="border-b px-4 py-3 pr-12">
+            <SheetTitle className="text-base">
+              Cart{cart?.length ? ` (${cart.length})` : ""}
+            </SheetTitle>
           </SheetHeader>
-          <ScrollArea className="flex-1 overflow-auto">
-            <div className="flex flex-col gap-10 mr-4">
+
+          {/* Items */}
+          <ScrollArea className="flex-1 min-h-0">
+            <ul className="divide-y">
               {cart?.map(({ products: product }, index) => (
-                <div
+                <li
                   key={product.id || index}
-                  className="flex hover:bg-background-secondary cursor-pointer items-center h-40 gap-5"
+                  className="flex items-center gap-3 px-4 py-3 hover:bg-background-muted cursor-pointer"
                   onClick={() => router.push(`/product/${product.id}`)}
                 >
-                  {/* Product image */}
-                  <div className="w-20 h-35 flex flex-col justify-center gap-2 items-center py-4">
-                    <img
-                      loading="lazy"
-                      src={product.thumbnail}
-                      alt=""
-                      className="object-contain h-full max-w-full"
-                    />
-                    <span className="text-xs text-muted">
-                      ({" "}
-                      {newPrice(
-                        product,
-                        userCurrencyCode,
-                        rates,
-                        1,
-                        cartMeasurement[id(product)]
-                      )}{" "}
-                      {userCurrencyCode} / {cartMeasurement[id(product)]})
-                    </span>
-                  </div>
-                  <div className="space-y-3 text-sm ">
-                    {/* Name */}
-                    <div className="max-w-35 break-words whitespace-normal">
-                      <h2 className="line-clamp-2 font-medium text-center">
-                        {product.name}
-                      </h2>
-                    </div>
-                    {/* Total & Qty */}
-                    <div className="space-y-1">
-                      {/* Quantity Change*/}
-                      <div>
-                        {cartQuantity && cartMeasurement && (
-                          <div className="flex gap-1 w-full">
-                            <span className="text-muted font-normal">
-                              Qty:{" "}
-                            </span>
-                            <div className="flex items-center">
-                              <button
-                                className="border-1 p-1 cursor-pointer"
-                                onClick={() =>
-                                  handleQuantityChange(product, "minus")
-                                }
-                              >
-                                <FiMinus size={10} />
-                              </button>
-                              <input
-                                type="number"
-                                value={cartQuantity[id(product)]}
-                                className="border-1 min-w-10 max-w-5 h-5 text-center"
-                                // style={{ width: `${Math.max(3, Math.min(8, cartQuantity[id(product)].toString().length + 1))}rem` }}
-                                onChange={(e) =>
-                                  handleQuantityChange(
-                                    product,
-                                    "other",
-                                    e.target.value
-                                  )
-                                }
-                              />
-                              <button
-                                className="border-1 p-1 cursor-pointer bg-primary text-highlight"
-                                onClick={() =>
-                                  handleQuantityChange(product, "plus")
-                                }
-                              >
-                                <FiPlus size={10} />
-                              </button>
-                            </div>
-                          </div>
-                        )}
+                  <img
+                    loading="lazy"
+                    src={product.thumbnail}
+                    alt=""
+                    className="size-14 shrink-0 rounded-md object-cover bg-background-muted"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium truncate">{product.name}</p>
+                    <div
+                      className="mt-1 flex items-center justify-between gap-2"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <button
+                          type="button"
+                          aria-label="Decrease quantity"
+                          className="size-5 rounded border flex items-center justify-center hover:bg-background-muted"
+                          onClick={() => handleQuantityChange(product, "minus")}
+                        >
+                          <FiMinus size={10} />
+                        </button>
+                        <span className="min-w-6 text-center text-foreground font-medium">
+                          {cartQuantity[id(product)] ?? 1}
+                        </span>
+                        <button
+                          type="button"
+                          aria-label="Increase quantity"
+                          className="size-5 rounded border flex items-center justify-center hover:bg-background-muted"
+                          onClick={() => handleQuantityChange(product, "plus")}
+                        >
+                          <FiPlus size={10} />
+                        </button>
+                        <span className="ml-1">{cartMeasurement[id(product)]}</span>
                       </div>
-
-                      {/* total */}
-                      <p className="font-semibold">
-                        <span className="text-muted font-normal">total: </span>{" "}
-                        {newPrice(
-                          product,
-                          userCurrencyCode,
-                          rates,
-                          cartQuantity[id(product)],
-                          cartMeasurement[id(product)]
-                        )}{" "}
-                        {userCurrencyCode}
+                      <p className="text-sm font-semibold whitespace-nowrap">
+                        {userCurrencyCode} {lineTotal(product)}
                       </p>
                     </div>
-                    {/* Measurement change */}
-                    <div>
-                      <span className="text-muted font-normal">mes: </span>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger className="m-auto">
-                          <Button
-                            variant={"link"}
-                            className="h-4 px-0 text-muted text-sm decoration-0 bg-background-secondary rounded-lg border-border border-1 gap-4"
-                          >
-                            {cartMeasurement[id(product)]}
-                            <FaChevronDown size={5} className="text-muted" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                          <DropdownMenuLabel>Measurement</DropdownMenuLabel>
-                          {measurements.map((mes) => (
-                            <DropdownMenuItem
-                              key={mes}
-                              onClick={() =>
-                                handleMeasurementChange(product, mes)
-                              }
-                            >
-                              {mes}
-                            </DropdownMenuItem>
-                          ))}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
                   </div>
-                </div>
+                </li>
               ))}
-            </div>
+              {!cart?.length && (
+                <li className="px-4 py-10 text-center text-sm text-muted-foreground">
+                  Your cart is empty
+                </li>
+              )}
+            </ul>
           </ScrollArea>
+
+          {/* Footer */}
+          <div className="border-t px-4 py-3 space-y-3">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground">Subtotal</span>
+              <span className="font-semibold">
+                {userCurrencyCode} {Math.round(subtotal * 100) / 100}
+              </span>
+            </div>
+            <NavigationButton
+              href={"/cart"}
+              shadcn={true}
+              className="w-full h-9"
+            >
+              Go to Cart
+            </NavigationButton>
+          </div>
         </SheetContent>
       </Sheet>
     </div>
