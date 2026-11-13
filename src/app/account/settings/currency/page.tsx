@@ -32,7 +32,7 @@ const Currency: React.FunctionComponent<ICurrencyProps> = () => {
         <h1 className="text-lg">Currency</h1>
       </div>
 
-      <div className="w-full  bg-gray-100 flex flex-col gap-2 py-2">
+      <div className="w-full  bg-background-muted flex flex-col gap-2 py-2">
         {/* Current Currency */}
         <div className="space-y-1">
           <div className="px-2">

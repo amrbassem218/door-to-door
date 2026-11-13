@@ -215,7 +215,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                                 >
                                   <MdDeleteOutline
                                     size={18}
-                                    className="hover:text-red-500 transition-all cursor-pointer"
+                                    className="hover:text-destructive transition-all cursor-pointer"
                                     onClick={() =>
                                       handleDeleteItem(
                                         product,
@@ -278,7 +278,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                                         cartMeasurement[id(product)],
                                       )}
                                     </p>
-                                    <p className="text-xs text-red-600 font-medium">
+                                    <p className="text-xs text-destructive font-medium">
                                       Save{" "}
                                       {save(
                                         product,
@@ -333,7 +333,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                   </div>
                   <div className="flex justify-between text-muted text-sm">
                     <p>Items discount:</p>
-                    <p className="text-red-500">
+                    <p className="text-destructive">
                       -{(total - subtotal).toFixed(2)} {userCurrencyCode}
                     </p>
                   </div>

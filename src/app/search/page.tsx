@@ -230,7 +230,7 @@ function SearchContext() {
             <button
               type="button"
               onClick={clearAll}
-              className="w-full rounded-md border text-sm font-medium py-2 hover:bg-gray-100"
+              className="w-full rounded-md border text-sm font-medium py-2 hover:bg-background-muted"
             >
               Clear all filters
             </button>
@@ -264,7 +264,7 @@ function SearchContext() {
                       className={`px-4 py-2 font-medium border-r last:border-0 transition-colors ${
                         active
                           ? "bg-foreground text-background"
-                          : "hover:bg-gray-100"
+                          : "hover:bg-background-muted"
                       }`}
                     >
                       {label}
@@ -277,13 +277,13 @@ function SearchContext() {
             </div>
           </div>
 
-          <div className="mb-4 rounded-sm bg-red-500 text-white text-center text-sm font-semibold py-2.5">
+          <div className="mb-4 rounded-sm bg-destructive text-highlight text-center text-sm font-semibold py-2.5">
             Big Sale · Free delivery on local orders
           </div>
 
           {filteredProducts.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">
+              <p className="text-muted-foreground text-lg">
                 No products found matching your criteria.
               </p>
             </div>

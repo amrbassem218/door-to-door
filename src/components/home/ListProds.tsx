@@ -19,7 +19,7 @@ const Skeleton = ({ size }: { size: string }) => (
     {[1, 2, 3, 4].map((i) => (
       <div
         key={i}
-        className={`animate-pulse rounded bg-gray-200 ${
+        className={`animate-pulse rounded bg-border ${
           size === "large" ? "w-48 h-64" : "w-40 h-52"
         }`}
       />

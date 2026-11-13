@@ -87,7 +87,7 @@ const LocationPage: React.FunctionComponent = () => {
         <div className="absolute top-3 sm:top-15 left-1/2 -translate-x-1/2 z-20 w-[90%] max-w-md">
           <div className="justify-center relative h-10 bg-background w-full max-w-full flex items-center gap-1 rounded-md border shadow-md">
             <IoSearchOutline
-              className="text-gray-500 absolute left-2"
+              className="text-muted-foreground absolute left-2"
               size={18}
             />
             <Autocomplete

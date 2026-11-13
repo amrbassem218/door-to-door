@@ -18,7 +18,7 @@ const Header: React.FunctionComponent<IHeaderProps> = () => {
       {isFocused && (
         <div
           className={`inset-0  ${
-            isFocused ? "fixed bg-black/40" : "bg-transparent"
+            isFocused ? "fixed bg-foreground/40" : "bg-transparent"
           } z-50 transition-all ease-in-out`}
           onClick={() => {
             setIsFocused(false);

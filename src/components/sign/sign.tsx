@@ -49,7 +49,7 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
                 </button>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <button className="text-red-500" onClick={() => handleLogout()}>
+                <button className="text-destructive" onClick={() => handleLogout()}>
                   Log out
                 </button>
               </DropdownMenuItem>

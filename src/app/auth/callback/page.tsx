@@ -55,7 +55,7 @@ const AuthCallbackPage = () => {
           </p>
         )}
         {status === "success" && (
-          <p className="text-green-600 font-medium">{message ?? "Success!"}</p>
+          <p className="text-success font-medium">{message ?? "Success!"}</p>
         )}
         {status === "error" && (
           <>

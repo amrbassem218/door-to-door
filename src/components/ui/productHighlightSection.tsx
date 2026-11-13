@@ -16,13 +16,13 @@ const ProductHighLight: React.FunctionComponent<IProductHighLightProps> = ({text
             expanded ? "max-h-none" : "max-h-24 overflow-hidden"
           }`}
         >
-          <p className="text-gray-800 leading-relaxed">{text}</p>
+          <p className="text-foreground leading-relaxed">{text}</p>
         </div>
 
         {/* Blur overlay when collapsed */}
         {!expanded && (
           <div className="absolute bottom-0 left-0 w-full h-6 
-                          bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none" />
+                          bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none" />
         )}
 
       </div>

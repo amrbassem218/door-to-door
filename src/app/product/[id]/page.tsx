@@ -56,6 +56,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   const [measurement, setMeasurement] = useState(measurements[0]);
   const [quantity, setQuantity] = useState<number>(1);
   const [isCrop, setIsCrop] = useState(false);
+  const [descriptionExpanded, setDescriptionExpanded] = useState(false);
   const [headerHeight, setHeaderHeight] = useState<number>(0);
   const [currentImage, setCurrentImage] = useState(0);
   const [productFullPrice, setProductFullPrice] = useState<FullPrice>({
@@ -73,12 +74,14 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   const [relatedVisible, setRelatedVisible] = useState(8);
 
   const reviewsRef = useRef<HTMLElement>(null);
+  const descriptionRef = useRef<HTMLElement>(null);
   const specificationsRef = useRef<HTMLElement>(null);
   const moreToLoveRef = useRef<HTMLElement>(null);
   const storeRef = useRef<HTMLElement>(null);
   const router = useRouter();
 
   const sections = [
+    { name: "Description", ref: descriptionRef },
     { name: "Customer Reviews", ref: reviewsRef },
     { name: "Specifications", ref: specificationsRef },
     { name: "About Store", ref: storeRef },
@@ -220,6 +223,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
     setActiveTab(tabName);
 
     const sectionRefs = {
+      Description: descriptionRef,
       "Customer Reviews": reviewsRef,
       Specifications: specificationsRef,
       "More to love": moreToLoveRef,
@@ -268,7 +272,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
   }
   return (
     <div className="sm:grid sm:grid-cols-32 w-full sm:py-5 sm:px-8 px-2 overflow-x-hidden sm:gap-5 max-w-450 mx-auto">
-      <div className="bg-gray-100 sm:bg-background flex flex-col gap-2 sm:mb-0 col-span-32 sm:col-span-24 relative">
+      <div className="bg-background-muted sm:bg-background flex flex-col gap-2 sm:mb-0 col-span-32 sm:col-span-24 relative">
         {/* Product Main */}
         {/* Main description */}
         <div className="flex flex-col sm:flex-row gap-5">
@@ -312,7 +316,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
               <CarouselContent className="-ml-0 w-screen">
                 {product.gallery.map((image, i) => (
                   <CarouselItem key={i} className="pl-0">
-                    <div className="h-72 w-full bg-gray-100 flex items-center justify-center border">
+                    <div className="h-72 w-full bg-background-muted flex items-center justify-center border">
                       <img
                         loading="lazy"
                         src={image}
@@ -348,16 +352,16 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
                     size={18}
                     SVGstyle={{ display: "inline-block" }}
                     allowFraction // allows values like 3.5 stars
-                    fillColor=" oklch(0.56 0.14 35)"
+                    fillColor="var(--primary)"
                   />
-                  <p className="text-sm font-normal text-gray-600">
+                  <p className="text-sm font-normal text-muted-foreground">
                     ({product?.reviewCount ?? 0}) reviews |{" "}
                   </p>
                   <p
                     className={`text-sm font-normal ${
                       product?.stockCount || isCrop
-                        ? "text-green-600"
-                        : "text-red-600"
+                        ? "text-success"
+                        : "text-destructive"
                     }`}
                   >
                     {product?.stockCount || isCrop
@@ -369,29 +373,29 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
 
               {/* Product Price */}
               <div className="space-y-2">
-                {!isCrop && (
-                  <div>
-                    <p className="text-xl flex items-end gap-1">
-                      {product.discount > 0 && (
-                        <span className="text-secondary mr-1">
-                          -{productFullPrice.discount}%
-                        </span>
-                      )}
-                      <span className="font-bold ">
-                        {userCurrencyCode} {productFullPrice.newPrice}{" "}
+                <div>
+                  <p className="text-xl flex items-end gap-1">
+                    {product.discount > 0 && (
+                      <span className="text-secondary mr-1">
+                        -{productFullPrice.discount}%
                       </span>
-                      <span className="text-muted-foreground text-xs">
-                        (per {measurement})
-                      </span>
-                    </p>
+                    )}
+                    <span className="font-bold ">
+                      {userCurrencyCode} {productFullPrice.newPrice}{" "}
+                    </span>
+                    <span className="text-muted-foreground text-xs">
+                      (per {measurement})
+                    </span>
+                  </p>
+                  {product.discount > 0 && (
                     <p className="text-muted-foreground flex gap-1">
                       Was:
                       <span className="line-through">
-                        {userCurrencyCode} {product.priceBefore}
+                        {userCurrencyCode} {productFullPrice.oldPrice}
                       </span>
                     </p>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
 
               {/* VAT & Returns */}
@@ -498,7 +502,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
                   return name == activeTab ? (
                     <li
                       key={i}
-                      className="flex items-center text-black font-bold "
+                      className="flex items-center text-foreground font-bold "
                     >
                       <FaLocationDot size={15} />
                       {name}
@@ -515,6 +519,38 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
                 })}
               </ul>
             </nav>
+
+            {/* Description */}
+            <section
+              ref={descriptionRef}
+              className="w-full flex flex-col py-2 px-3 sm:px-0 bg-background space-y-2"
+            >
+              <h1 className="text-2xl sm:text-xl font-bold">Description</h1>
+              <div className="relative">
+                <p
+                  className={`whitespace-pre-line leading-relaxed text-foreground ${
+                    descriptionExpanded ? "" : "max-h-72 overflow-hidden"
+                  }`}
+                >
+                  {product.description?.trim() ||
+                    "No description available for this product."}
+                </p>
+                {!descriptionExpanded && (product.description?.length ?? 0) > 600 && (
+                  <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+                )}
+              </div>
+              {(product.description?.length ?? 0) > 600 && (
+                <button
+                  type="button"
+                  onClick={() => setDescriptionExpanded((v) => !v)}
+                  className="self-center text-primary text-sm font-medium hover:underline"
+                >
+                  {descriptionExpanded ? "See Less" : "See More"}
+                </button>
+              )}
+            </section>
+
+            <Separator className="my-4" />
 
             {/* Reviews */}
             <ProductReviewSection ref={reviewsRef} product={product} />
@@ -541,7 +577,7 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
               </div>
 
               {/* Store Content */}
-              <div className="w-full bg-gray-100 p-4">
+              <div className="w-full bg-background-muted p-4">
                 <p>There doesn't Exist data about this store</p>
               </div>
             </section>

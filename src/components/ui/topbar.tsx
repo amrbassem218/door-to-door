@@ -12,11 +12,11 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     <p className="">Welcome to Door to Door (DTD)</p>
     {/* right nav */}
     <div className='flex gap-2'>
-        <div className="flex border-r-2 border-gray-400 px-3 items-center  gap-1 text-sm">
+        <div className="flex border-r-2 border-border px-3 items-center  gap-1 text-sm">
             <MdOutlineLocationOn className="text-primary font-bold" size={17}/>
             <p>Deliver to Egypt</p>
         </div>
-        <div className="flex border-r-2 border-gray-400 px-3 items-center gap-1 text-sm">
+        <div className="flex border-r-2 border-border px-3 items-center gap-1 text-sm">
             <LuTruck className="text-primary font-bold" size={17}/>
             <p>Track your order</p>
         </div>

@@ -72,7 +72,7 @@ const ProductReviewSection: React.FunctionComponent<
               size={20}
               SVGstyle={{ display: "inline-block" }}
               allowFraction
-              fillColor=" oklch(0.56 0.14 35)"
+              fillColor="var(--primary)"
               className=""
             />
           </div>

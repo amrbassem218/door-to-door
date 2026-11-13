@@ -125,7 +125,7 @@ const LoginCard: React.FunctionComponent<ILoginCardProps> = ({ context, redirect
                 Don't have an account?{" "}
                 <button
                   onClick={() => handleSignupClick()}
-                  className="text-blue-500 hover:text-blue-600"
+                  className="text-info hover:text-info"
                 >
                   Sign up
                 </button>
@@ -136,11 +136,11 @@ const LoginCard: React.FunctionComponent<ILoginCardProps> = ({ context, redirect
         <div>
           {/* Seperator */}
           <div className="flex items-center w-full my-4">
-            <Separator className="h-px bg-gray-300 flex-1" />
-            <p className="px-4 text-sm text-gray-500 whitespace-nowrap">
+            <Separator className="h-px bg-border flex-1" />
+            <p className="px-4 text-sm text-muted-foreground whitespace-nowrap">
               or continue with
             </p>
-            <Separator className="h-px bg-gray-300 flex-1" />
+            <Separator className="h-px bg-border flex-1" />
           </div>
 
           <div className="">

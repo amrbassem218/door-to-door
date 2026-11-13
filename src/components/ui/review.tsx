@@ -36,7 +36,7 @@ const Review: React.FunctionComponent<IReviewProps> = ({ review }) => {
                 SVGstyle={{ display: "inline-block" }}
                 allowFraction
                 className=""
-                fillColor="oklch(0.56 0.14 35)"
+                fillColor="var(--primary)"
               />
               <p className="text-muted-foreground text-xs">
                 ({review.starCount})

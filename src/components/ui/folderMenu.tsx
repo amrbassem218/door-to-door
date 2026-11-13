@@ -103,7 +103,7 @@ const FolderMenu: React.FunctionComponent<IFolderMenuProps> = (props) => {
                             <Accordion type="single" collapsible defaultValue='0'>
                                 {topics.map((topic,i) => (
                                     <AccordionItem value={`${i}`} className='w-30'>
-                                        <AccordionTrigger className='font-semibold text-[#222222]'>{topic.name}</AccordionTrigger>
+                                        <AccordionTrigger className='font-semibold text-foreground'>{topic.name}</AccordionTrigger>
                                         <AccordionContent className='truncate'>
                                             <ul className='text-left '>
                                                 {topic.subTopics.map((subTopic) => (

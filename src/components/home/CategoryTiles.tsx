@@ -38,7 +38,7 @@ const CategoryTiles = () => {
             href={`/search?query=${encodeURIComponent(cat.tag)}`}
             className="group flex flex-col items-center gap-2 rounded-lg border bg-card p-3 hover:shadow-md hover:border-primary transition-all"
           >
-            <div className="h-16 w-16 md:h-24 md:w-24 rounded-full bg-gray-100 overflow-hidden">
+            <div className="h-16 w-16 md:h-24 md:w-24 rounded-full bg-background-muted overflow-hidden">
               {image ? (
                 <img
                   loading="lazy"
@@ -47,7 +47,7 @@ const CategoryTiles = () => {
                   className="h-full w-full object-cover group-hover:scale-105 transition-transform"
                 />
               ) : (
-                <div className="h-full w-full animate-pulse bg-gray-200" />
+                <div className="h-full w-full animate-pulse bg-border" />
               )}
             </div>
             <p className="text-xs md:text-sm font-medium text-center leading-tight">

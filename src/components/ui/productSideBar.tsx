@@ -272,7 +272,7 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
               {measurements.map((mes) => (
                 <DropdownMenuItem
                   key={mes}
-                  className="hover:bg-gray-100"
+                  className="hover:bg-background-muted"
                   onClick={() => handleMeasurementChange(mes)}
                 >
                   {mes}

@@ -19,13 +19,13 @@ const Hero: React.FunctionComponent<IHeroProps> = (props) => {
         </video>
 
         {/* Gradient overlay - darker at bottom */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/70 to-transparent"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/0 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/70 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-foreground/50 via-foreground/0 to-transparent"></div>
 
         <div className="absolute inset-x-0 z-10 sm:bottom-16 bottom-10">
           <div className="mx-auto max-w-[1800px] px-4 md:px-6 2xl:px-10">
             <div className="w-150 max-w-full">
-              <h1 className="lg:text-5xl text-2xl font-bold mb-4 text-white ">
+              <h1 className="lg:text-5xl text-2xl font-bold mb-4 text-highlight ">
                 From Egyptian Fields to the World's Markets
               </h1>
               <div className="space-y-3">
@@ -34,7 +34,7 @@ const Hero: React.FunctionComponent<IHeroProps> = (props) => {
                   {suggestedKeywords.map((word) => (
                     <Link
                       key={word}
-                      className="p-3 h-5 border-1 border-white flex items-center justify-center rounded-md text-white hover:bg-background hover:text-black cursor-pointer transition-all"
+                      className="p-3 h-5 border-1 border-highlight flex items-center justify-center rounded-md text-highlight hover:bg-background hover:text-foreground cursor-pointer transition-all"
                       href={`/search?query=${word}`}
                     >
                       {word}

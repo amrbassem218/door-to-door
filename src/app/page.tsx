@@ -15,7 +15,7 @@ import "../App.css";
 
 const Hero = dynamic(() => import("@/components/home/hero"), {
   ssr: false,
-  loading: () => <div className="animate-pulse h-64 w-full bg-gray-200 mb-10" />,
+  loading: () => <div className="animate-pulse h-64 w-full bg-border mb-10" />,
 });
 
 import CategoryTiles from "@/components/home/CategoryTiles";
@@ -25,7 +25,7 @@ const ListProd = dynamic(() => import("@/components/home/ListProds"), {
   loading: () => (
     <div className="flex flex-wrap justify-center gap-4 w-full">
       {[1, 2, 3, 4].map((i) => (
-        <div key={i} className="animate-pulse w-48 h-64 rounded bg-gray-200" />
+        <div key={i} className="animate-pulse w-48 h-64 rounded bg-border" />
       ))}
     </div>
   ),
@@ -111,12 +111,12 @@ interface IHomeProps {}
 
 const Home: React.FunctionComponent<IHomeProps> = (props) => {
   return (
-    <div className="bg-gray-100">
+    <div className="bg-background-muted">
       <Hero />
 
       {/* Big sale + coupons */}
       <section className="mx-auto max-w-[1800px] px-4 md:px-6 2xl:px-10 -mt-6 relative z-10">
-        <div className="rounded-xl bg-gradient-to-r from-red-600 to-orange-500 text-white p-4 md:p-6 grid md:grid-cols-[1fr_2fr] gap-4 items-center shadow-lg">
+        <div className="rounded-xl bg-gradient-to-r from-secondary to-warning text-highlight p-4 md:p-6 grid md:grid-cols-[1fr_2fr] gap-4 items-center shadow-lg">
           <div>
             <h2 className="text-2xl md:text-4xl font-extrabold">Big Sale</h2>
             <p className="text-sm opacity-90">Up to 75% off local favorites</p>
@@ -125,11 +125,11 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
             {coupons.map((c) => (
               <div
                 key={c.code}
-                className="rounded-lg bg-white text-red-600 p-2 md:p-3 text-center"
+                className="rounded-lg bg-background-secondary text-destructive p-2 md:p-3 text-center"
               >
                 <p className="font-extrabold text-sm md:text-xl">{c.off}</p>
-                <p className="text-[10px] md:text-xs text-gray-600">{c.min}</p>
-                <p className="mt-1 text-[10px] md:text-xs font-semibold border border-dashed border-red-400 rounded px-1">
+                <p className="text-[10px] md:text-xs text-muted-foreground">{c.min}</p>
+                <p className="mt-1 text-[10px] md:text-xs font-semibold border border-dashed border-destructive rounded px-1">
                   Code: {c.code}
                 </p>
               </div>
@@ -171,19 +171,19 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
           <DealCard
             title="Bestsellers"
             badge="Best price & quality"
-            badgeClass="bg-yellow-300 text-black"
+            badgeClass="bg-warning text-warning-foreground"
             query="bestsellers"
           />
           <DealCard
             title="Big Save"
             badge="Up to 50% off"
-            badgeClass="bg-red-300/80 text-black"
+            badgeClass="bg-danger/40 text-foreground"
             query="sale"
           />
           <DealCard
             title="SuperDeals"
             badge="Up to 75% off"
-            badgeClass="bg-red-400 text-white"
+            badgeClass="bg-danger text-destructive-foreground"
             query="deals"
           />
         </section>

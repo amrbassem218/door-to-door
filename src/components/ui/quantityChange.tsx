@@ -23,7 +23,7 @@ const QuantityChange: React.FunctionComponent<IQuantityChangeProps> = ({handleQu
             className='border-1 text-center text-sm h-full flex-1 min-w-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none' 
             onChange={(e) => handleQuantityChange(e.target.value, product)}
         />
-        <button className={`border-1 p-2 cursor-pointer bg-primary text-white h-full flex items-center justify-center w-8 ${sqauresStyle}`} onClick={() => handleQuantityChange("plus", product)}>
+        <button className={`border-1 p-2 cursor-pointer bg-primary text-highlight h-full flex items-center justify-center w-8 ${sqauresStyle}`} onClick={() => handleQuantityChange("plus", product)}>
             <FiPlus size={14}/>  
         </button>
     </div>

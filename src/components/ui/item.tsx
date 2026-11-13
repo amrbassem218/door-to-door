@@ -30,12 +30,12 @@ const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
   return (
     <div
       onClick={() => router.push(`/product/${item.id}`)}
-      className={`${col} transform-all duration-200 ease-in-out hover:scale-101 cursor-pointer ${style} w-full bg-gray-100 rounded-sm overflow-hidden relative flex flex-col`}
+      className={`${col} transform-all duration-200 ease-in-out hover:scale-101 cursor-pointer ${style} w-full bg-background-muted rounded-sm overflow-hidden relative flex flex-col`}
       onMouseEnter={() => setOnHover(true)}
       onMouseLeave={() => setOnHover(false)}
     >
       {/* Item Image */}
-      <div className="aspect-square w-full shrink-0 bg-gray-100 flex items-center justify-center overflow-hidden">
+      <div className="aspect-square w-full shrink-0 bg-background-muted flex items-center justify-center overflow-hidden">
         <img
           loading="lazy"
           src={item.thumbnail}
@@ -71,10 +71,10 @@ const Item: React.FunctionComponent<IItemProps> = ({ item, col, style }) => {
             size={12}
             SVGstyle={{ display: "inline-flex" }}
             allowFraction
-            fillColor=" oklch(0.56 0.14 35)"
+            fillColor="var(--primary)"
           />
           <p className="text-xs font-medium">{item.rating.toFixed(1)}</p>
-          <p className="text-xs font-normal text-gray-600">
+          <p className="text-xs font-normal text-muted-foreground">
             ({item?.reviewCount ?? 0})
           </p>
         </div>

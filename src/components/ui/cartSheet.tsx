@@ -167,7 +167,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
               <div className="flex flex-col justify-center items-center">
                 <div className="mb-2 ">
                   <h2 className="text-center text-heading">Subtotal</h2>
-                  <h3 className="text-center font-bold text-md text-orange-700 ">
+                  <h3 className="text-center font-bold text-md text-warning ">
                     {subtotal} {userCurrencyCode}
                   </h3>
                 </div>
@@ -249,7 +249,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                                 }
                               />
                               <button
-                                className="border-1 p-1 cursor-pointer bg-primary text-white"
+                                className="border-1 p-1 cursor-pointer bg-primary text-highlight"
                                 onClick={() =>
                                   handleQuantityChange(product, "plus")
                                 }
@@ -281,7 +281,7 @@ const CartSheet: React.FunctionComponent<ICardSheetProps> = (props) => {
                         <DropdownMenuTrigger className="m-auto">
                           <Button
                             variant={"link"}
-                            className="h-4 px-0 text-muted text-sm decoration-0 bg-background-secondary rounded-lg border-gray-300 border-1 gap-4"
+                            className="h-4 px-0 text-muted text-sm decoration-0 bg-background-secondary rounded-lg border-border border-1 gap-4"
                           >
                             {cartMeasurement[id(product)]}
                             <FaChevronDown size={5} className="text-muted" />

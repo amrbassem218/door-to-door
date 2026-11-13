@@ -43,6 +43,10 @@
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--highlight);
 
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--highlight);
+  --color-highlight: var(--highlight);
+
   /* =====================
      SEMANTIC STATES
      ===================== */
@@ -87,30 +91,31 @@
 }
 
 :root {
+  /* Palette from Figma "Color pallete" */
   /* Backgrounds */
-  --bg-dark: #f1ebe5;
-  --bg: #f8f4f0;
-  --bg-light: #ffffff;
+  --bg-dark: #f8e7e1;
+  --bg: #fcf3f0;
+  --bg-light: #fcfcfc;
 
   /* Text */
-  --text: #2e2836; /* Shadow Grey */
-  --text-muted: #6b6670;
-  --highlight: #ffffff;
+  --text: #1d0c0a;
+  --text-muted: #60524e;
+  --highlight: #fcfcfc;
 
   /* Borders */
-  --border: #e4ddd7;
-  --border-muted: #efe8e2;
+  --border: #d0c0bb;
+  --border-muted: #d0c0bb;
 
   /* Brand Colors */
-  --primary: #6a2e35; /* Wine Plum */
-  --secondary: #be8a60; /* Camel */
-  --accent: #b6d094; /* Celadon */
+  --primary: #a15200;
+  --secondary: #b75037;
+  --accent: #008095;
 
   /* Status */
-  --danger: #a23f4a;
-  --warning: #e1aa7d;
-  --success: #8fae6a;
-  --info: #8ca6b8;
+  --danger: #a94e58;
+  --warning: #c56c21;
+  --success: #448c56;
+  --info: #347ca9;
 }
 
 @layer base {
@@ -127,7 +132,7 @@
     font-optical-sizing: auto;
     font-display: swap;
     font-style: normal;
-    color: oklch(0.18 0.03 30);
+    color: var(--text);
     overflow-x: hidden;
     width: 100%;
   }

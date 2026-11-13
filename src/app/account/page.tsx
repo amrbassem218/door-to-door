@@ -14,7 +14,7 @@ const Account: React.FunctionComponent<IAccountProps> = (props) => {
   const { user } = useUser();
   const router = useRouter();
   return (
-    <div className="space-y-5 bg-gray-100">
+    <div className="space-y-5 bg-background-muted">
       {/* Account info */}
       <section className="px-3 space-y-4 bg-background py-3">
         {user ? (

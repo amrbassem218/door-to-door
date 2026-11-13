@@ -139,7 +139,7 @@ const SearchBar: React.FunctionComponent<ISearchBarProps> = ({
                   <img
                     src={s.thumbnail}
                     alt=""
-                    className="h-8 w-8 rounded object-cover shrink-0 bg-gray-100"
+                    className="h-8 w-8 rounded object-cover shrink-0 bg-background-muted"
                     onError={(e) => (e.currentTarget.style.display = "none")}
                   />
                 )}
