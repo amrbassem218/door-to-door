@@ -125,7 +125,7 @@ const LoginCard: React.FunctionComponent<ILoginCardProps> = ({ context, redirect
                 Don't have an account?{" "}
                 <button
                   onClick={() => handleSignupClick()}
-                  className="text-info hover:text-info"
+                  className="text-foreground font-medium underline underline-offset-2 hover:opacity-80"
                 >
                   Sign up
                 </button>

@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import type { ReviewType } from "@/types/types";
 import { viewDate } from "@/utilities";
 import * as React from "react";
@@ -8,6 +8,24 @@ interface IReviewProps {
   review: ReviewType;
 }
 
+/** "Amr Bassem" -> "A** B*****" (first letter kept, rest masked). */
+const maskName = (name?: string | null) => {
+  const parts = (name ?? "").trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "Verified buyer";
+  return parts
+    .map((w) => w.charAt(0).toUpperCase() + "*".repeat(Math.min(Math.max(w.length - 1, 2), 6)))
+    .join(" ");
+};
+
+const initials = (name?: string | null) => {
+  const parts = (name ?? "").trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "V";
+  return parts
+    .slice(0, 2)
+    .map((w) => w.charAt(0).toUpperCase())
+    .join("");
+};
+
 const Review: React.FunctionComponent<IReviewProps> = ({ review }) => {
   const createdAtDate = new Date(review.createdAt);
   return (
@@ -16,15 +34,15 @@ const Review: React.FunctionComponent<IReviewProps> = ({ review }) => {
         {/* Avatar */}
         <div className="flex gap-2 items-center">
           <Avatar>
-            <AvatarImage src={review.profiles.avatarUrl ?? ""} />
-            <AvatarFallback>N</AvatarFallback>
+            {/* No profile photo: reviewers stay anonymous */}
+            <AvatarFallback>{initials(review.profiles?.fullName)}</AvatarFallback>
           </Avatar>
         </div>
 
         {/* Rest of Review */}
         <div className="mt-1">
           {/* Name */}
-          <h1 className=" text-sm">{review.profiles.fullName}</h1>
+          <h1 className=" text-sm">{maskName(review.profiles?.fullName)}</h1>
 
           <div className="mb-1">
             {/* Rating and Tags */}
