@@ -54,8 +54,12 @@ export async function POST(req: Request) {
   for (const item of requested) {
     const p = products.find((x) => x.id === Number(item.productId));
     const qty = Number(item.quantity);
-    const measurement = item.measurement ?? "KG";
-    if (!p || p.price_before == null || !(qty > 0) || !(measurement in UNIT_FACTOR))
+    // The cart stores measurements in lowercase ("kg"); the UI uses "KG", "Ton", ...
+    const measurement =
+      Object.keys(UNIT_FACTOR).find(
+        (k) => k.toLowerCase() === (item.measurement ?? "KG").toLowerCase(),
+      ) ?? "";
+    if (!p || p.price_before == null || !(qty > 0) || !measurement)
       return NextResponse.json({ error: "Invalid item" }, { status: 400 });
     const unit = p.price_before * (1 - (p.discount ?? 0) / 100);
     const cents = Math.round(unit * UNIT_FACTOR[measurement] * qty * 100);
