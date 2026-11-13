@@ -96,7 +96,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Could not create order" }, { status: 500 });
   }
 
-  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? new URL(req.url).origin;
+  const origin = (
+    process.env.NEXT_PUBLIC_SITE_URL || new URL(req.url).origin
+  ).replace(/\/+$/, "");
   const meta = (user.user_metadata ?? {}) as Record<string, string>;
   const fullName = (meta.full_name ?? meta.name ?? "").trim().split(/\s+/);
 

@@ -125,7 +125,9 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
       ]);
     } catch (e) {
       console.error(e);
-      toast.error("Couldn't start payment. Please try again.");
+      toast.error(
+        `Couldn't start payment: ${e instanceof Error ? e.message : "unknown error"}`,
+      );
     }
   });
   const BASE_LIKES = 16;

@@ -215,7 +215,9 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
       ]);
     } catch (e) {
       console.error(e);
-      toast.error("Couldn't start payment. Please try again.");
+      toast.error(
+        `Couldn't start payment: ${e instanceof Error ? e.message : "unknown error"}`,
+      );
     }
   });
 
