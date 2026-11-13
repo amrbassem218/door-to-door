@@ -2,7 +2,6 @@
 import { supabase } from "@/supabase/supabaseClient";
 import type { Product } from "@/types/types";
 import { camel } from "@/utilities";
-import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import Item from "./item";
@@ -13,7 +12,6 @@ interface IAppProps {
 
 const SimilarProducts: React.FunctionComponent<IAppProps> = ({ product }) => {
   const [similarProducts, setSimilarProducts] = useState<Product[]>();
-  const router = useRouter();
   useEffect(() => {
     if (product) {
       const getSimilarProds = async () => {
@@ -47,13 +45,11 @@ const SimilarProducts: React.FunctionComponent<IAppProps> = ({ product }) => {
         <div className="grid grid-cols-12 gap-5">
           {similarProducts &&
             similarProducts.map((item, i) => (
-              <div
-                key={`${item.name}-${i}`}
-                className="lg:col-span-2 col-span-6"
-                onClick={() => router.push(`/product/${item.id}`)}
-              >
-                <Item item={item} />
-              </div>
+              <Item
+                key={`${item.id}-${i}`}
+                item={item}
+                col="lg:col-span-2 col-span-6"
+              />
             ))}
         </div>
       </section>
