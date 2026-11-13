@@ -15,6 +15,8 @@ import { useCurrencyRates } from "@/getRates";
 import { cleanupDuplicateCarts, getCart } from "@/utils/cart-utils";
 import { useUser } from "@/utils/getUser";
 import { useRouter } from "next/navigation";
+import { startCheckout } from "@/utils/checkout";
+import { toast } from "sonner";
 import EmptyCart from "./empty";
 interface ICartProps {}
 
@@ -151,9 +153,17 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
     }
   }, [cartItems]);
   const handleCheckout = () => {
-    if (user) {
-      // Proceed to checkout
-    }
+    if (!user || !cartItems?.length) return;
+    startCheckout(
+      cartItems.map(({ products: product, quantity }) => ({
+        productId: product.id,
+        quantity: cartQuantity[id(product)] || quantity,
+        measurement: cartMeasurement[id(product)] || "KG",
+      })),
+    ).catch((e) => {
+      console.error(e);
+      toast.error("Couldn't start payment. Please try again.");
+    });
   };
   if (ratesLoading) return <p>Loading prices...</p>;
   if (isEmpty) {
@@ -350,7 +360,10 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                       {(subtotal + shippingCost).toFixed(2)} {userCurrencyCode}
                     </p>
                   </div>
-                  <Button className="w-full text-lg transition-all mt-2">
+                  <Button
+                    className="w-full text-lg transition-all mt-2"
+                    onClick={handleCheckout}
+                  >
                     Checkout
                   </Button>
                 </CardContent>

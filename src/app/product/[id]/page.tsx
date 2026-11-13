@@ -1,5 +1,7 @@
 "use client";
 import ListProd from "@/components/home/ListProds";
+import { startCheckout } from "@/utils/checkout";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Carousel,
@@ -207,8 +209,14 @@ const ProductListing: React.FunctionComponent<IProductProps> = ({ params }) => {
 
   const handleBuyNow = executeWithAuth(async () => {
     if (!user || !product) return;
-    await addProductToCart(user, product, quantity);
-    router.push("/cart");
+    try {
+      await startCheckout([
+        { productId: product.id, quantity, measurement },
+      ]);
+    } catch (e) {
+      console.error(e);
+      toast.error("Couldn't start payment. Please try again.");
+    }
   });
 
   // Add scroll listener for tab activation

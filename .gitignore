@@ -26,3 +26,5 @@ dist-ssr
 tsconfig.tsbuildinfo
 # ...
 dist
+.env
+.env.local

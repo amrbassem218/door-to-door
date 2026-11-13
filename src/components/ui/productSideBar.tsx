@@ -19,6 +19,7 @@ import { addProductToCart } from "@/utils/cart-utils";
 import { useUser } from "@/utils/getUser";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { toast } from "sonner";
+import { startCheckout } from "@/utils/checkout";
 import NavigationButton from "../navigationButton";
 
 interface IProductSideBarProps {
@@ -118,13 +119,14 @@ const ProductSideBar: React.FunctionComponent<IProductSideBarProps> = ({
   const handleBuyNow = executeWithAuth(async () => {
     if (!user) return; // Type guard - user is guaranteed to exist by executeWithAuth
 
-    addProductToCart(user, product, quantity).then((status) => {
-      if (status == "success") {
-        console.log("product added sucessfully");
-      } else {
-        console.log("couldn't add product");
-      }
-    });
+    try {
+      await startCheckout([
+        { productId: product.id, quantity, measurement },
+      ]);
+    } catch (e) {
+      console.error(e);
+      toast.error("Couldn't start payment. Please try again.");
+    }
   });
   const BASE_LIKES = 16;
   const [liked, setLiked] = React.useState(false);
