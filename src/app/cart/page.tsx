@@ -200,7 +200,7 @@ const Cart: React.FunctionComponent<ICartProps> = (props) => {
                         ) => (
                           <div
                             key={index}
-                            className="flex gap-4 w-full px-4 sm:px-6 py-4 transition-colors hover:bg-accent/40"
+                            className="flex gap-4 w-full px-4 sm:px-6 py-4"
                             onClick={() =>
                               router.push(`/product/${product.id}`)
                             }
