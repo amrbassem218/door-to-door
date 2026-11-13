@@ -1,11 +1,13 @@
 "use client";
 import * as React from "react";
 import { FaAngleRight } from "react-icons/fa";
-import { LuUser } from "react-icons/lu";
+import { LuLogOut, LuPackagePlus, LuSettings, LuShoppingCart, LuUser } from "react-icons/lu";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
@@ -38,23 +40,50 @@ const Sign: React.FunctionComponent<ISignProps> = (props) => {
               </div>
               <LuUser className="text-xl lg:text-2xl" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => router.push("/account")}>Profile</DropdownMenuItem>
-              <DropdownMenuItem>
-                <button
-                  className=""
-                  onClick={() => router.push("/add_product")}
-                >
-                  Add a product
-                </button>
+            <DropdownMenuContent align="end" sideOffset={8} className="w-60 p-1.5">
+              <DropdownMenuLabel className="px-2 py-2 font-normal">
+                <p className="text-sm font-semibold truncate">
+                  {getDisplayName(user)}
+                </p>
+                {user.email && (
+                  <p className="text-xs text-muted-foreground truncate">
+                    {user.email}
+                  </p>
+                )}
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="gap-3 py-2 cursor-pointer"
+                onClick={() => router.push("/account")}
+              >
+                <LuUser /> Profile
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <button className="text-destructive" onClick={() => handleLogout()}>
-                  Log out
-                </button>
+              <DropdownMenuItem
+                className="gap-3 py-2 cursor-pointer"
+                onClick={() => router.push("/account/settings")}
+              >
+                <LuSettings /> Settings
               </DropdownMenuItem>
-              {/* <DropdownMenuGroup>
-              </DropdownMenuGroup> */}
+              <DropdownMenuItem
+                className="gap-3 py-2 cursor-pointer"
+                onClick={() => router.push("/cart")}
+              >
+                <LuShoppingCart /> Cart
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="gap-3 py-2 cursor-pointer"
+                onClick={() => router.push("/add_product")}
+              >
+                <LuPackagePlus /> Add a product
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                variant="destructive"
+                className="gap-3 py-2 cursor-pointer"
+                onClick={() => handleLogout()}
+              >
+                <LuLogOut /> Log out
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
