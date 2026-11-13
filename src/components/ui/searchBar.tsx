@@ -1,136 +1,162 @@
 "use client";
-import * as React from "react";
-import { useEffect, useRef, useState } from "react";
-import { IoSearch } from "react-icons/io5";
-
-import { useSearch } from "@/contexts/searchContext";
+import { Command as CommandPrimitive } from "cmdk";
 import { useRouter } from "next/navigation";
+import * as React from "react";
+import { useEffect, useState } from "react";
+import { IoSearch } from "react-icons/io5";
 import { FaAngleDown } from "react-icons/fa6";
-import { Input } from "./input";
+
+import { Popover, PopoverAnchor, PopoverContent } from "@/components/ui/popover";
+import { useSearch } from "@/contexts/searchContext";
+import { cn } from "@/lib/utils";
+
 interface ISearchBarProps {
   styles?: string;
   setIsFocused?: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+const MAX_SUGGESTIONS = 8;
 
 const SearchBar: React.FunctionComponent<ISearchBarProps> = ({
   styles,
   setIsFocused,
 }) => {
   const search = useSearch();
-  const [suggestions, setSuggestions] = useState<any[]>([]);
-  const [isSuggested, setIsSuggested] = useState(false);
-  const searchRef = useRef<HTMLDivElement>(null);
-  const searchBarRef = useRef<HTMLInputElement>(null);
-  const [query, setQuery] = useState("");
   const router = useRouter();
-  const handleFilter = () => {};
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const anchorRef = React.useRef<HTMLDivElement>(null);
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+
+  // Fetch suggestions (ignoring out-of-order responses).
   useEffect(() => {
-    if (isSuggested) {
+    const q = query.trim();
+    if (!q) {
       setSuggestions([]);
-    } else if (query && search) {
-      search.searchProducts(query).then((results) => {
-        setSuggestions(results);
-      });
-    } else {
-      setSuggestions([]);
+      return;
     }
+    let cancelled = false;
+    search.searchProducts(q).then((results) => {
+      if (!cancelled) setSuggestions((results ?? []).slice(0, MAX_SUGGESTIONS));
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [query, search]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(event.target as Node)
-      ) {
-        setSuggestions([]);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const handleSearchSubmit = (suggestionQuery?: string) => {
-    if (suggestionQuery) {
-      setQuery(suggestionQuery);
-      setIsSuggested(true);
-    } else {
-      setIsSuggested(false);
-    }
-    setSuggestions([]);
-    searchBarRef.current?.blur();
-    router.push(`/search?query=${suggestionQuery ? suggestionQuery : query}`);
+  const submit = (value: string) => {
+    const q = value.trim();
+    if (!q) return;
+    setQuery(q);
+    setOpen(false);
+    inputRef.current?.blur();
+    router.push(`/search?query=${encodeURIComponent(q)}`);
   };
+
+  const showList = open && query.trim().length > 0;
+
   return (
-    <div
-      ref={searchRef}
-      className={`justify-center relative h-10 bg-background-secondary w-120 max-w-full flex items-center gap-1 rounded-sm ${styles}`}
-    >
-      {/* <IoSearchOutline className="text-primary absolute left-2" size={18} /> */}
-      <button
-        className="absolute left-0 w-fit h-full flex items-center justify-between bg-background-muted rounded-l-sm text-text text-xs sm:text-sm px-2 text-muted-foreground font-medium"
-        type="button"
+    <Popover open={showList} onOpenChange={setOpen}>
+      <CommandPrimitive
+        shouldFilter={false}
+        loop
+        className={cn("h-10 w-120 max-w-full", styles)}
       >
-        All
-        <FaAngleDown className="ml-1 text-muted-foreground w-2 h-2 sm:w-3" />
-      </button>
-      <form
-        className="w-full h-full"
-        action=""
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSearchSubmit();
-        }}
-      >
-        <Input
-          type="text"
-          placeholder="Search crops, furniture and more..."
-          className="w-full border-0 px-14 h-full text-text text-sm"
-          value={query}
-          onFocus={() => setIsFocused && setIsFocused(true)}
-          onBlur={() => setIsFocused && setIsFocused(false)}
-          onChange={(e) => setQuery(e.target.value)}
-          ref={searchBarRef}
-        />
-      </form>
-      <button
-        className="cursor-pointer absolute right-0 w-10 h-full flex items-center justify-center bg-primary rounded-r-md text-text"
-        onClick={() => handleFilter()}
-      >
-        <IoSearch className="w-3 h-3 md:w-4 md:h-4 text-background" />
-      </button>
-      {/* Suggestions dropdown */}
-      {suggestions.length > 0 && query && (
-        <div className="absolute top-full left-0 right-0 bg-background border border-border rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
-          {suggestions.map((suggestion, index) => (
-            <div
-              key={suggestion.id || index}
-              className="px-4 py-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-b-0"
-              onClick={() => {
-                // setQuery();
-                handleSearchSubmit(suggestion.name);
-                setSuggestions([]);
-              }}
+        <PopoverAnchor asChild>
+          <div
+            ref={anchorRef}
+            className="relative h-full w-full bg-background-secondary flex items-center rounded-sm"
+          >
+            <button
+              className="absolute left-0 h-full flex items-center bg-background-muted rounded-l-sm text-xs sm:text-sm px-2 text-muted-foreground font-medium"
+              type="button"
+              tabIndex={-1}
             >
-              <div>
-                <div className="font-medium text-primary">
-                  {suggestion.name}
-                </div>
-                {suggestion.tags && (
-                  <div className="text-sm text-muted">
-                    {Array.isArray(suggestion.tags)
-                      ? suggestion.tags.join(", ")
-                      : suggestion.tags}
-                  </div>
+              All
+              <FaAngleDown className="ml-1 w-2 h-2 sm:w-3" />
+            </button>
+            <CommandPrimitive.Input
+              ref={inputRef}
+              value={query}
+              onValueChange={(v) => {
+                setQuery(v);
+                setOpen(true);
+              }}
+              onFocus={() => {
+                setOpen(true);
+                setIsFocused?.(true);
+              }}
+              onBlur={() => setIsFocused?.(false)}
+              onKeyDown={(e) => {
+                if (e.key === "Escape") setOpen(false);
+              }}
+              placeholder="Search crops, furniture and more..."
+              className="w-full h-full bg-transparent outline-none px-14 text-sm placeholder:text-muted-foreground"
+            />
+            <button
+              type="button"
+              aria-label="Search"
+              onClick={() => submit(query)}
+              className="cursor-pointer absolute right-0 w-10 h-full flex items-center justify-center bg-primary rounded-r-md"
+            >
+              <IoSearch className="w-3 h-3 md:w-4 md:h-4 text-background" />
+            </button>
+          </div>
+        </PopoverAnchor>
+
+        <PopoverContent
+          align="start"
+          sideOffset={4}
+          className="p-0 w-(--radix-popover-trigger-width)"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          onCloseAutoFocus={(e) => e.preventDefault()}
+          onInteractOutside={(e) => {
+            // Clicking the input itself is not "outside".
+            if (anchorRef.current?.contains(e.target as Node)) e.preventDefault();
+          }}
+        >
+          <CommandPrimitive.List className="max-h-72 overflow-y-auto p-1">
+            {/* First row so Enter searches the raw text */}
+            <CommandPrimitive.Item
+              value={`__query__${query}`}
+              onSelect={() => submit(query)}
+              className="flex items-center gap-2 relative rounded-sm pl-4 pr-3 py-2 data-[selected=true]:bg-primary/10 data-[selected=true]:before:absolute data-[selected=true]:before:left-0 data-[selected=true]:before:top-0 data-[selected=true]:before:h-full data-[selected=true]:before:w-1 data-[selected=true]:before:bg-primary data-[selected=true]:before:rounded-l-sm text-sm cursor-pointer"
+            >
+              <IoSearch className="shrink-0 text-muted-foreground" />
+              <span className="truncate">
+                Search for <strong>“{query.trim()}”</strong>
+              </span>
+            </CommandPrimitive.Item>
+            {suggestions.map((s, i) => (
+              <CommandPrimitive.Item
+                key={s.id ?? i}
+                value={`${s.id ?? i}-${s.name}`}
+                onSelect={() => submit(s.name)}
+                className="flex items-center gap-3 relative rounded-sm pl-4 pr-3 py-2 data-[selected=true]:bg-primary/10 data-[selected=true]:before:absolute data-[selected=true]:before:left-0 data-[selected=true]:before:top-0 data-[selected=true]:before:h-full data-[selected=true]:before:w-1 data-[selected=true]:before:bg-primary data-[selected=true]:before:rounded-l-sm cursor-pointer"
+              >
+                {s.thumbnail && (
+                  <img
+                    src={s.thumbnail}
+                    alt=""
+                    className="h-8 w-8 rounded object-cover shrink-0 bg-gray-100"
+                    onError={(e) => (e.currentTarget.style.display = "none")}
+                  />
                 )}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium truncate">{s.name}</p>
+                  {Array.isArray(s.tags) && s.tags.length > 0 && (
+                    <p className="text-xs text-muted-foreground truncate">
+                      {s.tags.join(", ")}
+                    </p>
+                  )}
+                </div>
+              </CommandPrimitive.Item>
+            ))}
+          </CommandPrimitive.List>
+        </PopoverContent>
+      </CommandPrimitive>
+    </Popover>
   );
 };
 
