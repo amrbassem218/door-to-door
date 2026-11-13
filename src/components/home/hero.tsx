@@ -7,7 +7,7 @@ const Hero: React.FunctionComponent<IHeroProps> = (props) => {
   const suggestedKeywords = ["tomatoes", "olives", "lettuce", "onion"];
   return (
     <div className="">
-      <div className="relative sm:h-150 h-100 overflow-hidden">
+      <div className="relative sm:h-96 h-72 overflow-hidden">
         <video
           autoPlay
           loop
@@ -22,8 +22,8 @@ const Hero: React.FunctionComponent<IHeroProps> = (props) => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/70 to-transparent"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/0 to-transparent"></div>
 
-        <div className="absolute inset-x-0 z-10 sm:bottom-35 bottom-10">
-          <div className="mx-auto max-w-7xl px-4 md:px-20">
+        <div className="absolute inset-x-0 z-10 sm:bottom-16 bottom-10">
+          <div className="mx-auto max-w-[1800px] px-4 md:px-6 2xl:px-10">
             <div className="w-150 max-w-full">
               <h1 className="lg:text-5xl text-2xl font-bold mb-4 text-white ">
                 From Egyptian Fields to the World's Markets

@@ -1,0 +1,219 @@
+- generic [active] [ref=f1e1]:
+  - generic [ref=f1e2]:
+    - generic [ref=f1e3]:
+      - generic [ref=f1e7]:
+        - generic [ref=f1e8]:
+          - link "EGEEX" [ref=f1e9] [cursor=pointer]:
+            - /url: /
+          - button [ref=f1e11] [cursor=pointer]:
+            - generic [ref=f1e16]:
+              - paragraph [ref=f1e17]: Deliver to
+              - paragraph
+        - generic [ref=f1e19]:
+          - button "All" [ref=f1e20] [cursor=pointer]
+          - textbox "Search crops, furniture and more..." [ref=f1e24]
+          - button [ref=f1e25] [cursor=pointer]
+        - generic [ref=f1e28]:
+          - button [ref=f1e29] [cursor=pointer]:
+            - generic [ref=f1e33]:
+              - paragraph [ref=f1e34]: En/
+              - paragraph [ref=f1e35]: USD
+          - link [ref=f1e38] [cursor=pointer]:
+            - /url: /login
+            - generic [ref=f1e39]:
+              - paragraph [ref=f1e40]: Hello there
+              - paragraph [ref=f1e41]: Sign in/Register
+          - button [ref=f1e45] [cursor=pointer]:
+            - paragraph [ref=f1e46]: Returns& Orders
+          - generic [ref=f1e52] [cursor=pointer]:
+            - paragraph [ref=f1e54]: "0"
+            - button "Cart" [ref=f1e55]
+      - generic [ref=f1e56]:
+        - generic [ref=f1e57]:
+          - generic [ref=f1e58]:
+            - generic [ref=f1e86]:
+              - generic [ref=f1e87] [cursor=pointer]
+              - generic [ref=f1e88] [cursor=pointer]
+              - generic [ref=f1e89] [cursor=pointer]
+              - generic [ref=f1e90] [cursor=pointer]
+              - generic [ref=f1e91] [cursor=pointer]
+              - generic [ref=f1e92] [cursor=pointer]
+            - generic [ref=f1e95]:
+              - generic [ref=f1e96]:
+                - heading "Prince Magic Set" [level=1] [ref=f1e97]
+                - generic [ref=f1e98]:
+                  - paragraph [ref=f1e99]: "1.0"
+                  - paragraph [ref=f1e124]: (0) reviews |
+                  - paragraph [ref=f1e125]: In stock
+              - generic [ref=f1e127]:
+                - paragraph [ref=f1e128]:
+                  - generic [ref=f1e129]: "-25%"
+                  - generic [ref=f1e130]: USD 29.8
+                  - generic [ref=f1e131]: (per KG)
+                - paragraph [ref=f1e132]:
+                  - text: "Was:"
+                  - generic [ref=f1e133]: USD 2203
+              - generic [ref=f1e134]:
+                - paragraph [ref=f1e135]: All prices don’t include VAT
+                - button "International Returns" [ref=f1e136] [cursor=pointer]
+              - paragraph [ref=f1e144]: USD100 off on USD800 order
+          - generic [ref=f1e147]:
+            - generic [ref=f1e149]:
+              - heading "Related Items" [level=1] [ref=f1e150]
+              - generic [ref=f1e151]:
+                - generic [ref=f1e154] [cursor=pointer]:
+                  - generic [ref=f1e155]:
+                    - generic [ref=f1e156]: Superdeal
+                    - heading "Children's Bathrobe Size 6" [level=1] [ref=f1e158]
+                  - generic [ref=f1e159]:
+                    - paragraph [ref=f1e160]: USD5.75
+                    - paragraph [ref=f1e161]: USD7.67
+                  - generic [ref=f1e162]:
+                    - paragraph [ref=f1e187]: "1.0"
+                    - paragraph [ref=f1e188]: (0)
+                  - paragraph [ref=f1e192]: EGP100 off on a EGP800 order
+                - generic [ref=f1e195] [cursor=pointer]:
+                  - generic [ref=f1e196]:
+                    - generic [ref=f1e197]: Superdeal
+                    - heading "bathrobe 3XL" [level=1] [ref=f1e199]
+                  - generic [ref=f1e200]:
+                    - paragraph [ref=f1e201]: USD16.37
+                    - paragraph [ref=f1e202]: USD21.83
+                  - generic [ref=f1e203]:
+                    - paragraph [ref=f1e228]: "1.0"
+                    - paragraph [ref=f1e229]: (0)
+                  - paragraph [ref=f1e233]: EGP100 off on a EGP800 order
+                - generic [ref=f1e236] [cursor=pointer]:
+                  - generic [ref=f1e237]:
+                    - generic [ref=f1e238]: Superdeal
+                    - heading "VRONA M 7000" [level=1] [ref=f1e240]
+                  - generic [ref=f1e241]:
+                    - paragraph [ref=f1e242]: USD30.65
+                    - paragraph [ref=f1e243]: USD36.77
+                  - generic [ref=f1e244]:
+                    - paragraph [ref=f1e269]: "1.0"
+                    - paragraph [ref=f1e270]: (0)
+                  - paragraph [ref=f1e274]: EGP100 off on a EGP800 order
+                - generic [ref=f1e277] [cursor=pointer]:
+                  - generic [ref=f1e278]:
+                    - generic [ref=f1e279]: Superdeal
+                    - heading "VRONA M 7001" [level=1] [ref=f1e281]
+                  - generic [ref=f1e282]:
+                    - paragraph [ref=f1e283]: USD30.65
+                    - paragraph [ref=f1e284]: USD36.77
+                  - generic [ref=f1e285]:
+                    - paragraph [ref=f1e310]: "1.0"
+                    - paragraph [ref=f1e311]: (0)
+                  - paragraph [ref=f1e315]: EGP100 off on a EGP800 order
+                - generic [ref=f1e318] [cursor=pointer]:
+                  - generic [ref=f1e319]:
+                    - generic [ref=f1e320]: Superdeal
+                    - heading "Children's sheet set B230" [level=1] [ref=f1e322]
+                  - generic [ref=f1e323]:
+                    - paragraph [ref=f1e324]: USD12.08
+                    - paragraph [ref=f1e325]: USD16.11
+                  - generic [ref=f1e326]:
+                    - paragraph [ref=f1e351]: "1.0"
+                    - paragraph [ref=f1e352]: (0)
+                  - paragraph [ref=f1e356]: EGP100 off on a EGP800 order
+                - generic [ref=f1e359] [cursor=pointer]:
+                  - generic [ref=f1e360]:
+                    - generic [ref=f1e361]: Superdeal
+                    - heading "Children's sheet set B236" [level=1] [ref=f1e363]
+                  - generic [ref=f1e364]:
+                    - paragraph [ref=f1e365]: USD12.08
+                    - paragraph [ref=f1e366]: USD16.11
+                  - generic [ref=f1e367]:
+                    - paragraph [ref=f1e392]: "1.0"
+                    - paragraph [ref=f1e393]: (0)
+                  - paragraph [ref=f1e397]: EGP100 off on a EGP800 order
+                - generic [ref=f1e400] [cursor=pointer]:
+                  - generic [ref=f1e401]:
+                    - generic [ref=f1e402]: Superdeal
+                    - heading "Children's box k1019" [level=1] [ref=f1e404]
+                  - generic [ref=f1e405]:
+                    - paragraph [ref=f1e406]: USD8.18
+                    - paragraph [ref=f1e407]: USD9.82
+                  - generic [ref=f1e408]:
+                    - paragraph [ref=f1e433]: "1.0"
+                    - paragraph [ref=f1e434]: (0)
+                  - paragraph [ref=f1e438]: EGP100 off on a EGP800 order
+                - generic [ref=f1e441] [cursor=pointer]:
+                  - generic [ref=f1e442]:
+                    - generic [ref=f1e443]: Superdeal
+                    - heading "episson Children's model (J205)" [level=1] [ref=f1e445]
+                  - generic [ref=f1e446]:
+                    - paragraph [ref=f1e447]: USD13.04
+                    - paragraph [ref=f1e448]: USD15.67
+                  - generic [ref=f1e449]:
+                    - paragraph [ref=f1e474]: "1.0"
+                    - paragraph [ref=f1e475]: (0)
+                  - paragraph [ref=f1e479]: EGP100 off on a EGP800 order
+              - button "Show more" [ref=f1e481] [cursor=pointer]
+            - generic [ref=f1e482]:
+              - navigation [ref=f1e483]:
+                - list [ref=f1e484] [cursor=pointer]:
+                  - listitem [ref=f1e485]: Customer Reviews
+                  - listitem [ref=f1e488]: Specifications
+                  - listitem [ref=f1e489]: About Store
+                  - listitem [ref=f1e490]: More to love
+              - generic [ref=f1e492]:
+                - generic [ref=f1e493]:
+                  - heading "Reviews" [level=1] [ref=f1e494]
+                  - paragraph [ref=f1e496]: See all
+                - generic [ref=f1e499]:
+                  - paragraph [ref=f1e501]: "1"
+                  - paragraph [ref=f1e526]: (0)
+                - button [ref=f1e528] [cursor=pointer]:
+                  - paragraph [ref=f1e530]: Sort by Most relevant
+              - heading "Specifications" [level=1] [ref=f1e535]
+              - generic [ref=f1e541]:
+                - heading "About Store" [level=1] [ref=f1e543]
+                - paragraph [ref=f1e547]: There doesn't Exist data about this store
+        - complementary [ref=f1e548]:
+          - generic [ref=f1e549]:
+            - generic [ref=f1e550]:
+              - paragraph [ref=f1e551]: USD596
+              - paragraph [ref=f1e552]: USD794.8
+            - paragraph [ref=f1e553]: Tax excluded, add at checkout if applicable
+          - generic [ref=f1e555]:
+            - generic [ref=f1e556] [cursor=pointer]:
+              - paragraph [ref=f1e557]: Sold by
+              - paragraph [ref=f1e559]: Lorem ipsum dolor sit.
+            - generic [ref=f1e561] [cursor=pointer]:
+              - paragraph [ref=f1e562]: Ship to
+              - generic [ref=f1e563]:
+                - paragraph
+          - generic [ref=f1e565]:
+            - generic [ref=f1e566]:
+              - generic [ref=f1e567]: Choice
+              - paragraph [ref=f1e568]: EGEEX commitments
+            - generic [ref=f1e569]:
+              - generic [ref=f1e572] [cursor=pointer]:
+                - paragraph [ref=f1e573]: Free shipping
+                - paragraph [ref=f1e574]: "Delivery: Dec 16-24"
+              - paragraph [ref=f1e578] [cursor=pointer]: Return & Refund Policy
+              - generic [ref=f1e581] [cursor=pointer]:
+                - paragraph [ref=f1e582]: Security & Privacy
+                - generic [ref=f1e583]:
+                  - paragraph [ref=f1e584]: "Safe Payments: We do not share your personal details, or credit card information with sellers."
+                  - paragraph [ref=f1e585]: "Secure personal details: We protect your privacy and keep your personal details safe and secure."
+          - generic [ref=f1e587]:
+            - generic [ref=f1e588]:
+              - generic [ref=f1e589]:
+                - paragraph [ref=f1e590]: Quantity
+                - generic [ref=f1e591]:
+                  - button "Decrease quantity" [ref=f1e592] [cursor=pointer]
+                  - spinbutton "Quantity" [ref=f1e593]: "20"
+                  - button "Increase quantity" [ref=f1e594] [cursor=pointer]
+              - 'button "Size: KG" [ref=f1e595] [cursor=pointer]'
+            - paragraph [ref=f1e597]: min. Order 20 KG / shopper
+          - generic [ref=f1e598]:
+            - button "Buy Now" [ref=f1e600] [cursor=pointer]
+            - button "Add to Cart" [ref=f1e602] [cursor=pointer]
+            - generic [ref=f1e603]:
+              - button "Negotiate" [ref=f1e604] [cursor=pointer]
+              - button "16" [ref=f1e605] [cursor=pointer]
+    - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=f1e79] [cursor=pointer]
+  - alert [ref=f1e606]

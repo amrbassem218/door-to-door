@@ -2,12 +2,16 @@
 import Item from "@/components/ui/item";
 import type { Product } from "@/types/types";
 import { getProducts } from "@/utils/products-utils";
+import { filterLoadable } from "@/utils/image-utils";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 
 interface IListProdProps {
   limit?: number;
   size: string;
+  /** "scroll" renders a horizontal AliExpress-style rail. */
+  layout?: "grid" | "scroll";
+  offset?: number;
 }
 
 const Skeleton = ({ size }: { size: string }) => (
@@ -23,7 +27,7 @@ const Skeleton = ({ size }: { size: string }) => (
   </div>
 );
 
-const ListProd: React.FunctionComponent<IListProdProps> = ({ limit, size }) => {
+const ListProd: React.FunctionComponent<IListProdProps> = ({ limit, size, layout = "grid", offset = 0 }) => {
   const [items, setItems] = useState<Product[]>();
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -47,7 +51,8 @@ const ListProd: React.FunctionComponent<IListProdProps> = ({ limit, size }) => {
     const getProd = async () => {
       const prod = await getProducts();
       if (prod) {
-        setItems(prod);
+        // Hide products whose picture fails to load.
+        setItems(await filterLoadable(prod));
       }
     };
     getProd();
@@ -55,24 +60,23 @@ const ListProd: React.FunctionComponent<IListProdProps> = ({ limit, size }) => {
 
   return (
     <div ref={ref}>
-      {!isVisible ? (
+      {!isVisible || !items ? (
         <Skeleton size={size} />
       ) : (
         <div
           className={`${
-            size === "large"
-              ? "grid grid-cols-2 gap-3"
-              : "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"
+            layout === "scroll"
+              ? "flex gap-3 overflow-x-auto snap-x pb-2 [&>*]:w-40 md:[&>*]:w-48 [&>*]:shrink-0 [&>*]:snap-start"
+              : size === "large"
+                ? "grid grid-cols-2 gap-3"
+                : "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3"
           } min-w-0 w-full`}
         >
-          {items &&
-            items.map((item, i) => {
-              return (
-                (!limit || (limit && i < limit)) && (
-                  <Item key={`${item.name}-${i}`} item={item} />
-                )
-              );
-            })}
+          {items
+            .slice(offset, limit ? offset + limit : undefined)
+            .map((item, i) => (
+              <Item key={`${item.id ?? item.name}-${i}`} item={item} />
+            ))}
         </div>
       )}
     </div>

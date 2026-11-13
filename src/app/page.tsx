@@ -101,16 +101,46 @@ const DealCard = ({
   </Card>
 );
 
+const coupons = [
+  { off: "EGP 400 OFF", min: "orders EGP 2,000+", code: "DOOR400" },
+  { off: "EGP 250 OFF", min: "orders EGP 1,200+", code: "DOOR250" },
+  { off: "EGP 100 OFF", min: "orders EGP 600+", code: "DOOR100" },
+];
+
 interface IHomeProps {}
 
 const Home: React.FunctionComponent<IHomeProps> = (props) => {
   return (
-    <div>
+    <div className="bg-gray-100">
       <Hero />
 
+      {/* Big sale + coupons */}
+      <section className="mx-auto max-w-[1800px] px-4 md:px-6 2xl:px-10 -mt-6 relative z-10">
+        <div className="rounded-xl bg-gradient-to-r from-red-600 to-orange-500 text-white p-4 md:p-6 grid md:grid-cols-[1fr_2fr] gap-4 items-center shadow-lg">
+          <div>
+            <h2 className="text-2xl md:text-4xl font-extrabold">Big Sale</h2>
+            <p className="text-sm opacity-90">Up to 75% off local favorites</p>
+          </div>
+          <div className="grid grid-cols-3 gap-2 md:gap-3">
+            {coupons.map((c) => (
+              <div
+                key={c.code}
+                className="rounded-lg bg-white text-red-600 p-2 md:p-3 text-center"
+              >
+                <p className="font-extrabold text-sm md:text-xl">{c.off}</p>
+                <p className="text-[10px] md:text-xs text-gray-600">{c.min}</p>
+                <p className="mt-1 text-[10px] md:text-xs font-semibold border border-dashed border-red-400 rounded px-1">
+                  Code: {c.code}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Perks strip */}
-      <section className="border-b bg-background-secondary">
-        <div className="mx-auto max-w-7xl grid grid-cols-2 md:grid-cols-4 gap-4 px-4 md:px-20 py-5">
+      <section className="mx-auto max-w-[1800px] px-4 md:px-6 2xl:px-10 mt-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 rounded-xl bg-background p-4">
           {perks.map(({ icon: Icon, title, text }) => (
             <div key={title} className="flex items-center gap-3">
               <Icon className="text-2xl text-primary shrink-0" />
@@ -125,43 +155,47 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
         </div>
       </section>
 
-      <div className="mx-auto max-w-7xl space-y-14 py-10 px-4 md:px-20">
+      <div className="mx-auto max-w-[1800px] space-y-4 py-4 px-4 md:px-6 2xl:px-10">
+        {/* Today's deals */}
+        <section className="space-y-4 rounded-xl bg-background p-4 md:p-5">
+          <SectionHeader
+            title="Today's deals"
+            subtitle="Limited-time prices on local favorites"
+            href="/search?query=deals"
+          />
+          <ListProd layout="scroll" size="small" limit={12} />
+        </section>
+
+        {/* Deal columns */}
+        <section className="grid grid-cols-12 gap-4">
+          <DealCard
+            title="Bestsellers"
+            badge="Best price & quality"
+            badgeClass="bg-yellow-300 text-black"
+            query="bestsellers"
+          />
+          <DealCard
+            title="Big Save"
+            badge="Up to 50% off"
+            badgeClass="bg-red-300/80 text-black"
+            query="sale"
+          />
+          <DealCard
+            title="SuperDeals"
+            badge="Up to 75% off"
+            badgeClass="bg-red-400 text-white"
+            query="deals"
+          />
+        </section>
+
         {/* Shop by category */}
-        <section className="space-y-5">
+        <section className="space-y-4 rounded-xl bg-background p-4 md:p-5">
           <SectionHeader
             title="Shop by category"
             subtitle="Find what you need from local sellers"
             href="/categories"
           />
           <CategoryTiles />
-        </section>
-
-        {/* Today's deals */}
-        <section className="space-y-5">
-          <SectionHeader
-            title="Today's deals"
-            subtitle="Limited-time prices on local favorites"
-          />
-          <div className="grid grid-cols-12 gap-4 md:gap-5">
-            <DealCard
-              title="Bestsellers"
-              badge="Best price & quality"
-              badgeClass="bg-yellow-300 text-black"
-              query="bestsellers"
-            />
-            <DealCard
-              title="Big Save"
-              badge="Up to 50% off"
-              badgeClass="bg-red-300/80 text-black"
-              query="sale"
-            />
-            <DealCard
-              title="SuperDeals"
-              badge="Up to 75% off"
-              badgeClass="bg-red-400 text-white"
-              query="deals"
-            />
-          </div>
         </section>
 
         {/* Sell with us banner */}
@@ -183,17 +217,15 @@ const Home: React.FunctionComponent<IHomeProps> = (props) => {
         </section>
 
         {/* More to love */}
-        <section className="space-y-5">
-          <SectionHeader
-            title="More to love"
-            subtitle="Picked for you"
-            href="/search"
-          />
+        <section className="space-y-4">
+          <h2 className="text-xl md:text-2xl font-bold text-center">
+            More to love
+          </h2>
           <ListProd size="small" />
           <div className="flex justify-center">
             <Link
               href="/search"
-              className="inline-flex items-center justify-center rounded-md border border-primary text-primary font-medium px-8 h-11 hover:bg-primary hover:text-primary-foreground transition-colors"
+              className="inline-flex items-center justify-center rounded-full border border-primary text-primary font-medium px-8 h-11 hover:bg-primary hover:text-primary-foreground transition-colors"
             >
               Browse all products
             </Link>
