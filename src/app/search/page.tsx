@@ -46,6 +46,10 @@ function SearchContext() {
   const search = useSearch();
   const [results, setResults] = useState<Product[]>([]);
   const [filters, setFilters] = useState<ProductFilters>({});
+  // Draft values for inputs; they only apply when the user submits.
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [minOrderDraft, setMinOrderDraft] = useState("");
   const [searchQuery, setSearchQuery] = useState(query || "");
   const [sort, setSort] = useState<Sort>("best");
 
@@ -68,11 +72,25 @@ function SearchContext() {
   const router = useRouter();
 
   const filteredProducts = useMemo(() => {
-    let list = results;
-    if (Object.keys(filters).length > 0) {
-      const allowed = new Set(search.filterProducts(filters).map((p) => p.id));
-      list = list.filter((p) => allowed.has(p.id));
-    }
+    const ratingMin: Record<string, number> = {
+      "5.0": 5,
+      "4.5 & above": 4.5,
+      "4.0 & above": 4,
+      "3 & above": 3,
+    };
+    const cur = (p: Product) => Number(newPrice(p, userCurrencyCode, rates)) || 0;
+    const list = results.filter((p) => {
+      if (filters.inStock && (p.stockCount ?? 1) <= 0) return false;
+      if (filters.rating && (p.rating ?? 0) < (ratingMin[filters.rating] ?? 0))
+        return false;
+      if (filters.priceRange) {
+        const v = cur(p);
+        if (v < filters.priceRange.min || v > filters.priceRange.max) return false;
+      }
+      if (filters.minOrder && p.minOrder && p.minOrder > filters.minOrder)
+        return false;
+      return true;
+    });
     const sorted = [...list];
     if (sort === "orders")
       sorted.sort((a, b) => (b.reviewCount ?? 0) - (a.reviewCount ?? 0));
@@ -81,10 +99,35 @@ function SearchContext() {
       sorted.sort((a, b) => (sort === "priceAsc" ? val(a) - val(b) : val(b) - val(a)));
     }
     return sorted;
-  }, [results, filters, sort, search, rates, userCurrencyCode]);
+  }, [results, filters, sort, rates, userCurrencyCode]);
 
   const handleFilterChange = (newFilters: Partial<ProductFilters>) =>
-    setFilters((prev) => ({ ...prev, ...newFilters }));
+    setFilters((prev) => {
+      const next = { ...prev, ...newFilters };
+      (Object.keys(next) as (keyof ProductFilters)[]).forEach(
+        (k) => next[k] === undefined && delete next[k],
+      );
+      return next;
+    });
+
+  const applyPrice = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    const min = Number(minPrice) || 0;
+    const max = Number(maxPrice) || Infinity;
+    handleFilterChange({
+      priceRange: minPrice || maxPrice ? { min, max } : undefined,
+    });
+  };
+  const applyMinOrder = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    handleFilterChange({ minOrder: Number(minOrderDraft) || undefined });
+  };
+  const clearAll = () => {
+    setFilters({});
+    setMinPrice("");
+    setMaxPrice("");
+    setMinOrderDraft("");
+  };
 
   if (loading) return <p className="p-6">Loading prices...</p>;
 
@@ -135,47 +178,63 @@ function SearchContext() {
           </FilterSection>
 
           <FilterSection title="Price range">
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                placeholder="Min"
-                className="w-full px-3 py-2 border rounded-md text-sm"
-                onChange={(e) =>
-                  handleFilterChange({
-                    priceRange: {
-                      min: Number(e.target.value) || 0,
-                      max: filters.priceRange?.max || 999999,
-                    },
-                  })
-                }
-              />
-              <span className="text-muted-foreground">-</span>
-              <input
-                type="number"
-                placeholder="Max"
-                className="w-full px-3 py-2 border rounded-md text-sm"
-                onChange={(e) =>
-                  handleFilterChange({
-                    priceRange: {
-                      min: filters.priceRange?.min || 0,
-                      max: Number(e.target.value) || 999999,
-                    },
-                  })
-                }
-              />
-            </div>
+            <form onSubmit={applyPrice} className="space-y-2">
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min={0}
+                  placeholder="Min"
+                  value={minPrice}
+                  onChange={(e) => setMinPrice(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-md text-sm"
+                />
+                <span className="text-muted-foreground">-</span>
+                <input
+                  type="number"
+                  min={0}
+                  placeholder="Max"
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-md text-sm"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full rounded-md bg-primary text-primary-foreground text-sm font-medium py-2 hover:opacity-90"
+              >
+                Apply
+              </button>
+            </form>
           </FilterSection>
 
           <FilterSection title="Min. order">
-            <input
-              type="number"
-              placeholder="Min. Order"
-              className="w-full px-3 py-2 border rounded-md text-sm"
-              onChange={(e) =>
-                handleFilterChange({ minOrder: Number(e.target.value) })
-              }
-            />
+            <form onSubmit={applyMinOrder} className="space-y-2">
+              <input
+                type="number"
+                min={0}
+                placeholder="Min. Order"
+                value={minOrderDraft}
+                onChange={(e) => setMinOrderDraft(e.target.value)}
+                className="w-full px-3 py-2 border rounded-md text-sm"
+              />
+              <button
+                type="submit"
+                className="w-full rounded-md bg-primary text-primary-foreground text-sm font-medium py-2 hover:opacity-90"
+              >
+                Apply
+              </button>
+            </form>
           </FilterSection>
+
+          {Object.keys(filters).length > 0 && (
+            <button
+              type="button"
+              onClick={clearAll}
+              className="w-full rounded-md border text-sm font-medium py-2 hover:bg-gray-100"
+            >
+              Clear all filters
+            </button>
+          )}
         </aside>
 
         {/* Results */}
